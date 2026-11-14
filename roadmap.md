@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Add and verify AI explanation drafts in both problem editors
 - [x] Restore accidentally removed Anatomy question #23
 - [x] Add an event-filtered Removed tab with Restore controls
 - [x] Add recovery controls to question editing and removal without changing settled reports or attempts
