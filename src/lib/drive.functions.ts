@@ -25,7 +25,7 @@ export function parseDriveName(name: string) {
   base = base.replace(/\b(key|answer key|answers?|solutions?)\b/gi, "").replace(/[-_()]+/g, " ").replace(/\s+/g, " ").trim();
   const dm = base.match(/\s(B|C)$/);
   const division = (dm?.[1] as "B" | "C" | undefined) ?? null;
-  const event = (dm ? base.slice(0, -2) : base).trim().replace(/\band\b/g, "&").replace(/^Anatomy & Physiology$/i, "Anatomy & Physiology");
+  const event = (dm ? base.slice(0, -2) : base).trim().replace(/^Anatomy and Physiology$/i, "Anatomy & Physiology");
   return { event, division, isKey };
 }
 
