@@ -21,6 +21,8 @@
 - [x] Save questions and add Saved/Missed sections to Review
 - [x] Practice setup, indented topic/subtopic filters, skip without scoring, mastery and source links
 - [x] Audit all 16 imported tests and restore Q98 matching format
-- [ ] Apply remaining audited question corrections (bulk row import unavailable through current authorized tools)
+- [ ] Apply all audited question corrections while preserving answer history
+- [ ] Allow coaches and captains to edit question prompts, choices, and answer keys
+- [ ] Repair and verify Test Archive test PDF and answer-key links
 - [x] Explain spaced repetition and expose current review status
 - [x] Multiple event/topic selections; topics stay empty until an event is selected
