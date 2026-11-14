@@ -17,4 +17,11 @@ describe("answer grading", () => {
   it("preserves all labeled subparts together", () => {
     expect(cleanStem("Original question: Context\n(a) Name the cell.\n(b) Explain its function.")).toBe("Context\n(a) Name the cell.\n(b) Explain its function.");
   });
+  it("removes source-number prefixes without removing subparts or scientific numbers", () => {
+    for (const prefix of ["Question 7. ", "Question #7: ", "Q7. ", "7. ", "7) ", "Original question 7. "]) {
+      expect(cleanStem(`${prefix}What is the name for the bifurcation of the trachea?`)).toBe("What is the name for the bifurcation of the trachea?");
+    }
+    expect(cleanStem("Question 98\n\n(a) Name the cell.\n(b) Explain its function.")).toBe("(a) Name the cell.\n(b) Explain its function.");
+    expect(cleanStem("98 percent of cells respond.\n1. First condition\n2. Second condition")).toBe("98 percent of cells respond.\n1. First condition\n2. Second condition");
+  });
 });

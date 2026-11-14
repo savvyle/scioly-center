@@ -6,7 +6,10 @@ export function sameSelection(selected: number[], correct: number[]) {
   return a.length === b.length && a.every((value, i) => value === b[i]);
 }
 export function cleanStem(stem: string) {
-  return stem.replace(/\b(?:in the )?original question\s*(?:\([^)]*\))?\s*[:—-]?\s*/gi, "").trim();
+  return stem
+    .replace(/^\s*(?:(?:original\s+)?question\s*#?\s*\d+\s*[.):—-]?|q\s*#?\s*\d+\s*[.):—-]?|\d+\s*[.)])\s*/i, "")
+    .replace(/\b(?:in the )?original question\s*(?:\([^)]*\))?\s*[:—-]?\s*/gi, "")
+    .trim();
 }
 export function earnedPoints(value: number, maximum: number) {
   return Math.max(0, Math.min(maximum, Number.isFinite(value) ? value : 0));
