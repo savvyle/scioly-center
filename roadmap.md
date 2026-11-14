@@ -12,3 +12,6 @@
 - [x] Rename visible Drill and Start drilling labels to Practice
 
 - [x] Preserve grouped questions as one question with combined subparts in new imports
+
+- [x] Pen/trash account actions kept on one line
+- [x] Div B defaults and syllabus-related Div C Practice questions

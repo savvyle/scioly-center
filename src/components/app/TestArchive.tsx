@@ -9,11 +9,12 @@ import { FileText, ExternalLink, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe } from "@/lib/auth";
 import { toast } from "sonner";
+import { DEFAULT_DIVISION } from "@/lib/practice-scope";
 
 export function TestArchive() {
   const { data: me } = useMe();
   const [event, setEvent] = useState("all");
-  const [division, setDivision] = useState("all");
+  const [division, setDivision] = useState<string>(DEFAULT_DIVISION);
   const [year, setYear] = useState("all");
   const [level, setLevel] = useState("all");
   const [search, setSearch] = useState("");

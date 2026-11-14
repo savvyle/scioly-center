@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { inPracticeScope } from "./practice-scope";
 
 export type Question = {
   id: string; event: string; division?: string | null; topic: string | null; subtopic: string | null; difficulty: number;
@@ -56,7 +57,8 @@ export const trendQuery = (userId: string | null) =>
 export const liveEventsQuery = queryOptions({
   queryKey: ["live-events"],
   queryFn: async () => {
-    const { data } = await supabase.from("questions").select("event, topic").eq("status", "live").limit(5000);
+    const { data: all } = await supabase.from("questions").select("event, topic, subtopic, division").eq("status", "live").limit(5000);
+    const data = (all ?? []).filter(inPracticeScope);
     const map = new Map<string, Set<string>>();
     for (const r of data ?? []) {
       if (!map.has(r.event)) map.set(r.event, new Set());

@@ -13,6 +13,7 @@ import { EVENTS, LEVELS } from "@/lib/events";
 import { toast } from "sonner";
 import { Loader2, Upload } from "lucide-react";
 import { DriveImport } from "@/components/app/DriveImport";
+import { DEFAULT_DIVISION } from "@/lib/practice-scope";
 
 export const Route = createFileRoute("/_authenticated/coach/upload")({
   head: () => ({ meta: [{ title: "Upload test · SciOly Center" }, { name: "description", content: "Upload a past test for AI parsing." }, { property: "og:title", content: "Upload test · SciOly Center" }, { property: "og:description", content: "Upload a past test for AI parsing." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
@@ -34,7 +35,7 @@ function UploadPage() {
   const qc = useQueryClient();
   const parse = useServerFn(parseTest);
   const retag = useServerFn(retagTest);
-  const [meta, setMeta] = useState({ event: "", year: String(new Date().getFullYear()), tournament: "", level: "Invitational" });
+  const [meta, setMeta] = useState({ event: "", division: DEFAULT_DIVISION as "B" | "C", year: String(new Date().getFullYear()), tournament: "", level: "Invitational" });
   const [testFile, setTestFile] = useState<File | null>(null);
   const [keyFile, setKeyFile] = useState<File | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
@@ -72,7 +73,7 @@ function UploadPage() {
       setBusy("Uploading…");
       const { data: row, error } = await supabase
         .from("tests")
-        .insert({ event: meta.event, year: Number(meta.year) || null, tournament: meta.tournament || null, level: meta.level })
+        .insert({ event: meta.event, division: meta.division, year: Number(meta.year) || null, tournament: meta.tournament || null, level: meta.level })
         .select("id")
         .single();
       if (error || !row) throw new Error(error?.message ?? "Couldn't save test");
@@ -107,6 +108,7 @@ function UploadPage() {
           <datalist id="events">{EVENTS.map((e) => <option key={e} value={e} />)}</datalist>
         </div>
         <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1.5"><Label>Division</Label><Select value={meta.division} onValueChange={(division) => setMeta({ ...meta, division: division as "B" | "C" })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="B">Div B</SelectItem><SelectItem value="C">Div C</SelectItem></SelectContent></Select></div>
           <div className="space-y-1.5"><Label>Year</Label><Input type="number" value={meta.year} onChange={(e) => setMeta({ ...meta, year: e.target.value })} /></div>
           <div className="space-y-1.5">
             <Label>Level</Label>

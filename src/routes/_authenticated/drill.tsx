@@ -12,6 +12,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { checkAnswer } from "@/lib/answers.functions";
 import { emptyAnswer, type Answer } from "@/lib/answers";
 import { toast } from "sonner";
+import { inPracticeScope } from "@/lib/practice-scope";
 
 export const Route = createFileRoute("/_authenticated/drill")({
   head: () => ({ meta: [{ title: "Practice · SciOly Center" }, { name: "description", content: "Practice Science Olympiad questions with answer checking and concise feedback." }, { property: "og:title", content: "Practice · SciOly Center" }, { property: "og:description", content: "Practice questions with answer checking and concise feedback." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
@@ -44,6 +45,8 @@ function Drill() {
     setAnswer(emptyAnswer());
     setChecked(null);
     submissionId.current = crypto.randomUUID();
+    let data: Question | null = null;
+    for (;;) {
     const { data: id } = await supabase.rpc("next_drill_question", {
       p_event: event === ALL ? undefined : event,
       p_topic: topic === ALL ? undefined : topic,
@@ -56,7 +59,11 @@ function Drill() {
       setLoading(false);
       return;
     }
-    const { data } = await supabase.from("questions").select("*").eq("id", id as string).single();
+    const { data: candidate, error } = await supabase.from("questions").select("*").eq("id", id as string).single();
+    if (error || !candidate) { setLoading(false); toast.error("Couldn't load this question."); return; }
+    if (inPracticeScope(candidate)) { data = candidate as unknown as Question; break; }
+    seen.current.push(candidate.id);
+    }
     setQ(data as unknown as Question);
     setEmpty(false);
     setLoading(false);

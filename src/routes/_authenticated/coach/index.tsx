@@ -6,6 +6,7 @@ import { meetsGoal, pct } from "@/lib/week";
 import { EventAccuracy, TrendChart } from "@/components/app/StatsPanels";
 import { cn } from "@/lib/utils";
 import { ExternalLink } from "lucide-react";
+import { DEFAULT_DIVISION } from "@/lib/practice-scope";
 
 export const Route = createFileRoute("/_authenticated/coach/")({
   head: () => ({ meta: [{ title: "Team dashboard · SciOly Center" }, { name: "description", content: "Team strength by event and weekly goals." }, { property: "og:title", content: "Team dashboard · SciOly Center" }, { property: "og:description", content: "Team strength by event and weekly goals." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
@@ -13,7 +14,7 @@ export const Route = createFileRoute("/_authenticated/coach/")({
 });
 
 function CoachHome() {
-  const [div, setDiv] = useState<"B" | "C" | null>(null);
+  const [div, setDiv] = useState<"B" | "C" | null>(DEFAULT_DIVISION);
   const { data: goal } = useQuery(settingsQuery);
   const { data: board = [] } = useQuery(leaderboardQuery(0));
   const rows = board.filter((r) => !div || r.division === div);
