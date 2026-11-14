@@ -13,7 +13,7 @@ export function Leaderboard() {
   const week = data[0];
   const mine = data.find((row) => row.user_id === me?.id);
   return (
-    <section className="space-y-4 border-y border-border bg-card px-4 py-5 text-card-foreground">
+    <section className="panel space-y-4 px-4 py-5 text-card-foreground">
       <h2 className="text-2xl font-extrabold">Weekly leaderboard</h2>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap gap-2">{["This week", "Last week", "2 weeks ago"].map((label, i) => (

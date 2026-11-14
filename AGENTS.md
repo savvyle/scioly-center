@@ -45,6 +45,6 @@ use the editor.
 - Source question numbers/pages are stored independently of display stems; mastery reads the existing review-state boxes with box four mastered (why: preserve source citations and reuse the authoritative spaced-repetition schedule).
 - Practice event/topic filters are multi-select, with event-qualified topic values and topics derived only from selected events (why: unrelated or stale topics must not enter practice).
 - Question-card editing uses authenticated staff-checked server functions and school-scoped RLS; answer edits clear generated feedback (why: students cannot edit keys and stale explanations must not contradict corrections).
-- Archive PDF actions reserve the new tab synchronously before signing private links (why: mobile popup blockers reject tabs opened after asynchronous requests).
+- Archive PDFs use pre-signed, periodically refreshed private URLs on native new-tab links (why: avoid programmatic popup navigation failures in embedded previews and mobile browsers).
 - Render the weekly leaderboard on the dashboard and redirect the legacy /leaderboard URL there (why: consolidate personal and team progress without breaking old links).
 - Dashboard event progress joins owner-scoped student event selections to existing topic totals, preserving zero-activity selections (why: selected events must remain visible before practice starts).

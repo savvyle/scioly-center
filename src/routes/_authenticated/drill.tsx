@@ -119,7 +119,7 @@ function Drill() {
         </span>
       </div>
       {active && <div className="flex justify-end"><Button variant="ghost" size="sm" disabled={checking} onClick={() => setActive(false)}>Change practice</Button></div>}
-      {!active && <><section className="space-y-5 border-y border-border py-6"><div className="space-y-2"><Label>Event</Label>
+      {!active && <><section className="panel space-y-5 p-6"><div className="space-y-2"><Label>Event</Label>
         <PracticeMultiSelect label="Event" placeholder="Select events" options={events.map((e) => ({ value: e.event, label: e.event }))} value={selectedEvents} onChange={(values) => { setSelectedEvents(values); setSelectedTopics((current) => current.filter((value) => values.includes((JSON.parse(value) as TopicSelection)[0]))); }} /></div><div className="space-y-2"><Label>Topic</Label>
         <PracticeMultiSelect label="Topic" placeholder={selectedEvents.length ? "All topics in selected events" : "Select an event first"} options={topics} value={selectedTopics} onChange={setSelectedTopics} disabled={!selectedEvents.length} /></div><div className="space-y-2"><Label>Difficulty</Label>
         <Select value={difficulty} onValueChange={setDifficulty}>

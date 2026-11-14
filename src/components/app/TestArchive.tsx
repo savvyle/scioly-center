@@ -8,7 +8,6 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileText, ExternalLink, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe } from "@/lib/auth";
-import { toast } from "sonner";
 import { DEFAULT_DIVISION } from "@/lib/practice-scope";
 import { schoolYear } from "@/lib/school-year";
 
@@ -29,19 +28,19 @@ export function TestArchive() {
       return data ?? [];
     },
   });
-  async function openPdf(path: string) {
-    // Reserve the tab during the click; opening after an await is blocked on phones.
-    const tab = window.open("about:blank", "_blank");
-    if (tab) tab.opener = null;
-    try {
-      const { data, error } = await supabase.storage.from("tests").createSignedUrl(path, 300);
-      if (error || !data) throw new Error("Couldn't open that PDF.");
-      if (tab) tab.location.replace(data.signedUrl);
-      else window.location.assign(data.signedUrl);
-    } catch {
-      tab?.close(); toast.error("Couldn't open that PDF.");
-    }
-  }
+  const paths = tests.flatMap((test) => [test.source_path, test.key_path]).filter((path): path is string => !!path);
+  const { data: pdfLinks = {}, error: linkError } = useQuery({
+    queryKey: ["archive-pdf-links", paths],
+    enabled: paths.length > 0,
+    staleTime: 240_000,
+    refetchInterval: 240_000,
+    refetchOnWindowFocus: "always",
+    queryFn: async () => {
+      const { data, error } = await supabase.storage.from("tests").createSignedUrls(paths, 600);
+      if (error) throw error;
+      return Object.fromEntries((data ?? []).filter((item) => item.path && item.signedUrl && !item.error).map((item) => [item.path, item.signedUrl])) as Record<string, string>;
+    },
+  });
   const events = [...new Set(tests.map((t) => t.event))].sort();
   const years = [...new Set(tests.map((t) => String(t.year)).filter((y) => y !== "null"))].sort().reverse();
   const levels = [...new Set(tests.map((t) => t.level).filter((l): l is string => !!l))].sort();
@@ -49,7 +48,7 @@ export function TestArchive() {
   return <div className="space-y-6">
     <h1 className="text-3xl font-extrabold">Test Archive</h1>
     <Tabs value={tab} onValueChange={setTab}><TabsList><TabsTrigger value="tests"><FileText className="mr-2 h-4 w-4" />Past tests ({tests.length})</TabsTrigger><TabsTrigger value="pdf">PDF archive</TabsTrigger></TabsList></Tabs>
-    <section className="space-y-4 border-y border-border py-5">
+    <section className="panel space-y-4 p-5">
       <div className="space-y-2"><Label>Event</Label><Select value={event} onValueChange={setEvent}><SelectTrigger className="w-full"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All events</SelectItem>{events.map((e) => <SelectItem key={e} value={e}>{e}</SelectItem>)}</SelectContent></Select></div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[auto_1fr_1fr_2fr_auto]">
         <div className="space-y-2"><Label>Division</Label><div className="flex gap-1">{["all", "B", "C"].map((d) => <Button key={d} variant={division === d ? "default" : "outline"} size="sm" onClick={() => setDivision(d)}>{d === "all" ? "All" : d}</Button>)}</div></div>
@@ -61,10 +60,11 @@ export function TestArchive() {
     </section>
     {isLoading && <p className="text-muted-foreground">Loading tests…</p>}
     {error && <p className="text-destructive">Couldn't load the archive.</p>}
-    <div className="divide-y divide-border">{rows.map((t) => <article key={t.id} className="flex flex-wrap items-center gap-4 py-4">
+    {linkError && <p className="text-destructive">Couldn't load PDF links. Please refresh and try again.</p>}
+    <div className="space-y-3">{rows.map((t) => <article key={t.id} className="panel flex flex-wrap items-center gap-4 p-4">
       <FileText className="h-6 w-6 text-primary" />
       <div className="min-w-0 flex-1 basis-60"><h2 className="font-bold">{t.event}</h2><p className="text-sm text-muted-foreground">{t.tournament ?? "Past tournament"} · {schoolYear(t.year) || "Year unknown"}{t.division ? ` · Div ${t.division}` : ""}{t.level ? ` · ${t.level}` : ""}</p>{tab === "tests" && <span className="text-xs text-muted-foreground">{t.question_count} questions</span>}</div>
-      <div className="flex flex-wrap gap-2">{t.source_path && <Button variant="outline" size="sm" onClick={() => openPdf(t.source_path ?? "")}><ExternalLink />Test PDF</Button>}{t.key_path ? <Button variant="outline" size="sm" onClick={() => openPdf(t.key_path ?? "")}><ExternalLink />Answer key</Button> : <span className="self-center text-xs text-muted-foreground">No answer key</span>}</div>
+      <div className="flex flex-wrap gap-2">{t.source_path && (pdfLinks[t.source_path] ? <Button asChild variant="outline" size="sm"><a href={pdfLinks[t.source_path]} target="_blank" rel="noopener noreferrer"><ExternalLink />Test PDF</a></Button> : <Button variant="outline" size="sm" disabled>Test PDF</Button>)}{t.key_path ? (pdfLinks[t.key_path] ? <Button asChild variant="outline" size="sm"><a href={pdfLinks[t.key_path]} target="_blank" rel="noopener noreferrer"><ExternalLink />Answer key</a></Button> : <Button variant="outline" size="sm" disabled>Answer key</Button>) : <span className="self-center text-xs text-muted-foreground">No answer key</span>}</div>
     </article>)}</div>
     {!isLoading && !error && !rows.length && <p className="py-6 text-center text-muted-foreground">No tests match these filters.</p>}
   </div>;
