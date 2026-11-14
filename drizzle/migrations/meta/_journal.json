@@ -22,6 +22,20 @@
       "when": 1794631403385,
       "tag": "0002_student_events",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794633357722,
+      "tag": "0003_question_formats_points_and_archive",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794633410190,
+      "tag": "0004_durable_ai_grading_pause",
+      "breakpoints": true
     }
   ]
 }

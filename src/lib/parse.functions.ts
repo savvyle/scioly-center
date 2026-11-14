@@ -17,14 +17,18 @@ const schema = {
         additionalProperties: false,
         required: [
           "number", "stem", "original_format", "choices", "correct_index", "topic", "subtopic",
-          "difficulty", "page", "needs_image", "image_description", "confidence", "explanation",
+          "correct_indices", "accepted_answers", "grading_rubric", "points", "difficulty", "page", "needs_image", "image_description", "confidence", "explanation",
         ],
         properties: {
           number: { type: "integer" },
           stem: { type: "string" },
-          original_format: { type: "string", enum: ["mcq", "free_response"] },
+          original_format: { type: "string", enum: ["mcq", "multiple", "free_response"] },
           choices: { type: "array", items: { type: "string" } },
           correct_index: { type: "integer" },
+          correct_indices: { type: "array", items: { type: "integer" } },
+          accepted_answers: { type: "array", items: { type: "string" } },
+          grading_rubric: { type: "string" },
+          points: { type: "number" },
           topic: { type: "string" },
           subtopic: { type: "string" },
           difficulty: { type: "integer" },
@@ -118,20 +122,24 @@ export const parseTest = createServerFn({ method: "POST" })
       }
       if (!files.length) throw new Error("No PDF attached.");
 
-      const instructions = `You convert Science Olympiad tests into a multiple-choice question bank.
+      const instructions = `You convert Science Olympiad tests into a question bank preserving their original answer formats.
 Event: ${test.event}${test.division ? ` (Division ${test.division})` : ""}. Year: ${test.year ?? "unknown"}. Tournament: ${test.tournament ?? "unknown"} (${test.level ?? ""}).
 The first PDF is the test. ${files.length > 1 ? "The second PDF is the answer key." : "The answer key may be included at the end of the test PDF."}
 ${syllabusPrompt(test.event, test.division)}
 Rules:
 - Extract EVERY question in order. Keep stems faithful; include any needed data, tables (as plain text) or station context.
 - Multiple-choice: copy choices verbatim without letter prefixes; set correct_index from the answer key.
-- Free response (short answer, fill-in, numeric, matching items): set original_format "free_response", put the answer key's correct answer as one choice and write 3 plausible but clearly wrong choices (common misconceptions, near-miss values, sibling terms). Shuffle; correct_index points at the right one. Never write a distractor that could also be correct.
-- Multi-part questions: split into separate questions, each self-contained.
+- Free response: preserve the format, use empty choices, correct_index 0, accepted_answers containing the key answer and valid equivalent answers, and a short grading_rubric. Never convert to multiple choice.
+- Multiple select: original_format multiple; copy all choices and put every correct index in correct_indices.
+- points: copy the stated point value, default 1 if unstated.
+- Single choice: correct_indices contains correct_index; accepted_answers is empty; grading_rubric is empty.
+- Never include phrases such as "original question" in stems.
+- Grouped and multi-part questions: NEVER split them. Keep shared context and every labeled subpart together in ONE stem, in original order. Use free_response for groups with separate answers; accepted_answers includes a complete labeled answer covering every subpart. Allocate rubric points per subpart and use the total as points.
 - topic and subtopic: from the syllabus above when given, otherwise short labels. difficulty: 1 easy, 2 medium, 3 hard.
 - page: 1-based page number in the test PDF.
 - needs_image true if the question can't be answered without a figure, photo or specimen image; describe it in image_description (else empty string).
 - confidence 0..1: your confidence that stem, choices and correct answer are all right. Use below 0.75 when the key is missing/ambiguous, text was unreadable, or you guessed.
-- explanation: one or two sentences on why the answer is correct (empty if unknown).`;
+- explanation: concise bullet lines explaining the correct answer, why alternatives are wrong and when they would apply (only where meaningful); free response gives key scoring criteria.`;
 
       const raw = await streamResponses(apiKey, {
         model: "openai/gpt-6-astra",
@@ -158,9 +166,9 @@ Rules:
         throw new Error("The AI returned something unreadable. Try again.");
       }
       const rows = (parsed.questions ?? [])
-        .filter((q) => q.stem && Array.isArray(q.choices) && q.choices.length >= 2)
+        .filter((q) => q.stem && Array.isArray(q.choices) && (q.original_format === "free_response" || q.choices.length >= 2))
         .map((q) => {
-          const ci = Math.min(Math.max(0, q.correct_index | 0), q.choices.length - 1);
+          const ci = q.original_format === "free_response" ? 0 : Math.min(Math.max(0, q.correct_index | 0), q.choices.length - 1);
           const conf = Math.max(0, Math.min(1, Number(q.confidence) || 0));
           const needsReview = conf < CONFIDENCE_THRESHOLD || q.needs_image;
           const notes: string[] = [];
@@ -175,13 +183,19 @@ Rules:
             topic: q.topic || null,
             subtopic: q.subtopic || null,
             difficulty: Math.min(3, Math.max(1, q.difficulty | 0 || 2)),
-            stem: q.stem,
+            stem: q.stem.replace(/\b(?:in the )?original question\s*[:—-]?\s*/gi, "").trim(),
+            question_type: q.original_format === "free_response" ? "free_response" : q.original_format === "multiple" ? "multiple" : "single",
+            correct_indices: q.correct_indices ?? [ci],
+            accepted_answers: q.accepted_answers ?? [],
+            grading_rubric: q.grading_rubric || null,
+            points: Number(q.points) > 0 ? Number(q.points) : 1,
+            feedback_bullets: (q.explanation || "").split("\n").filter(Boolean),
             choices: q.choices,
             correct_index: ci,
             explanation: q.explanation || null,
             status: needsReview ? "review" : "live",
             ai_confidence: conf,
-            converted_from_frq: q.original_format === "free_response",
+            converted_from_frq: false,
             review_note: notes.join(" ") || null,
           };
         });
@@ -220,7 +234,7 @@ export const retagTest = createServerFn({ method: "POST" })
     const apiKey = process.env["LOVABLE_API_KEY"]!;
     let updated = 0;
     for (let i = 0; i < (qs ?? []).length; i += 60) {
-      const batch = qs!.slice(i, i + 60);
+      const batch = (qs ?? []).slice(i, i + 60);
       const raw = await streamResponses(apiKey, {
         model: "openai/gpt-6-astra", stream: true, store: false, reasoning: { effort: "low" },
         instructions: `Tag each ${test.event} question with a topic and subtopic.${sp}`,

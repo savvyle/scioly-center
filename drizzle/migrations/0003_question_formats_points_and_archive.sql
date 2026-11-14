@@ -1,0 +1,15 @@
+ALTER TABLE public.questions ADD COLUMN question_type text NOT NULL DEFAULT 'single', ADD COLUMN correct_indices integer[] NOT NULL DEFAULT '{}', ADD COLUMN accepted_answers text[] NOT NULL DEFAULT '{}', ADD COLUMN grading_rubric text, ADD COLUMN points numeric NOT NULL DEFAULT 1, ADD COLUMN feedback_bullets text[] NOT NULL DEFAULT '{}';
+ALTER TABLE public.questions ADD CONSTRAINT questions_type_valid CHECK (question_type IN ('single','multiple','free_response')), ADD CONSTRAINT question_points_positive CHECK (points > 0);
+UPDATE public.questions SET question_type='free_response', accepted_answers=ARRAY[choices->>correct_index], grading_rubric=coalesce(explanation,'Accept scientifically equivalent wording of the reference answer.') WHERE converted_from_frq=true;
+ALTER TABLE public.attempts ADD COLUMN selected_indices integer[] NOT NULL DEFAULT '{}', ADD COLUMN response_text text, ADD COLUMN points_earned numeric NOT NULL DEFAULT 0, ADD COLUMN points_possible numeric NOT NULL DEFAULT 1, ADD COLUMN feedback_bullets text[] NOT NULL DEFAULT '{}', ADD COLUMN submission_id uuid;
+CREATE UNIQUE INDEX attempts_submission_id_unique ON public.attempts(user_id,submission_id) WHERE submission_id IS NOT NULL;
+CREATE POLICY "students read archive" ON public.tests FOR SELECT TO authenticated USING (school_id=public.current_school_id() AND status='parsed');
+CREATE POLICY "students download archived tests" ON storage.objects FOR SELECT TO authenticated USING (bucket_id='tests' AND EXISTS (SELECT 1 FROM public.tests t WHERE t.school_id=public.current_school_id() AND t.status='parsed' AND (t.source_path=name OR t.key_path=name)));
+CREATE OR REPLACE FUNCTION public.stats_by_topic(p_user uuid DEFAULT NULL::uuid, p_division text DEFAULT NULL::text)
+RETURNS TABLE(event text, topic text, answered integer, correct integer) LANGUAGE sql STABLE SET search_path TO 'public' AS $function$
+select q.event,coalesce(q.topic,'General'),count(*)::int,count(*) filter(where a.is_correct)::int from public.attempts a join public.questions q on q.id=a.question_id left join public.profiles p on p.id=a.user_id left join public.teams t on t.id=p.team_id where (p_user is null or a.user_id=p_user) and (p_division is null or t.division=p_division) and (p_user is not null or not public.has_role(a.user_id,'coach')) group by 1,2 order by 1,2
+$function$;
+CREATE OR REPLACE FUNCTION public.daily_trend(p_user uuid DEFAULT NULL::uuid,p_days integer DEFAULT 28)
+RETURNS TABLE(day date,answered integer,correct integer) LANGUAGE sql STABLE SET search_path TO 'public' AS $function$
+select (a.answered_at at time zone 'America/Los_Angeles')::date,count(*)::int,count(*) filter(where a.is_correct)::int from public.attempts a where (p_user is null or a.user_id=p_user) and a.answered_at>now()-p_days*interval '1 day' and (p_user is not null or not public.has_role(a.user_id,'coach')) group by 1 order by 1
+$function$;

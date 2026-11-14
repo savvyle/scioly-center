@@ -11,7 +11,7 @@ import { topRole, useMe, type Role } from "@/lib/auth";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/coach/accounts")({
-  head: () => ({ meta: [{ title: "Accounts · SciOly Center" }, { name: "description", content: "Manage team accounts and roles." }] }),
+  head: () => ({ meta: [{ title: "Accounts · SciOly Center" }, { name: "description", content: "Manage team accounts and roles." }, { property: "og:title", content: "Accounts · SciOly Center" }, { property: "og:description", content: "Manage team accounts and roles." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Accounts,
 });
 
@@ -29,6 +29,7 @@ function Accounts() {
   const remove = useServerFn(deleteAccount);
   const [f, setF] = useState({ username: "", displayName: "", password: genPassword(), role: "student" as Role, division: "C" as "B" | "C" | "" });
   const [busy, setBusy] = useState(false);
+  const [editing, setEditing] = useState<{ id: string; name: string; username: string } | null>(null);
 
   const { data: people = [] } = useQuery({
     queryKey: ["accounts"],
@@ -98,6 +99,12 @@ function Accounts() {
               <div className="font-medium">{p.name}</div>
               <div className="font-mono text-xs text-muted-foreground">@{p.username}</div>
             </div>
+            {me?.isCoach && <Button size="sm" variant="outline" onClick={() => setEditing({ id: p.id, name: p.name, username: p.username })}>Edit name / username</Button>}
+            {editing && editing.id === p.id && <form className="flex w-full flex-wrap gap-2" onSubmit={async (e) => { e.preventDefault(); if (!editing) return; try { await update({ data: { userId: editing.id, displayName: editing.name, username: editing.username } }); setEditing(null); qc.invalidateQueries(); toast.success("Account updated"); } catch (error) { toast.error(error instanceof Error ? error.message : "Failed"); } }}>
+              <Input aria-label="Display name" className="w-48" value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} required />
+              <Input aria-label="Username" className="w-48" value={editing.username} onChange={(e) => setEditing({ ...editing, username: e.target.value })} required />
+              <Button type="submit" size="sm">Save</Button><Button type="button" size="sm" variant="ghost" onClick={() => setEditing(null)}>Cancel</Button>
+            </form>}
             {me?.isCoach ? (
               <>
                 <select className="h-8 rounded-md border border-input bg-card px-1 text-xs" value={p.role} onChange={(e) => act(() => update({ data: { userId: p.id, role: e.target.value as Role } }), "Role updated")}>

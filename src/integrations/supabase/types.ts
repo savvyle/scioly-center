@@ -14,40 +14,76 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_grading_status: {
+        Row: {
+          id: string
+          message: string | null
+          paused: boolean
+        }
+        Insert: {
+          id: string
+          message?: string | null
+          paused?: boolean
+        }
+        Update: {
+          id?: string
+          message?: string | null
+          paused?: boolean
+        }
+        Relationships: []
+      }
       attempts: {
         Row: {
           answered_at: string
           chosen_index: number | null
+          feedback_bullets: string[]
           id: string
           is_correct: boolean
           mock_id: string | null
           mode: string
+          points_earned: number
+          points_possible: number
           question_id: string
+          response_text: string | null
           school_id: string
+          selected_indices: number[]
+          submission_id: string | null
           time_ms: number | null
           user_id: string
         }
         Insert: {
           answered_at?: string
           chosen_index?: number | null
+          feedback_bullets?: string[]
           id?: string
           is_correct: boolean
           mock_id?: string | null
           mode: string
+          points_earned?: number
+          points_possible?: number
           question_id: string
+          response_text?: string | null
           school_id?: string
+          selected_indices?: number[]
+          submission_id?: string | null
           time_ms?: number | null
           user_id?: string
         }
         Update: {
           answered_at?: string
           chosen_index?: number | null
+          feedback_bullets?: string[]
           id?: string
           is_correct?: boolean
           mock_id?: string | null
           mode?: string
+          points_earned?: number
+          points_possible?: number
           question_id?: string
+          response_text?: string | null
           school_id?: string
+          selected_indices?: number[]
+          submission_id?: string | null
           time_ms?: number | null
           user_id?: string
         }
@@ -189,18 +225,24 @@ export type Database = {
       }
       questions: {
         Row: {
+          accepted_answers: string[]
           ai_confidence: number | null
           choices: Json
           converted_from_frq: boolean
           correct_index: number
+          correct_indices: number[]
           created_at: string
           difficulty: number
           division: string | null
           event: string
           explanation: string | null
+          feedback_bullets: string[]
+          grading_rubric: string | null
           id: string
           image_urls: string[]
           level: string | null
+          points: number
+          question_type: string
           review_note: string | null
           school_id: string
           status: string
@@ -211,18 +253,24 @@ export type Database = {
           year: number | null
         }
         Insert: {
+          accepted_answers?: string[]
           ai_confidence?: number | null
           choices?: Json
           converted_from_frq?: boolean
           correct_index?: number
+          correct_indices?: number[]
           created_at?: string
           difficulty?: number
           division?: string | null
           event: string
           explanation?: string | null
+          feedback_bullets?: string[]
+          grading_rubric?: string | null
           id?: string
           image_urls?: string[]
           level?: string | null
+          points?: number
+          question_type?: string
           review_note?: string | null
           school_id?: string
           status?: string
@@ -233,18 +281,24 @@ export type Database = {
           year?: number | null
         }
         Update: {
+          accepted_answers?: string[]
           ai_confidence?: number | null
           choices?: Json
           converted_from_frq?: boolean
           correct_index?: number
+          correct_indices?: number[]
           created_at?: string
           difficulty?: number
           division?: string | null
           event?: string
           explanation?: string | null
+          feedback_bullets?: string[]
+          grading_rubric?: string | null
           id?: string
           image_urls?: string[]
           level?: string | null
+          points?: number
+          question_type?: string
           review_note?: string | null
           school_id?: string
           status?: string

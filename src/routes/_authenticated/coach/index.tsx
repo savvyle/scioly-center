@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { ExternalLink } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/coach/")({
-  head: () => ({ meta: [{ title: "Team dashboard · SciOly Center" }, { name: "description", content: "Team strength by event and weekly goals." }] }),
+  head: () => ({ meta: [{ title: "Team dashboard · SciOly Center" }, { name: "description", content: "Team strength by event and weekly goals." }, { property: "og:title", content: "Team dashboard · SciOly Center" }, { property: "og:description", content: "Team strength by event and weekly goals." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: CoachHome,
 });
 

@@ -8,7 +8,7 @@ import { EventAccuracy, TrendChart } from "@/components/app/StatsPanels";
 import { Brain, ListChecks, Timer } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Home · SciOly Center" }, { name: "description", content: "Your weekly goal and practice stats." }] }),
+  head: () => ({ meta: [{ title: "Home · SciOly Center" }, { name: "description", content: "Your weekly goal and practice stats." }, { property: "og:title", content: "Home · SciOly Center" }, { property: "og:description", content: "Your weekly goal and practice stats." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Dashboard,
 });
 
@@ -25,14 +25,14 @@ function Dashboard() {
         <h1 className="text-3xl font-extrabold">Ready for a few questions?</h1>
       </div>
       <Button asChild variant="hero" size="lg" className="w-full sm:w-auto">
-        <Link to="/drill"><Brain /> Start drilling</Link>
+        <Link to="/drill"><Brain /> Practice</Link>
       </Button>
       <div className="grid gap-4 md:grid-cols-2">
         <GoalBar answered={mine?.answered ?? 0} correct={mine?.correct ?? 0} goal={goal} />
         <div className="grid grid-cols-2 gap-3">
           <Link to="/mock" className="panel flex flex-col justify-between p-4 hover:border-primary">
             <Timer className="h-6 w-6 text-primary" />
-            <div><div className="font-bold">Mock test</div><div className="text-xs text-muted-foreground">50 minutes, one event</div></div>
+            <div><div className="font-bold">Test Archive</div><div className="text-xs text-muted-foreground">Past tests and answer keys</div></div>
           </Link>
           <Link to="/review" className="panel flex flex-col justify-between p-4 hover:border-primary">
             <ListChecks className="h-6 w-6 text-primary" />

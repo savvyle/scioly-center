@@ -82,7 +82,8 @@ export const updateAccount = createServerFn({ method: "POST" })
     z
       .object({
         userId: z.string().uuid(),
-        displayName: z.string().min(1).max(80).optional(),
+        displayName: z.string().trim().min(1).max(80).optional(),
+        username: z.string().min(2).max(40).optional(),
         role: z.enum(["student", "captain", "coach"]).optional(),
         division: z.enum(["B", "C"]).nullable().optional(),
       })
@@ -91,10 +92,22 @@ export const updateAccount = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     if ((await roleOf(context.supabase, context.userId)) !== "coach") throw new Error("Only coaches can change accounts.");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const patch: { display_name?: string; team_id?: string | null } = {};
+    const patch: { display_name?: string; username?: string; team_id?: string | null } = {};
+    if (data.username !== undefined) {
+      const username = norm(data.username);
+      if (username.length < 2) throw new Error("Username needs at least 2 letters or numbers.");
+      const { data: existing } = await supabaseAdmin.from("profiles").select("id").eq("username", username).neq("id", data.userId).maybeSingle();
+      if (existing) throw new Error("That username is taken.");
+      const { error } = await supabaseAdmin.auth.admin.updateUserById(data.userId, { email: `${username}@${DOMAIN}`, email_confirm: true, user_metadata: { username } });
+      if (error) throw new Error(error.message);
+      patch.username = username;
+    }
     if (data.displayName) patch.display_name = data.displayName;
     if (data.division !== undefined) patch.team_id = data.division ? TEAM[data.division] : null;
-    if (Object.keys(patch).length) await supabaseAdmin.from("profiles").update(patch).eq("id", data.userId);
+    if (Object.keys(patch).length) {
+      const { error } = await supabaseAdmin.from("profiles").update(patch).eq("id", data.userId);
+      if (error) throw new Error(error.message);
+    }
     if (data.role) {
       if (data.userId === context.userId && data.role !== "coach") throw new Error("You can't remove your own coach role.");
       await supabaseAdmin.from("user_roles").delete().eq("user_id", data.userId);

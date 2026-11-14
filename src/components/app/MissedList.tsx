@@ -12,15 +12,15 @@ export function MissedList({ userId }: { userId: string }) {
     queryFn: async () => {
       const { data } = await supabase
         .from("attempts")
-        .select("question_id, is_correct, chosen_index, answered_at, questions(*)")
+        .select("question_id, is_correct, chosen_index, selected_indices, response_text, feedback_bullets, answered_at, questions(*)")
         .eq("user_id", userId)
         .order("answered_at", { ascending: false })
         .limit(1000);
-      const latest = new Map<string, { q: Question; lastCorrect: boolean; chosen: number | null; misses: number }>();
+      const latest = new Map<string, { q: Question; lastCorrect: boolean; chosen: number | null; misses: number; answer: { indices: number[]; text: string }; feedback: string[] }>();
       for (const a of data ?? []) {
         if (!a.questions) continue;
         const cur = latest.get(a.question_id);
-        if (!cur) latest.set(a.question_id, { q: a.questions as unknown as Question, lastCorrect: a.is_correct, chosen: a.is_correct ? null : a.chosen_index, misses: a.is_correct ? 0 : 1 });
+        if (!cur) latest.set(a.question_id, { q: a.questions as unknown as Question, lastCorrect: a.is_correct, chosen: a.is_correct ? null : a.chosen_index, misses: a.is_correct ? 0 : 1, answer: { indices: a.selected_indices ?? [], text: a.response_text ?? "" }, feedback: a.feedback_bullets ?? [] });
         else if (!a.is_correct) { cur.misses++; if (cur.chosen === null) cur.chosen = a.chosen_index; }
       }
       return [...latest.values()].filter((x) => x.misses > 0);
@@ -45,7 +45,7 @@ export function MissedList({ userId }: { userId: string }) {
             <span>missed {r.misses}×</span>
             {r.lastCorrect && <span className="text-success">· since answered correctly</span>}
           </div>
-          <QuestionCard q={r.q} chosen={r.chosen} reveal />
+          <QuestionCard q={r.q} chosen={r.chosen} answer={r.answer} feedback={r.feedback} reveal />
         </div>
       ))}
     </div>

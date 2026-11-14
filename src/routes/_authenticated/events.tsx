@@ -9,7 +9,7 @@ import { Check } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/events")({
-  head: () => ({ meta: [{ title: "My events · SciOly Center" }, { name: "description", content: "Pick your events, one per conflict block." }] }),
+  head: () => ({ meta: [{ title: "My events · SciOly Center" }, { name: "description", content: "Pick your events, one per conflict block." }, { property: "og:title", content: "My events · SciOly Center" }, { property: "og:description", content: "Pick your events, one per conflict block." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: EventsPage,
 });
 

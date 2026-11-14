@@ -9,7 +9,7 @@ import { settingsQuery } from "@/lib/data";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/coach/settings")({
-  head: () => ({ meta: [{ title: "Settings · SciOly Center" }, { name: "description", content: "Weekly goal targets." }] }),
+  head: () => ({ meta: [{ title: "Settings · SciOly Center" }, { name: "description", content: "Weekly goal targets." }, { property: "og:title", content: "Settings · SciOly Center" }, { property: "og:description", content: "Weekly goal targets." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Settings,
 });
 

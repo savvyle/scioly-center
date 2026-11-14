@@ -7,7 +7,7 @@ import { EventAccuracy, TrendChart } from "@/components/app/StatsPanels";
 import { MissedList } from "@/components/app/MissedList";
 
 export const Route = createFileRoute("/_authenticated/coach/students/$id")({
-  head: () => ({ meta: [{ title: "Student · SciOly Center" }, { name: "description", content: "Per-student practice stats." }] }),
+  head: () => ({ meta: [{ title: "Student · SciOly Center" }, { name: "description", content: "Per-student practice stats." }, { property: "og:title", content: "Student · SciOly Center" }, { property: "og:description", content: "Per-student practice stats." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Student,
 });
 

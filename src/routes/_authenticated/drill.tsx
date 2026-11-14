@@ -8,9 +8,13 @@ import { liveEventsQuery, type Question } from "@/lib/data";
 import { DIFFICULTY } from "@/lib/events";
 import { FlagButton, QuestionCard } from "@/components/app/QuestionCard";
 import { ArrowRight, Loader2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { checkAnswer } from "@/lib/answers.functions";
+import { emptyAnswer, type Answer } from "@/lib/answers";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/drill")({
-  head: () => ({ meta: [{ title: "Drill · SciOly Center" }, { name: "description", content: "One question at a time with instant feedback." }] }),
+  head: () => ({ meta: [{ title: "Practice · SciOly Center" }, { name: "description", content: "Practice Science Olympiad questions with answer checking and concise feedback." }, { property: "og:title", content: "Practice · SciOly Center" }, { property: "og:description", content: "Practice questions with answer checking and concise feedback." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Drill,
 });
 
@@ -25,14 +29,21 @@ function Drill() {
   const [q, setQ] = useState<Question | null>(null);
   const [loading, setLoading] = useState(true);
   const [empty, setEmpty] = useState(false);
-  const [chosen, setChosen] = useState<number | null>(null);
+  const [answer, setAnswer] = useState<Answer>(emptyAnswer);
+  const [checked, setChecked] = useState<{ correct: boolean; points: number; possible: number; bullets: string[] } | null>(null);
+  const [checking, setChecking] = useState(false);
+  const checkingRef = useRef(false);
+  const submissionId = useRef("");
+  const check = useServerFn(checkAnswer);
   const [session, setSession] = useState({ answered: 0, correct: 0 });
   const seen = useRef<string[]>([]);
   const started = useRef(Date.now());
 
   const next = useCallback(async () => {
     setLoading(true);
-    setChosen(null);
+    setAnswer(emptyAnswer());
+    setChecked(null);
+    submissionId.current = crypto.randomUUID();
     const { data: id } = await supabase.rpc("next_drill_question", {
       p_event: event === ALL ? undefined : event,
       p_topic: topic === ALL ? undefined : topic,
@@ -57,15 +68,20 @@ function Drill() {
     next();
   }, [next]);
 
-  async function choose(i: number) {
-    if (!q || chosen !== null) return;
-    setChosen(i);
-    const ok = i === q.correct_index;
-    seen.current.push(q.id);
-    setSession((s) => ({ answered: s.answered + 1, correct: s.correct + (ok ? 1 : 0) }));
-    await supabase.from("attempts").insert({ question_id: q.id, mode: "drill", chosen_index: i, is_correct: ok, time_ms: Date.now() - started.current });
-    qc.invalidateQueries({ queryKey: ["leaderboard"] });
-    qc.invalidateQueries({ queryKey: ["stats"] });
+  async function commitAnswer() {
+    if (!q || checked || checkingRef.current) return;
+    checkingRef.current = true;
+    setChecking(true);
+    try {
+      const result = await check({ data: { questionId: q.id, submissionId: submissionId.current, ...answer } });
+      setChecked(result);
+      seen.current.push(q.id);
+      setSession((s) => ({ answered: s.answered + 1, correct: s.correct + (result.correct ? 1 : 0) }));
+      qc.invalidateQueries({ queryKey: ["leaderboard"] });
+      qc.invalidateQueries({ queryKey: ["stats"] });
+      qc.invalidateQueries({ queryKey: ["trend"] });
+    } catch (error) { toast.error(error instanceof Error ? error.message : "Couldn't check your answer."); }
+    finally { checkingRef.current = false; setChecking(false); }
   }
 
   const topics = events.find((e) => e.event === event)?.topics ?? [];
@@ -73,27 +89,27 @@ function Drill() {
   return (
     <div className="mx-auto max-w-2xl space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-extrabold">Drill</h1>
+        <h1 className="text-2xl font-extrabold">Practice</h1>
         <span className="font-mono text-sm">
           <span className="text-success">{session.correct}</span>/{session.answered} this session
         </span>
       </div>
       <div className="grid grid-cols-3 gap-2">
-        <Select value={event} onValueChange={(v) => { setEvent(v); setTopic(ALL); }}>
+        <Select disabled={checking} value={event} onValueChange={(v) => { setEvent(v); setTopic(ALL); }}>
           <SelectTrigger><SelectValue placeholder="Event" /></SelectTrigger>
           <SelectContent>
             <SelectItem value={ALL}>All events</SelectItem>
             {events.map((e) => <SelectItem key={e.event} value={e.event}>{e.event} ({e.count})</SelectItem>)}
           </SelectContent>
         </Select>
-        <Select value={topic} onValueChange={setTopic} disabled={event === ALL}>
+        <Select value={topic} onValueChange={setTopic} disabled={event === ALL || checking}>
           <SelectTrigger><SelectValue placeholder="Topic" /></SelectTrigger>
           <SelectContent>
             <SelectItem value={ALL}>All topics</SelectItem>
             {topics.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
           </SelectContent>
         </Select>
-        <Select value={difficulty} onValueChange={setDifficulty}>
+        <Select disabled={checking} value={difficulty} onValueChange={setDifficulty}>
           <SelectTrigger><SelectValue placeholder="Difficulty" /></SelectTrigger>
           <SelectContent>
             <SelectItem value={ALL}>Any level</SelectItem>
@@ -111,17 +127,17 @@ function Drill() {
       )}
       {!loading && q && (
         <>
-          <QuestionCard q={q} chosen={chosen} reveal={chosen !== null} onChoose={choose} showTagsBefore={false} />
-          {chosen !== null && (
-            <div className="sticky bottom-20 flex items-center gap-2 md:bottom-4">
-              <div className={chosen === q.correct_index ? "flex-1 font-display text-xl font-bold text-success" : "flex-1 font-display text-xl font-bold text-destructive"}>
-                {chosen === q.correct_index ? "Correct!" : "Not quite — it'll come back soon."}
+          <QuestionCard q={q} chosen={answer.indices[0] ?? null} answer={answer} reveal={checked !== null} onAnswer={checking ? undefined : setAnswer} feedback={checked?.bullets} />
+          {checked && (
+            <div className="sticky bottom-20 flex flex-wrap items-center gap-2 bg-background py-2 md:bottom-4">
+              <div className={checked.correct ? "flex-1 font-display text-xl font-bold text-success" : "flex-1 font-display text-xl font-bold text-destructive"}>
+                {checked.correct ? "Correct!" : "Not quite"} <span className="text-sm">{checked.points}/{checked.possible} pts</span>
               </div>
               <FlagButton questionId={q.id} />
               <Button size="lg" onClick={next}>Next <ArrowRight /></Button>
             </div>
           )}
-          {chosen === null && <div className="flex justify-end"><FlagButton questionId={q.id} onFlagged={next} /></div>}
+          {!checked && <div className="flex items-center justify-end gap-2">{!checking && <FlagButton questionId={q.id} onFlagged={next} />}<Button size="lg" onClick={commitAnswer} disabled={checking || (q.question_type === "free_response" ? !answer.text.trim() : !answer.indices.length)}>{checking && <Loader2 className="animate-spin" />}{checking ? "Checking…" : "Check answer"}</Button></div>}
         </>
       )}
     </div>

@@ -15,7 +15,7 @@ import { Loader2, Upload } from "lucide-react";
 import { DriveImport } from "@/components/app/DriveImport";
 
 export const Route = createFileRoute("/_authenticated/coach/upload")({
-  head: () => ({ meta: [{ title: "Upload test · SciOly Center" }, { name: "description", content: "Upload a past test for AI parsing." }] }),
+  head: () => ({ meta: [{ title: "Upload test · SciOly Center" }, { name: "description", content: "Upload a past test for AI parsing." }, { property: "og:title", content: "Upload test · SciOly Center" }, { property: "og:description", content: "Upload a past test for AI parsing." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: UploadPage,
 });
 

@@ -13,7 +13,7 @@ import { useMe } from "@/lib/auth";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/coach/queue")({
-  head: () => ({ meta: [{ title: "Review queue · SciOly Center" }, { name: "description", content: "Check uncertain and flagged questions." }] }),
+  head: () => ({ meta: [{ title: "Review queue · SciOly Center" }, { name: "description", content: "Check uncertain and flagged questions." }, { property: "og:title", content: "Review queue · SciOly Center" }, { property: "og:description", content: "Check uncertain and flagged questions." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Queue,
 });
 
@@ -59,6 +59,7 @@ function Editor({ q, flagIds, flagReasons }: { q: Question; flagIds?: string[]; 
   const [f, setF] = useState({
     stem: q.stem, choices: q.choices.join("\n"), correct: q.correct_index, topic: q.topic ?? "", subtopic: q.subtopic ?? "",
     difficulty: q.difficulty, explanation: q.explanation ?? "", images: q.image_urls ?? [],
+    type: q.question_type ?? "single", points: q.points ?? 1, accepted: (q.accepted_answers ?? []).join("\n"), rubric: q.grading_rubric ?? "", correctIndices: q.correct_indices ?? [q.correct_index],
   });
   const [busy, setBusy] = useState(false);
   const choices = f.choices.split("\n").map((c) => c.trim()).filter(Boolean);
@@ -71,11 +72,12 @@ function Editor({ q, flagIds, flagReasons }: { q: Question; flagIds?: string[]; 
   }
 
   async function save(status: "live" | "rejected") {
-    if (status === "live" && (choices.length < 2 || f.correct >= choices.length)) { toast.error("Need 2+ choices and a valid correct answer."); return; }
+    if (status === "live" && (f.points <= 0 || (f.type === "free_response" ? !f.accepted.trim() : choices.length < 2 || (f.type === "multiple" ? !f.correctIndices.length || f.correctIndices.some((i) => i >= choices.length) : f.correct >= choices.length)))) { toast.error("Add valid answers and a positive point value."); return; }
     setBusy(true);
     const { error } = await supabase.from("questions").update({
       stem: f.stem, choices, correct_index: f.correct, topic: f.topic || null, subtopic: f.subtopic || null,
       difficulty: f.difficulty, explanation: f.explanation || null, image_urls: f.images, status, review_note: null,
+      question_type: f.type, points: f.points, correct_indices: f.type === "multiple" ? f.correctIndices : [f.correct], accepted_answers: f.accepted.split("\n").map((a) => a.trim()).filter(Boolean), grading_rubric: f.rubric || null, feedback_bullets: f.explanation.split("\n").filter(Boolean),
     }).eq("id", q.id);
     if (!error && flagIds?.length) {
       await supabase.from("flags").update({ resolved_at: new Date().toISOString(), resolved_by: me?.id ?? null, resolution: status === "live" ? "fixed" : "removed" }).in("id", flagIds);
@@ -92,15 +94,19 @@ function Editor({ q, flagIds, flagReasons }: { q: Question; flagIds?: string[]; 
       {q.review_note && <p className="rounded-md bg-muted p-2 text-sm">{q.review_note}</p>}
       {flagReasons && <p className="rounded-md bg-destructive-soft p-2 text-sm">Flags: {flagReasons.join(" · ")}</p>}
       <div className="space-y-1.5"><Label>Question</Label><Textarea rows={4} value={f.stem} onChange={(e) => setF({ ...f, stem: e.target.value })} /></div>
+      <div className="flex flex-wrap items-center gap-3"><Label>Answer format</Label><select aria-label="Answer format" className="rounded-md border border-input bg-card p-2 text-sm" value={f.type} onChange={(e) => setF({ ...f, type: e.target.value as typeof f.type })}><option value="single">Single choice</option><option value="multiple">Multiple select</option><option value="free_response">Free response</option></select><Label>Points</Label><Input aria-label="Points" className="w-24" type="number" min="0.25" step="0.25" value={f.points} onChange={(e) => setF({ ...f, points: Number(e.target.value) })} /></div>
+      {f.type === "free_response" && <div className="space-y-2"><Label>Accepted answers (one per line)</Label><Textarea value={f.accepted} onChange={(e) => setF({ ...f, accepted: e.target.value })} /><Label>Grading rubric</Label><Textarea value={f.rubric} onChange={(e) => setF({ ...f, rubric: e.target.value })} /></div>}
+      {f.type !== "free_response" && <>
       <div className="space-y-1.5"><Label>Choices (one per line)</Label><Textarea rows={4} value={f.choices} onChange={(e) => setF({ ...f, choices: e.target.value })} /></div>
       <div className="flex flex-wrap items-center gap-2">
         <Label>Correct:</Label>
         {choices.map((c, i) => (
-          <Button key={i} type="button" size="sm" variant={f.correct === i ? "default" : "outline"} onClick={() => setF({ ...f, correct: i })} className="max-w-48 truncate">
+          <Button key={i} type="button" size="sm" variant={(f.type === "multiple" ? f.correctIndices.includes(i) : f.correct === i) ? "default" : "outline"} onClick={() => setF({ ...f, correct: i, correctIndices: f.correctIndices.includes(i) ? f.correctIndices.filter((x) => x !== i) : [...f.correctIndices, i] })} className="max-w-48 truncate">
             {"ABCDEFGHIJ"[i]}. {c.slice(0, 24)}
           </Button>
         ))}
       </div>
+      </>}
       <div className="grid grid-cols-3 gap-2">
         <Input placeholder="Topic" value={f.topic} onChange={(e) => setF({ ...f, topic: e.target.value })} />
         <Input placeholder="Subtopic" value={f.subtopic} onChange={(e) => setF({ ...f, subtopic: e.target.value })} />

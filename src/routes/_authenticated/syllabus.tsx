@@ -8,7 +8,7 @@ import { pct } from "@/lib/week";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/syllabus")({
-  head: () => ({ meta: [{ title: "Syllabus · SciOly Center" }, { name: "description", content: "Every 2027 concept to master, with your accuracy." }] }),
+  head: () => ({ meta: [{ title: "Syllabus · SciOly Center" }, { name: "description", content: "Every 2027 concept to master, with your accuracy." }, { property: "og:title", content: "Syllabus · SciOly Center" }, { property: "og:description", content: "Every 2027 concept to master, with your accuracy." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: SyllabusPage,
 });
 

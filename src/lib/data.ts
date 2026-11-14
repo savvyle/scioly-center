@@ -6,6 +6,8 @@ export type Question = {
   year: number | null; level: string | null; stem: string; choices: string[]; correct_index: number;
   explanation: string | null; image_urls: string[]; status: string; ai_confidence: number | null;
   converted_from_frq: boolean; review_note: string | null; test_id: string | null;
+  question_type?: "single" | "multiple" | "free_response"; correct_indices?: number[];
+  accepted_answers?: string[]; grading_rubric?: string | null; points?: number; feedback_bullets?: string[];
 };
 
 export const settingsQuery = queryOptions({
@@ -58,7 +60,7 @@ export const liveEventsQuery = queryOptions({
     const map = new Map<string, Set<string>>();
     for (const r of data ?? []) {
       if (!map.has(r.event)) map.set(r.event, new Set());
-      if (r.topic) map.get(r.event)!.add(r.topic);
+      if (r.topic) map.get(r.event)?.add(r.topic);
     }
     return [...map.entries()]
       .map(([event, topics]) => ({ event, topics: [...topics].sort(), count: (data ?? []).filter((d) => d.event === event).length }))

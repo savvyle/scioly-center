@@ -34,3 +34,6 @@ use the editor.
 - Leaderboard and weekly windows are computed from attempts in SQL (`weekly_leaderboard`, `week_bounds`), not snapshotted by a cron job (why: no recurring job needed, history is always exact).
 - Spaced repetition state is updated by a database trigger on attempts (why: drill and mock answers both feed it consistently).
 - Test PDFs are parsed by an AI server function (`src/lib/parse.functions.ts`); low-confidence or image-dependent questions go to the review queue.
+- Original answer formats and points are stored per question; authenticated check-answer functions grade and save committed answers, with AI grading and reference answers confined to server modules (why: consistent scoring and uncommitted selections never count).
+- Aggregate team SQL excludes coach roles while personal reports retain their practice (why: coach testing must not distort student progress).
+- The historical /mock URL renders the filtered Test Archive with short-lived private PDF links (why: preserve existing links without retaining timed mock behavior).
