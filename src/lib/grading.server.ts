@@ -1,5 +1,5 @@
 import { createOpenAI } from "@ai-sdk/openai";
-import { Output, streamText } from "ai";
+import { Output, streamText, type FilePart } from "ai";
 import { z } from "zod";
 import { getRequest } from "@tanstack/react-start/server";
 import { createLovableAiGatewayRunIdFetch, getLovableAiGatewayRunId } from "./ai/run-id.server.ts";
@@ -11,7 +11,7 @@ const resultSchema = z.object({
   bullets: z.array(z.string()),
 });
 
-export async function gradeWithAi(instructions: string, input: unknown) {
+export async function structuredAi<T>(schema: z.ZodType<T>, instructions: string, input: unknown, files: FilePart[] = []) {
   const key = process.env["LOVABLE_API_KEY"];
   if (!key) throw new Error("AI grading is not configured.");
   const request = getRequest();
@@ -23,8 +23,8 @@ export async function gradeWithAi(instructions: string, input: unknown) {
   try {
     const result = streamText({
       model: provider.responses("openai/gpt-6-astra"), instructions,
-      messages: [{ role: "user", content: JSON.stringify(input) }],
-      output: Output.object({ schema: resultSchema }), maxRetries: 0, abortSignal: request.signal,
+      messages: [{ role: "user", content: [{ type: "text", text: JSON.stringify(input) }, ...files] }],
+      output: Output.object({ schema }), maxRetries: 0, abortSignal: request.signal,
       providerOptions: { openai: { forceReasoning: true, reasoningEffort: "low", reasoningSummary: "auto", store: false, include: ["reasoning.encrypted_content"] } },
     });
     return await result.output;
@@ -40,4 +40,8 @@ export async function gradeWithAi(instructions: string, input: unknown) {
     }
     throw new Error(safe);
   }
+}
+
+export async function gradeWithAi(instructions: string, input: unknown) {
+  return structuredAi(resultSchema, instructions, input);
 }

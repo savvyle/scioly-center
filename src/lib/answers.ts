@@ -1,5 +1,8 @@
 export type Answer = { indices: number[]; text: string };
 export const emptyAnswer = (): Answer => ({ indices: [], text: "" });
+export function needsAiGrading(type: string, feedback: string[], explanation: string | null) {
+  return type === "free_response" || (!feedback.some((bullet) => bullet.trim()) && !explanation?.trim());
+}
 export function sameSelection(selected: number[], correct: number[]) {
   const a = [...new Set(selected)].sort((x, y) => x - y);
   const b = [...new Set(correct)].sort((x, y) => x - y);

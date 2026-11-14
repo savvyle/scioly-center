@@ -48,3 +48,5 @@ use the editor.
 - Archive PDF buttons reserve a tab synchronously, fetch the private file with the authenticated storage client, and open an app-origin blob URL (why: avoid blocked external storage navigation without making files public).
 - Render the weekly leaderboard on the dashboard and redirect the legacy /leaderboard URL there (why: consolidate personal and team progress without breaking old links).
 - Dashboard event progress joins owner-scoped student event selections to existing topic totals, preserving zero-activity selections (why: selected events must remain visible before practice starts).
+- Reports attempt source-backed AI repair before unresolved coach review, with validated high-confidence corrections and an audit record (why: automate clear defects without guessing missing context).
+- Choice grading is deterministic and reuses stored feedback or explanations; generated instructional feedback is persisted separately from student-specific scores (why: avoid repeat AI calls and unsafe feedback reuse).

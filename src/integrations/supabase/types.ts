@@ -607,6 +607,7 @@ export type Database = {
         }
         Returns: string
       }
+      review_interval_days: { Args: { p_box: number }; Returns: number }
       stats_by_topic: {
         Args: { p_division?: string; p_user?: string }
         Returns: {

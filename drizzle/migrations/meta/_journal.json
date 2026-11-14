@@ -50,6 +50,13 @@
       "when": 1794637334748,
       "tag": "0006_question_source_coordinates",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794642082586,
+      "tag": "0007_update_review_intervals",
+      "breakpoints": true
     }
   ]
 }

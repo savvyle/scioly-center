@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { cleanStem, earnedPoints, sameSelection } from "./answers";
+import { cleanStem, earnedPoints, sameSelection, needsAiGrading } from "./answers";
 describe("answer grading", () => {
+  it("never calls AI for single or multiple choice with saved feedback", () => {
+    for (const type of ["single", "multiple"]) {
+      expect(needsAiGrading(type, ["Saved feedback"], null)).toBe(false);
+      expect(needsAiGrading(type, [], "Saved explanation")).toBe(false);
+      expect(needsAiGrading(type, [], null)).toBe(true);
+    }
+    expect(needsAiGrading("free_response", ["Feedback"], "Explanation")).toBe(true);
+  });
   it("requires every correct selection and no extra selections", () => {
     expect(sameSelection([2, 0], [0, 2])).toBe(true);
     expect(sameSelection([0], [0, 2])).toBe(false);

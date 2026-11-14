@@ -12,6 +12,8 @@ import { useQuery } from "@tanstack/react-query";
 import { masteryLevel, matchingItems, sourceLabel } from "@/lib/practice";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { EditQuestionButton } from "./EditQuestionButton";
+import { useServerFn } from "@tanstack/react-start";
+import { reportQuestion } from "@/lib/report.functions";
 
 const LETTERS = "ABCDEFGHIJ";
 
@@ -145,15 +147,17 @@ export function FlagButton({ questionId, onFlagged }: { questionId: string; onFl
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
+  const report = useServerFn(reportQuestion);
   async function submit() {
     setBusy(true);
-    const { error } = await supabase.from("flags").insert({ question_id: questionId, reason: reason || "Wrong or broken" });
-    setBusy(false);
-    if (error) { toast.error("Couldn't report that question."); return; }
-    toast.success("Thanks — a coach will check it.");
-    setOpen(false);
-    setReason("");
-    onFlagged?.();
+    try {
+      const result = await report({ data: { questionId, reason: reason || "Wrong or broken" } });
+      toast.success(result.message);
+      setOpen(false);
+      setReason("");
+      onFlagged?.();
+    } catch (error) { toast.error(error instanceof Error ? error.message : "Couldn't report that question."); }
+    finally { setBusy(false); }
   }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -174,7 +178,7 @@ export function FlagButton({ questionId, onFlagged }: { questionId: string; onFl
           ))}
         </div>
         <Textarea placeholder="Details (optional)" value={reason} onChange={(e) => setReason(e.target.value)} />
-        <Button onClick={submit} disabled={busy}>Send report</Button>
+        <Button onClick={submit} disabled={busy}>{busy ? "AI is checking…" : "Send report"}</Button>
       </DialogContent>
     </Dialog>
   );
