@@ -11,6 +11,7 @@ import { parseTest, retagTest } from "@/lib/parse.functions";
 import { importDriveFolder, importTestLink } from "@/lib/drive.functions";
 import { isAnswerKey, pdfPairName } from "@/lib/test-metadata";
 import { DEFAULT_DIVISION } from "@/lib/practice-scope";
+import { schoolYear } from "@/lib/school-year";
 import { toast } from "sonner";
 import { FileUp, Link2, Loader2, Upload, X } from "lucide-react";
 
@@ -57,7 +58,7 @@ function UploadPage() {
 
   async function readTest(id: string, sourceHint?: string) {
     const result = await parse({ data: { testId: id, identify: Boolean(sourceHint), sourceHint } });
-    setLog((l) => [...l, `${result.event} · Div ${result.division}${result.year ? ` · ${result.year}` : ""}: ${result.total} questions, ${result.review} to review`]);
+    setLog((l) => [...l, `${result.event} · Div ${result.division}${result.year ? ` · ${schoolYear(result.year)}` : ""}: ${result.total} questions, ${result.review} to review`]);
     await qc.invalidateQueries({ queryKey: ["tests"] });
     return result;
   }
@@ -134,7 +135,7 @@ function UploadPage() {
         <h2 className="text-lg font-bold">Recent uploads</h2>
         <div className="mt-2 divide-y divide-border">
           {tests.map((t) => <div key={t.id} className="flex flex-wrap items-center gap-2 py-3 text-sm">
-            <div className="min-w-0 flex-1 basis-48"><div className="font-medium">{t.event}{t.division ? ` · Div ${t.division}` : ""}</div><div className="font-mono text-xs text-muted-foreground">{[t.year, t.tournament, t.level].filter(Boolean).join(" · ")}</div>{t.error && <div className="break-words text-xs text-destructive">{t.error}</div>}</div>
+            <div className="min-w-0 flex-1 basis-48"><div className="font-medium">{t.event}{t.division ? ` · Div ${t.division}` : ""}</div><div className="font-mono text-xs text-muted-foreground">{[schoolYear(t.year), t.tournament, t.level].filter(Boolean).join(" · ")}</div>{t.error && <div className="break-words text-xs text-destructive">{t.error}</div>}</div>
             <span className="tag">{t.status === "parsed" ? `${t.question_count} Q` : t.status}</span>
             {t.status === "parsed" && <Button size="sm" variant="ghost" disabled={!!busy} onClick={async () => { setBusy("Retagging…"); try { const r = await retag({ data: { testId: t.id } }); toast.success(`Retagged ${r.updated} questions`); } catch (error) { toast.error(error instanceof Error ? error.message : "Failed"); } finally { setBusy(null); } }}>Retag</Button>}
             {(t.status === "failed" || t.status === "uploaded") && t.source_path && <Button size="sm" variant="outline" disabled={!!busy} onClick={async () => { setBusy("Reading test…"); try { await readTest(t.id); } catch (error) { toast.error(error instanceof Error ? error.message : "Failed"); } finally { setBusy(null); } }}>Retry</Button>}

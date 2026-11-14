@@ -13,7 +13,7 @@ import { useMe } from "@/lib/auth";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/coach/queue")({
-  head: () => ({ meta: [{ title: "Review queue · SciOly Center" }, { name: "description", content: "Check uncertain and flagged questions." }, { property: "og:title", content: "Review queue · SciOly Center" }, { property: "og:description", content: "Check uncertain and flagged questions." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
+  head: () => ({ meta: [{ title: "Review queue · SciOly Center" }, { name: "description", content: "Check uncertain and reported questions." }, { property: "og:title", content: "Review queue · SciOly Center" }, { property: "og:description", content: "Check uncertain and reported questions." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Queue,
 });
 
@@ -39,7 +39,7 @@ function Queue() {
     <Tabs defaultValue="review">
       <TabsList>
         <TabsTrigger value="review">Needs review ({review.length})</TabsTrigger>
-        <TabsTrigger value="flags">Flagged ({byQ.size})</TabsTrigger>
+        <TabsTrigger value="flags">Reported ({byQ.size})</TabsTrigger>
       </TabsList>
       <TabsContent value="review" className="space-y-4">
         {review.map((q) => <Editor key={q.id} q={q} />)}
@@ -47,7 +47,7 @@ function Queue() {
       </TabsContent>
       <TabsContent value="flags" className="space-y-4">
         {[...byQ.values()].map((x) => <Editor key={x.q.id} q={x.q} flagIds={x.ids} flagReasons={x.reasons} />)}
-        {!byQ.size && <p className="panel p-6 text-center text-muted-foreground">No open flags.</p>}
+        {!byQ.size && <p className="panel p-6 text-center text-muted-foreground">No open reports.</p>}
       </TabsContent>
     </Tabs>
   );
@@ -92,7 +92,7 @@ function Editor({ q, flagIds, flagReasons }: { q: Question; flagIds?: string[]; 
     <div className="panel space-y-3 p-4">
       <QuestionTags q={q} />
       {q.review_note && <p className="rounded-md bg-muted p-2 text-sm">{q.review_note}</p>}
-      {flagReasons && <p className="rounded-md bg-destructive-soft p-2 text-sm">Flags: {flagReasons.join(" · ")}</p>}
+      {flagReasons && <p className="rounded-md bg-destructive-soft p-2 text-sm">Reports: {flagReasons.join(" · ")}</p>}
       <div className="space-y-1.5"><Label>Question</Label><Textarea rows={4} value={f.stem} onChange={(e) => setF({ ...f, stem: e.target.value })} /></div>
       <div className="flex flex-wrap items-center gap-3"><Label>Answer format</Label><select aria-label="Answer format" className="rounded-md border border-input bg-card p-2 text-sm" value={f.type} onChange={(e) => setF({ ...f, type: e.target.value as typeof f.type })}><option value="single">Single choice</option><option value="multiple">Multiple select</option><option value="free_response">Free response</option></select><Label>Points</Label><Input aria-label="Points" className="w-24" type="number" min="0.25" step="0.25" value={f.points} onChange={(e) => setF({ ...f, points: Number(e.target.value) })} /></div>
       {f.type === "free_response" && <div className="space-y-2"><Label>Accepted answers (one per line)</Label><Textarea value={f.accepted} onChange={(e) => setF({ ...f, accepted: e.target.value })} /><Label>Grading rubric</Label><Textarea value={f.rubric} onChange={(e) => setF({ ...f, rubric: e.target.value })} /></div>}

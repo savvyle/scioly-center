@@ -13,6 +13,7 @@ import { checkAnswer } from "@/lib/answers.functions";
 import { emptyAnswer, type Answer } from "@/lib/answers";
 import { toast } from "sonner";
 import { inPracticeScope } from "@/lib/practice-scope";
+import { SaveButton } from "@/components/app/SaveButton";
 
 export const Route = createFileRoute("/_authenticated/drill")({
   head: () => ({ meta: [{ title: "Practice · SciOly Center" }, { name: "description", content: "Practice Science Olympiad questions with answer checking and concise feedback." }, { property: "og:title", content: "Practice · SciOly Center" }, { property: "og:description", content: "Practice questions with answer checking and concise feedback." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
@@ -87,6 +88,7 @@ function Drill() {
       qc.invalidateQueries({ queryKey: ["leaderboard"] });
       qc.invalidateQueries({ queryKey: ["stats"] });
       qc.invalidateQueries({ queryKey: ["trend"] });
+      qc.invalidateQueries({ queryKey: ["missed"] });
     } catch (error) { toast.error(error instanceof Error ? error.message : "Couldn't check your answer."); }
     finally { checkingRef.current = false; setChecking(false); }
   }
@@ -140,11 +142,11 @@ function Drill() {
               <div className={checked.correct ? "flex-1 font-display text-xl font-bold text-success" : "flex-1 font-display text-xl font-bold text-destructive"}>
                 {checked.correct ? "Correct!" : "Not quite"} <span className="text-sm">{checked.points}/{checked.possible} pts</span>
               </div>
-              <FlagButton questionId={q.id} />
+              <SaveButton questionId={q.id} /><FlagButton questionId={q.id} />
               <Button size="lg" onClick={next}>Next <ArrowRight /></Button>
             </div>
           )}
-          {!checked && <div className="flex items-center justify-end gap-2">{!checking && <FlagButton questionId={q.id} onFlagged={next} />}<Button size="lg" onClick={commitAnswer} disabled={checking || (q.question_type === "free_response" ? !answer.text.trim() : !answer.indices.length)}>{checking && <Loader2 className="animate-spin" />}{checking ? "Checking…" : "Check answer"}</Button></div>}
+          {!checked && <div className="flex flex-wrap items-center justify-end gap-2"><SaveButton questionId={q.id} />{!checking && <FlagButton questionId={q.id} onFlagged={next} />}<Button size="lg" onClick={commitAnswer} disabled={checking || (q.question_type === "free_response" ? !answer.text.trim() : !answer.indices.length)}>{checking && <Loader2 className="animate-spin" />}{checking ? "Checking…" : "Check answer"}</Button></div>}
         </>
       )}
     </div>

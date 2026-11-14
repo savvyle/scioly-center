@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useMe } from "@/lib/auth";
 import { toast } from "sonner";
 import { DEFAULT_DIVISION } from "@/lib/practice-scope";
+import { schoolYear } from "@/lib/school-year";
 
 export function TestArchive() {
   const { data: me } = useMe();
@@ -44,7 +45,7 @@ export function TestArchive() {
       <div className="space-y-2"><Label>Event</Label><Select value={event} onValueChange={setEvent}><SelectTrigger className="w-full"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All events</SelectItem>{events.map((e) => <SelectItem key={e} value={e}>{e}</SelectItem>)}</SelectContent></Select></div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[auto_1fr_1fr_2fr_auto]">
         <div className="space-y-2"><Label>Division</Label><div className="flex gap-1">{["all", "B", "C"].map((d) => <Button key={d} variant={division === d ? "default" : "outline"} size="sm" onClick={() => setDivision(d)}>{d === "all" ? "All" : d}</Button>)}</div></div>
-        <div className="space-y-2"><Label>Season</Label><Select value={year} onValueChange={setYear}><SelectTrigger className="w-full"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All seasons</SelectItem>{years.map((y) => <SelectItem key={y} value={y}>{y}</SelectItem>)}</SelectContent></Select></div>
+        <div className="space-y-2"><Label>School year</Label><Select value={year} onValueChange={setYear}><SelectTrigger className="w-full"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All school years</SelectItem>{years.map((y) => <SelectItem key={y} value={y}>{schoolYear(y)}</SelectItem>)}</SelectContent></Select></div>
         <div className="space-y-2"><Label>Level</Label><Select value={level} onValueChange={setLevel}><SelectTrigger className="w-full"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All levels</SelectItem>{levels.map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}</SelectContent></Select></div>
         <div className="space-y-2"><Label htmlFor="archive-search">Search</Label><div className="relative"><Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" /><Input id="archive-search" className="pl-9" placeholder="Tournament or title…" value={search} onChange={(e) => setSearch(e.target.value)} /></div></div>
         <label className="flex items-center gap-2 self-end py-2 text-sm"><input type="checkbox" checked={mine} onChange={(e) => setMine(e.target.checked)} />My tests</label>
@@ -54,7 +55,7 @@ export function TestArchive() {
     {error && <p className="text-destructive">Couldn't load the archive.</p>}
     <div className="divide-y divide-border">{rows.map((t) => <article key={t.id} className="flex flex-wrap items-center gap-4 py-4">
       <FileText className="h-6 w-6 text-primary" />
-      <div className="min-w-0 flex-1 basis-60"><h2 className="font-bold">{t.event}</h2><p className="text-sm text-muted-foreground">{t.tournament ?? "Past tournament"} · {t.year ?? "Year unknown"}{t.division ? ` · Div ${t.division}` : ""}{t.level ? ` · ${t.level}` : ""}</p>{tab === "tests" && <span className="text-xs text-muted-foreground">{t.question_count} questions</span>}</div>
+      <div className="min-w-0 flex-1 basis-60"><h2 className="font-bold">{t.event}</h2><p className="text-sm text-muted-foreground">{t.tournament ?? "Past tournament"} · {schoolYear(t.year) || "Year unknown"}{t.division ? ` · Div ${t.division}` : ""}{t.level ? ` · ${t.level}` : ""}</p>{tab === "tests" && <span className="text-xs text-muted-foreground">{t.question_count} questions</span>}</div>
       <div className="flex flex-wrap gap-2">{t.source_path && <Button variant="outline" size="sm" onClick={() => openPdf(t.source_path ?? "")}><ExternalLink />Test PDF</Button>}{t.key_path ? <Button variant="outline" size="sm" onClick={() => openPdf(t.key_path ?? "")}><ExternalLink />Answer key</Button> : <span className="self-center text-xs text-muted-foreground">No answer key</span>}</div>
     </article>)}</div>
     {!isLoading && !error && !rows.length && <p className="py-6 text-center text-muted-foreground">No tests match these filters.</p>}

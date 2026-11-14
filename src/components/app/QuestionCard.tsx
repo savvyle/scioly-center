@@ -8,6 +8,7 @@ import { DIFFICULTY } from "@/lib/events";
 import { signedImageUrls, type Question } from "@/lib/data";
 import { toast } from "sonner";
 import { cleanStem, type Answer } from "@/lib/answers";
+import { schoolYear } from "@/lib/school-year";
 
 const LETTERS = "ABCDEFGHIJ";
 
@@ -18,7 +19,7 @@ export function QuestionTags({ q }: { q: Question }) {
       {q.topic && <span className="tag">{q.topic}</span>}
       {q.subtopic && <span className="tag">{q.subtopic}</span>}
       <span className="tag">{DIFFICULTY[q.difficulty]}</span>
-      {q.year && <span className="tag">{q.year}</span>}
+      {q.year && <span className="tag">{schoolYear(q.year)}</span>}
       {q.level && <span className="tag">{q.level}</span>}
       <span className="tag">{q.points ?? 1} pt{Number(q.points ?? 1) === 1 ? "" : "s"}</span>
       {q.question_type === "multiple" && <span className="tag">Multiple select</span>}
@@ -110,7 +111,7 @@ export function FlagButton({ questionId, onFlagged }: { questionId: string; onFl
     setBusy(true);
     const { error } = await supabase.from("flags").insert({ question_id: questionId, reason: reason || "Wrong or broken" });
     setBusy(false);
-    if (error) { toast.error("Couldn't flag that question."); return; }
+    if (error) { toast.error("Couldn't report that question."); return; }
     toast.success("Thanks — a coach will check it.");
     setOpen(false);
     setReason("");
@@ -120,7 +121,7 @@ export function FlagButton({ questionId, onFlagged }: { questionId: string; onFl
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm" className="text-muted-foreground">
-          <Flag /> Flag
+          <Flag /> Report
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -135,7 +136,7 @@ export function FlagButton({ questionId, onFlagged }: { questionId: string; onFl
           ))}
         </div>
         <Textarea placeholder="Details (optional)" value={reason} onChange={(e) => setReason(e.target.value)} />
-        <Button onClick={submit} disabled={busy}>Send flag</Button>
+        <Button onClick={submit} disabled={busy}>Send report</Button>
       </DialogContent>
     </Dialog>
   );

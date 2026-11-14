@@ -4,6 +4,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { syllabusPrompt } from "./syllabus";
 import { EVENTS, LEVELS } from "./events";
 import { normalizeTestMetadata } from "./test-metadata";
+import { combineQuestionParts } from "./question-groups";
 
 const CONFIDENCE_THRESHOLD = 0.75;
 
@@ -156,7 +157,7 @@ Rules:
 - points: copy the stated point value, default 1 if unstated.
 - Single choice: correct_indices contains correct_index; accepted_answers is empty; grading_rubric is empty.
 - Never include phrases such as "original question" in stems.
-- Grouped and multi-part questions: NEVER split them. Keep shared context and every labeled subpart together in ONE stem, in original order. Use free_response for groups with separate answers; accepted_answers includes a complete labeled answer covering every subpart. Allocate rubric points per subpart and use the total as points.
+- Grouped and multi-part questions: NEVER split them. Keep shared context and every labeled subpart together in ONE stem, in original order. The number field MUST be the original parent question number, never a new sequential number for a subpart. Question 48 parts 1 and 2 are ONE question; 2-3, 2-4 and 2-5 all belong to parent question 2. Use free_response for groups with separate answers; retain each part's choices in the stem and include a complete labeled accepted answer covering every subpart. Allocate rubric points per subpart and use the total as points.
 - topic and subtopic: from the syllabus above when given, otherwise short labels. difficulty: 1 easy, 2 medium, 3 hard.
 - page: 1-based page number in the test PDF.
 - needs_image true if the question can't be answered without a figure, photo or specimen image; describe it in image_description (else empty string).
@@ -187,7 +188,7 @@ Rules:
       } catch {
         throw new Error("The AI returned something unreadable. Try again.");
       }
-      const rows = (parsed.questions ?? [])
+      const rows = combineQuestionParts(parsed.questions ?? [])
         .filter((q) => q.stem && Array.isArray(q.choices) && (q.original_format === "free_response" || q.choices.length >= 2))
         .map((q) => {
           const ci = q.original_format === "free_response" ? 0 : Math.min(Math.max(0, q.correct_index | 0), q.choices.length - 1);

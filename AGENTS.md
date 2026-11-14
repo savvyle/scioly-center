@@ -39,3 +39,5 @@ use the editor.
 - The historical /mock URL renders the filtered Test Archive with short-lived private PDF links (why: preserve existing links without retaining timed mock behavior).
 - Division defaults share one constant, while Practice scopes Division C candidates against the bundled Division B syllabus before displaying them (why: defaults do not block relevant cross-division practice).
 - New uploads identify metadata from the PDF and source names before syllabus-based parsing; only missing division defaults, while unknown year/tournament/level stay empty (why: one-input uploads must not invent archive filters).
+- Explicit parent question numbers are combined after extraction; merged legacy rows retain a replacement pointer so answer history is not deleted.
+- Saved questions are owner-scoped persistent bookmarks with RLS; competition years remain numeric end-years and share a school-year display formatter.

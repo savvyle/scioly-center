@@ -16,3 +16,6 @@
 - [x] Pen/trash account actions kept on one line
 - [x] Div B defaults and syllabus-related Div C Practice questions
 - [x] Combine link/file upload and infer test details automatically
+- [x] Repair existing split question parts and enforce grouped imports
+- [x] Display school years and rename Flag to Report
+- [x] Save questions and add Saved/Missed sections to Review

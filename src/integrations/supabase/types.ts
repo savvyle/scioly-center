@@ -241,6 +241,7 @@ export type Database = {
           id: string
           image_urls: string[]
           level: string | null
+          merged_into: string | null
           points: number
           question_type: string
           review_note: string | null
@@ -269,6 +270,7 @@ export type Database = {
           id?: string
           image_urls?: string[]
           level?: string | null
+          merged_into?: string | null
           points?: number
           question_type?: string
           review_note?: string | null
@@ -297,6 +299,7 @@ export type Database = {
           id?: string
           image_urls?: string[]
           level?: string | null
+          merged_into?: string | null
           points?: number
           question_type?: string
           review_note?: string | null
@@ -309,6 +312,13 @@ export type Database = {
           year?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "questions_merged_into_fkey"
+            columns: ["merged_into"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "questions_school_id_fkey"
             columns: ["school_id"]
@@ -347,6 +357,32 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "review_state_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saved_questions: {
+        Row: {
+          created_at: string
+          question_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          question_id: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          question_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_questions_question_id_fkey"
             columns: ["question_id"]
             isOneToOne: false
             referencedRelation: "questions"
