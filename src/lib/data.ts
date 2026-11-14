@@ -2,7 +2,7 @@ import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 export type Question = {
-  id: string; event: string; topic: string | null; subtopic: string | null; difficulty: number;
+  id: string; event: string; division?: string | null; topic: string | null; subtopic: string | null; difficulty: number;
   year: number | null; level: string | null; stem: string; choices: string[]; correct_index: number;
   explanation: string | null; image_urls: string[]; status: string; ai_confidence: number | null;
   converted_from_frq: boolean; review_note: string | null; test_id: string | null;

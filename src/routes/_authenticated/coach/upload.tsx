@@ -12,9 +12,10 @@ import { parseTest } from "@/lib/parse.functions";
 import { EVENTS, LEVELS } from "@/lib/events";
 import { toast } from "sonner";
 import { Loader2, Upload } from "lucide-react";
+import { DriveImport } from "@/components/app/DriveImport";
 
 export const Route = createFileRoute("/_authenticated/coach/upload")({
-  head: () => ({ meta: [{ title: "Upload test · SciOly@KLS" }, { name: "description", content: "Upload a past test for AI parsing." }] }),
+  head: () => ({ meta: [{ title: "Upload test · SciOly Center" }, { name: "description", content: "Upload a past test for AI parsing." }] }),
   component: UploadPage,
 });
 
@@ -121,13 +122,15 @@ function UploadPage() {
           {busy ? <><Loader2 className="animate-spin" /> {busy}</> : <><Upload /> Upload and parse</>}
         </Button>
       </form>
+      <div className="space-y-5">
+      <DriveImport />
       <div className="panel p-5">
         <h2 className="text-lg font-bold">Recent uploads</h2>
         <div className="mt-2 divide-y divide-border">
           {tests.map((t: any) => (
             <div key={t.id} className="flex items-center gap-2 py-2 text-sm">
               <div className="flex-1">
-                <div className="font-medium">{t.event}</div>
+                <div className="font-medium">{t.event}{t.division ? ` · Div ${t.division}` : ""}</div>
                 <div className="font-mono text-xs text-muted-foreground">{[t.year, t.tournament, t.level].filter(Boolean).join(" · ")}</div>
                 {t.error && <div className="text-xs text-destructive">{t.error}</div>}
               </div>
@@ -139,6 +142,7 @@ function UploadPage() {
           ))}
           {!tests.length && <p className="py-2 text-sm text-muted-foreground">Nothing uploaded yet.</p>}
         </div>
+      </div>
       </div>
     </div>
   );

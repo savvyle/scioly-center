@@ -7,7 +7,7 @@ import { fmtWeek, pct } from "@/lib/week";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/leaderboard")({
-  head: () => ({ meta: [{ title: "Leaderboard · SciOly@KLS" }, { name: "description", content: "Weekly ranking by correct answers." }] }),
+  head: () => ({ meta: [{ title: "Leaderboard · SciOly Center" }, { name: "description", content: "Weekly ranking by correct answers." }] }),
   component: Board,
 });
 

@@ -12,9 +12,9 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in · SciOly@KLS" },
+      { title: "Sign in · SciOly Center" },
       { name: "description", content: "Sign in to the KLS Science Olympiad practice hub." },
-      { property: "og:title", content: "Sign in · SciOly@KLS" },
+      { property: "og:title", content: "Sign in · SciOly Center" },
       { property: "og:description", content: "Sign in to the KLS Science Olympiad practice hub." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -48,7 +48,7 @@ function AuthPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-6">
       <Link to="/" className="mb-8 font-mono text-xs uppercase tracking-widest text-muted-foreground">
-        ← SciOly@KLS
+        ← SciOly Center
       </Link>
       <h1 className="text-4xl font-extrabold">Sign in</h1>
       <p className="mt-2 text-muted-foreground">Use the username your coach gave you. Parents: use your child's login.</p>

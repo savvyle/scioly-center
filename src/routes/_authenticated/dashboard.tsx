@@ -8,7 +8,7 @@ import { EventAccuracy, TrendChart } from "@/components/app/StatsPanels";
 import { Brain, ListChecks, Timer } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Home · SciOly@KLS" }, { name: "description", content: "Your weekly goal and practice stats." }] }),
+  head: () => ({ meta: [{ title: "Home · SciOly Center" }, { name: "description", content: "Your weekly goal and practice stats." }] }),
   component: Dashboard,
 });
 

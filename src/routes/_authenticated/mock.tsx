@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/mock")({
-  head: () => ({ meta: [{ title: "Mock test · SciOly@KLS" }, { name: "description", content: "Timed 50-minute practice tests." }] }),
+  head: () => ({ meta: [{ title: "Mock test · SciOly Center" }, { name: "description", content: "Timed 50-minute practice tests." }] }),
   component: Mock,
 });
 

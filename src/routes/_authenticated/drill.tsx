@@ -10,7 +10,7 @@ import { FlagButton, QuestionCard } from "@/components/app/QuestionCard";
 import { ArrowRight, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/drill")({
-  head: () => ({ meta: [{ title: "Drill · SciOly@KLS" }, { name: "description", content: "One question at a time with instant feedback." }] }),
+  head: () => ({ meta: [{ title: "Drill · SciOly Center" }, { name: "description", content: "One question at a time with instant feedback." }] }),
   component: Drill,
 });
 

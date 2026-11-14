@@ -13,7 +13,7 @@ import { useMe } from "@/lib/auth";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/coach/queue")({
-  head: () => ({ meta: [{ title: "Review queue · SciOly@KLS" }, { name: "description", content: "Check uncertain and flagged questions." }] }),
+  head: () => ({ meta: [{ title: "Review queue · SciOly Center" }, { name: "description", content: "Check uncertain and flagged questions." }] }),
   component: Queue,
 });
 

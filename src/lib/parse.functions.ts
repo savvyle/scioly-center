@@ -118,7 +118,7 @@ export const parseTest = createServerFn({ method: "POST" })
       if (!files.length) throw new Error("No PDF attached.");
 
       const instructions = `You convert Science Olympiad tests into a multiple-choice question bank.
-Event: ${test.event}. Year: ${test.year ?? "unknown"}. Tournament: ${test.tournament ?? "unknown"} (${test.level ?? ""}).
+Event: ${test.event}${test.division ? ` (Division ${test.division})` : ""}. Year: ${test.year ?? "unknown"}. Tournament: ${test.tournament ?? "unknown"} (${test.level ?? ""}).
 The first PDF is the test. ${files.length > 1 ? "The second PDF is the answer key." : "The answer key may be included at the end of the test PDF."}
 Rules:
 - Extract EVERY question in order. Keep stems faithful; include any needed data, tables (as plain text) or station context.
@@ -167,6 +167,7 @@ Rules:
           return {
             test_id: test.id,
             event: test.event,
+            division: test.division,
             year: test.year,
             level: test.level,
             topic: q.topic || null,

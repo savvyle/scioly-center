@@ -12,9 +12,9 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/setup")({
   head: () => ({
     meta: [
-      { title: "First-time setup · SciOly@KLS" },
+      { title: "First-time setup · SciOly Center" },
       { name: "description", content: "Create the first coach account for the practice hub." },
-      { property: "og:title", content: "First-time setup · SciOly@KLS" },
+      { property: "og:title", content: "First-time setup · SciOly Center" },
       { property: "og:description", content: "Create the first coach account for the practice hub." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

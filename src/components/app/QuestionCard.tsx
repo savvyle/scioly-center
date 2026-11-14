@@ -13,7 +13,7 @@ const LETTERS = "ABCDEFGHIJ";
 export function QuestionTags({ q }: { q: Question }) {
   return (
     <div className="flex flex-wrap gap-1.5">
-      <span className="tag">{q.event}</span>
+      <span className="tag">{q.event}{q.division ? ` · ${q.division}` : ""}</span>
       {q.topic && <span className="tag">{q.topic}</span>}
       {q.subtopic && <span className="tag">{q.subtopic}</span>}
       <span className="tag">{DIFFICULTY[q.difficulty]}</span>

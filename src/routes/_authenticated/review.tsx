@@ -5,7 +5,7 @@ import { useMe } from "@/lib/auth";
 import { MissedList } from "@/components/app/MissedList";
 
 export const Route = createFileRoute("/_authenticated/review")({
-  head: () => ({ meta: [{ title: "Missed questions · SciOly@KLS" }, { name: "description", content: "Every question you got wrong." }] }),
+  head: () => ({ meta: [{ title: "Missed questions · SciOly Center" }, { name: "description", content: "Every question you got wrong." }] }),
   component: Review,
 });
 

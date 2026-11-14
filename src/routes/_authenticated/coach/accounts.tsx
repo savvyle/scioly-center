@@ -11,7 +11,7 @@ import { topRole, useMe, type Role } from "@/lib/auth";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/coach/accounts")({
-  head: () => ({ meta: [{ title: "Accounts · SciOly@KLS" }, { name: "description", content: "Manage team accounts and roles." }] }),
+  head: () => ({ meta: [{ title: "Accounts · SciOly Center" }, { name: "description", content: "Manage team accounts and roles." }] }),
   component: Accounts,
 });
 

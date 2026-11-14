@@ -41,7 +41,7 @@ function Shell() {
       <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center gap-4 px-4 py-3">
           <Link to="/dashboard" className="font-display text-lg font-extrabold">
-            SciOly<span className="text-accent">@</span>KLS
+            SciOly <span className="text-accent">Center</span>
           </Link>
           <nav className="ml-4 hidden gap-1 md:flex">
             {nav.map((n) => (

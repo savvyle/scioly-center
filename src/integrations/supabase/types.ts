@@ -195,6 +195,7 @@ export type Database = {
           correct_index: number
           created_at: string
           difficulty: number
+          division: string | null
           event: string
           explanation: string | null
           id: string
@@ -216,6 +217,7 @@ export type Database = {
           correct_index?: number
           created_at?: string
           difficulty?: number
+          division?: string | null
           event: string
           explanation?: string | null
           id?: string
@@ -237,6 +239,7 @@ export type Database = {
           correct_index?: number
           created_at?: string
           difficulty?: number
+          division?: string | null
           event?: string
           explanation?: string | null
           id?: string
@@ -377,6 +380,7 @@ export type Database = {
         Row: {
           created_at: string
           created_by: string | null
+          division: string | null
           error: string | null
           event: string
           id: string
@@ -385,6 +389,7 @@ export type Database = {
           question_count: number
           school_id: string
           source_path: string | null
+          source_ref: string | null
           status: string
           tournament: string | null
           year: number | null
@@ -392,6 +397,7 @@ export type Database = {
         Insert: {
           created_at?: string
           created_by?: string | null
+          division?: string | null
           error?: string | null
           event: string
           id?: string
@@ -400,6 +406,7 @@ export type Database = {
           question_count?: number
           school_id?: string
           source_path?: string | null
+          source_ref?: string | null
           status?: string
           tournament?: string | null
           year?: number | null
@@ -407,6 +414,7 @@ export type Database = {
         Update: {
           created_at?: string
           created_by?: string | null
+          division?: string | null
           error?: string | null
           event?: string
           id?: string
@@ -415,6 +423,7 @@ export type Database = {
           question_count?: number
           school_id?: string
           source_path?: string | null
+          source_ref?: string | null
           status?: string
           tournament?: string | null
           year?: number | null
