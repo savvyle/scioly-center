@@ -19,3 +19,6 @@
 - [x] Repair existing split question parts and enforce grouped imports
 - [x] Display school years and rename Flag to Report
 - [x] Save questions and add Saved/Missed sections to Review
+- [ ] Practice setup, indented topic/subtopic filters, skip without scoring, mastery and source links
+- [ ] Audit and restore original formats across imported questions, including Q98
+- [ ] Explain spaced repetition and expose current review status

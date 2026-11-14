@@ -8,24 +8,49 @@ import { DIFFICULTY } from "@/lib/events";
 import { signedImageUrls, type Question } from "@/lib/data";
 import { toast } from "sonner";
 import { cleanStem, type Answer } from "@/lib/answers";
-import { schoolYear } from "@/lib/school-year";
+import { useQuery } from "@tanstack/react-query";
+import { masteryLevel, matchingItems, sourceLabel } from "@/lib/practice";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const LETTERS = "ABCDEFGHIJ";
 
 export function QuestionTags({ q }: { q: Question }) {
+  const { data: state } = useQuery({ queryKey: ["question-mastery", q.id], queryFn: async () => {
+    const { data, error } = await supabase.from("review_state").select("box,due_at").eq("question_id", q.id).maybeSingle();
+    if (error) throw error;
+    return data;
+  } });
   return (
     <div className="flex flex-wrap gap-1.5">
-      <span className="tag">{q.event}{q.division ? ` · ${q.division}` : ""}</span>
-      {q.topic && <span className="tag">{q.topic}</span>}
-      {q.subtopic && <span className="tag">{q.subtopic}</span>}
       <span className="tag">{DIFFICULTY[q.difficulty]}</span>
-      {q.year && <span className="tag">{schoolYear(q.year)}</span>}
-      {q.level && <span className="tag">{q.level}</span>}
       <span className="tag">{q.points ?? 1} pt{Number(q.points ?? 1) === 1 ? "" : "s"}</span>
-      {q.question_type === "multiple" && <span className="tag">Multiple select</span>}
-      {q.question_type === "free_response" && <span className="tag">Free response</span>}
+      <span className={`tag ${state?.box === 4 ? "text-success" : ""}`}>{masteryLevel(state?.box)}</span>
+      {state && <span className="self-center text-xs text-muted-foreground">{new Date(state.due_at) <= new Date() ? "Review due" : `Next review ${new Date(state.due_at).toLocaleDateString(undefined, { month: "short", day: "numeric" })}`}</span>}
     </div>
   );
+}
+
+function QuestionSource({ q }: { q: Question }) {
+  const { data: source } = useQuery({ queryKey: ["question-source", q.test_id], enabled: !!q.test_id, queryFn: async () => {
+    if (!q.test_id) return null;
+    const { data, error } = await supabase.from("tests").select("tournament,division,year,source_path").eq("id", q.test_id).maybeSingle();
+    if (error) throw error;
+    return data;
+  } });
+  const [url, setUrl] = useState<string | null>(null);
+  useEffect(() => {
+    setUrl(null);
+    if (!source?.source_path) return;
+    let active = true;
+    supabase.storage.from("tests").createSignedUrl(source.source_path, 300).then(({ data }) => {
+      if (active && data) setUrl(`${data.signedUrl}${q.source_page ? `#page=${q.source_page}` : ""}`);
+    });
+    return () => { active = false; };
+  }, [source?.source_path, q.source_page]);
+  if (!source) return null;
+  const number = q.source_number ?? (Number(q.stem.match(/^(?:Original question |Question )?(\d+)/i)?.[1]) || null);
+  const label = sourceLabel(source, number);
+  return <div className="mt-4 border-t border-border pt-3 text-sm text-muted-foreground">{url ? <a href={url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">{label}</a> : label}</div>;
 }
 
 export function QuestionImages({ paths }: { paths: string[] }) {
@@ -64,13 +89,22 @@ export function QuestionCard({
 }) {
   const indices = answer?.indices ?? (chosen === null ? [] : [chosen]);
   const free = q.question_type === "free_response";
+  const matching = free ? matchingItems(q.stem, q.choices) : [];
   const correctIndices = q.question_type === "multiple" ? q.correct_indices ?? [] : [q.correct_index];
   return (
     <div className="panel p-4 sm:p-6">
       {(showTagsBefore || reveal) && <QuestionTags q={q} />}
       <p className="mt-3 whitespace-pre-wrap text-[17px] leading-relaxed">{cleanStem(q.stem)}</p>
       <QuestionImages paths={q.image_urls ?? []} />
-      {free && <Textarea aria-label="Your answer" placeholder="Your answer" className="mt-4" rows={4} value={answer?.text ?? ""} disabled={reveal || !onAnswer} onChange={(e) => onAnswer?.({ indices: [], text: e.target.value })} />}
+      {matching.length > 0 && <><div className="mt-6 space-y-3">{q.choices.map((choice, i) => <p key={i}>{LETTERS[i]}) {choice}</p>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2">{matching.map((item, i) => {
+        const responses = answer?.text.split("\n") ?? [];
+        const value = responses[i]?.match(/—\s*([A-J])/)?.[1] ?? "";
+        return <div key={item.number} className="space-y-1"><label className="text-sm" htmlFor={`match-${q.id}-${i}`}>{item.number}. {item.text}</label><Select disabled={reveal || !onAnswer} value={value} onValueChange={(letter) => {
+          const next = matching.map((part, j) => `${part.number} — ${j === i ? letter : responses[j]?.match(/—\s*([A-J])/)?.[1] ?? ""}`);
+          onAnswer?.({ indices: [], text: next.join("\n") });
+        }}><SelectTrigger id={`match-${q.id}-${i}`} aria-label={`Answer for ${item.number}. ${item.text}`}><SelectValue placeholder="Choose answer" /></SelectTrigger><SelectContent>{q.choices.map((choice, j) => <SelectItem key={j} value={LETTERS[j] ?? String(j)}>{LETTERS[j]}) {choice}</SelectItem>)}</SelectContent></Select></div>;
+      })}</div></>}
+      {free && !matching.length && <Textarea aria-label="Your answer" placeholder="Your answer" className="mt-4" rows={4} value={answer?.text ?? ""} disabled={reveal || !onAnswer} onChange={(e) => onAnswer?.({ indices: [], text: e.target.value })} />}
       {!free && <div className="mt-4 grid gap-2">
         {q.choices.map((c, i) => {
           let variant: "choice" | "correct" | "wrong" = "choice";
@@ -99,6 +133,7 @@ export function QuestionCard({
       </div>}
       {reveal && free && <div className="mt-3 text-sm"><strong>Accepted answers</strong><ul className="mt-1 list-disc space-y-1 pl-5">{(q.accepted_answers ?? []).map((text, i) => <li key={i}>{text}</li>)}</ul></div>}
       {reveal && <ul className="mt-4 list-disc space-y-2 rounded-lg bg-muted p-4 pl-8 text-sm text-muted-foreground">{(feedback?.length ? feedback : q.feedback_bullets?.length ? q.feedback_bullets : q.explanation ? [q.explanation] : []).map((text, i) => <li key={i}>{text.replace(/^[-•]\s*/, "")}</li>)}</ul>}
+      <QuestionSource q={q} />
     </div>
   );
 }

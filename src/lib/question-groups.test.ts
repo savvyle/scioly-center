@@ -19,4 +19,9 @@ describe("grouped source questions", () => {
   it("recognizes hyphenated subquestion numbers", () => {
     expect(questionPart("Question 2–3: GABA:")).toEqual({ number: 2, part: "3", text: "GABA:" });
   });
+  it("recognizes all four Q98 item prefixes as the same parent", () => {
+    const items = [1, 2, 3, 4].map((i) => part(98, `Original question 98, item ${i}: Condition ${i}`, `Answer ${i}`));
+    expect(combineQuestionParts(items)).toHaveLength(1);
+    expect(combineQuestionParts(items)[0]?.points).toBe(4);
+  });
 });

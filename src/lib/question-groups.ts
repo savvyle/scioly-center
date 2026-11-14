@@ -1,6 +1,6 @@
 /** Only explicit source numbering establishes a group; similar topics never do. */
 export function questionPart(stem: string) {
-  const match = stem.match(/^(?:original\s+question\s+|question\s+)?(\d+)\s*[,.:–-]?\s*(?:part\s*(\d+)|[-–](\d+)|\(([a-z])\))\s*(?:\([^)]*\))?\s*[:.)-]?\s*/i);
+  const match = stem.match(/^(?:original\s+question\s+|question\s+)?(\d+)\s*[,.:–-]?\s*(?:(?:part|item|subpart)\s*(\d+|[a-z])|[-–](\d+)|\(([a-z])\))\s*(?:\([^)]*\))?\s*[:.)-]?\s*/i);
   if (!match) return null;
   return { number: Number(match[1]), part: match[2] || match[3] || match[4], text: stem.slice(match[0].length) };
 }

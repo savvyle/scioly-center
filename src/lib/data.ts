@@ -1,6 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { inPracticeScope } from "./practice-scope";
+import { topicTree } from "./practice";
 
 export type Question = {
   id: string; event: string; division?: string | null; topic: string | null; subtopic: string | null; difficulty: number;
@@ -9,6 +10,7 @@ export type Question = {
   converted_from_frq: boolean; review_note: string | null; test_id: string | null;
   question_type?: "single" | "multiple" | "free_response"; correct_indices?: number[];
   accepted_answers?: string[]; grading_rubric?: string | null; points?: number; feedback_bullets?: string[];
+  source_number?: number | null; source_page?: number | null;
 };
 
 export const settingsQuery = queryOptions({
@@ -57,7 +59,13 @@ export const trendQuery = (userId: string | null) =>
 export const liveEventsQuery = queryOptions({
   queryKey: ["live-events"],
   queryFn: async () => {
-    const { data: all } = await supabase.from("questions").select("event, topic, subtopic, division").eq("status", "live").limit(5000);
+    const all = [];
+    for (let offset = 0; ; offset += 1000) {
+      const { data, error } = await supabase.from("questions").select("event, topic, subtopic, division").eq("status", "live").is("merged_into", null).order("id").range(offset, offset + 999);
+      if (error) throw error;
+      all.push(...(data ?? []));
+      if ((data?.length ?? 0) < 1000) break;
+    }
     const data = (all ?? []).filter(inPracticeScope);
     const map = new Map<string, Set<string>>();
     for (const r of data ?? []) {
@@ -65,7 +73,7 @@ export const liveEventsQuery = queryOptions({
       if (r.topic) map.get(r.event)?.add(r.topic);
     }
     return [...map.entries()]
-      .map(([event, topics]) => ({ event, topics: [...topics].sort(), count: (data ?? []).filter((d) => d.event === event).length }))
+      .map(([event, topics]) => ({ event, topics: [...topics].sort(), topicTree: topicTree(data.filter((d) => d.event === event)), count: (data ?? []).filter((d) => d.event === event).length }))
       .sort((a, b) => a.event.localeCompare(b.event));
   },
 });

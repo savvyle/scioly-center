@@ -41,3 +41,5 @@ use the editor.
 - New uploads identify metadata from the PDF and source names before syllabus-based parsing; only missing division defaults, while unknown year/tournament/level stay empty (why: one-input uploads must not invent archive filters).
 - Explicit parent question numbers are combined after extraction; merged legacy rows retain a replacement pointer so answer history is not deleted.
 - Saved questions are owner-scoped persistent bookmarks with RLS; competition years remain numeric end-years and share a school-year display formatter.
+- Practice starts with explicit filter configuration; skips only exclude a question for the current pass and never write attempts or review state (why: skipped work must stay due without distorting scores).
+- Source question numbers/pages are stored independently of display stems; mastery reads the existing review-state boxes with box four mastered (why: preserve source citations and reuse the authoritative spaced-repetition schedule).

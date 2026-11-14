@@ -43,6 +43,13 @@
       "when": 1794635453266,
       "tag": "0005_saved_questions_and_group_references",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794637334748,
+      "tag": "0006_question_source_coordinates",
+      "breakpoints": true
     }
   ]
 }

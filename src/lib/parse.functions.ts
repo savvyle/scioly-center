@@ -158,6 +158,7 @@ Rules:
 - Single choice: correct_indices contains correct_index; accepted_answers is empty; grading_rubric is empty.
 - Never include phrases such as "original question" in stems.
 - Grouped and multi-part questions: NEVER split them. Keep shared context and every labeled subpart together in ONE stem, in original order. The number field MUST be the original parent question number, never a new sequential number for a subpart. Question 48 parts 1 and 2 are ONE question; 2-3, 2-4 and 2-5 all belong to parent question 2. Use free_response for groups with separate answers; retain each part's choices in the stem and include a complete labeled accepted answer covering every subpart. Allocate rubric points per subpart and use the total as points.
+- Matching: preserve the complete instruction and numbered items in one stem, and the single shared lettered answer bank in choices in exact source order. Use free_response with a complete numbered letter mapping in accepted_answers and points equal to the source total. Never turn matching items into separate questions or shuffle the answer bank. Preserve select-all as multiple, never separate true/false items. Never invent distractors for a free-response question.
 - topic and subtopic: from the syllabus above when given, otherwise short labels. difficulty: 1 easy, 2 medium, 3 hard.
 - page: 1-based page number in the test PDF.
 - needs_image true if the question can't be answered without a figure, photo or specimen image; describe it in image_description (else empty string).
@@ -199,6 +200,8 @@ Rules:
           if (q.needs_image) notes.push(`Needs image from page ${q.page}: ${q.image_description}`);
           return {
             test_id: test.id,
+            source_number: q.number > 0 ? q.number : null,
+            source_page: q.page > 0 ? q.page : null,
             event: test.event,
             division: test.division,
             year: test.year,

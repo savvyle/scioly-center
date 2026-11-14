@@ -246,6 +246,8 @@ export type Database = {
           question_type: string
           review_note: string | null
           school_id: string
+          source_number: number | null
+          source_page: number | null
           status: string
           stem: string
           subtopic: string | null
@@ -275,6 +277,8 @@ export type Database = {
           question_type?: string
           review_note?: string | null
           school_id?: string
+          source_number?: number | null
+          source_page?: number | null
           status?: string
           stem: string
           subtopic?: string | null
@@ -304,6 +308,8 @@ export type Database = {
           question_type?: string
           review_note?: string | null
           school_id?: string
+          source_number?: number | null
+          source_page?: number | null
           status?: string
           stem?: string
           subtopic?: string | null

@@ -14,6 +14,8 @@ import { emptyAnswer, type Answer } from "@/lib/answers";
 import { toast } from "sonner";
 import { inPracticeScope } from "@/lib/practice-scope";
 import { SaveButton } from "@/components/app/SaveButton";
+import { skipQuestion, matchingItems } from "@/lib/practice";
+import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/_authenticated/drill")({
   head: () => ({ meta: [{ title: "Practice · SciOly Center" }, { name: "description", content: "Practice Science Olympiad questions with answer checking and concise feedback." }, { property: "og:title", content: "Practice · SciOly Center" }, { property: "og:description", content: "Practice questions with answer checking and concise feedback." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
@@ -28,8 +30,9 @@ function Drill() {
   const [event, setEvent] = useState(ALL);
   const [topic, setTopic] = useState(ALL);
   const [difficulty, setDifficulty] = useState(ALL);
+  const [active, setActive] = useState(false);
   const [q, setQ] = useState<Question | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [empty, setEmpty] = useState(false);
   const [answer, setAnswer] = useState<Answer>(emptyAnswer);
   const [checked, setChecked] = useState<{ correct: boolean; points: number; possible: number; bullets: string[] } | null>(null);
@@ -47,10 +50,11 @@ function Drill() {
     setChecked(null);
     submissionId.current = crypto.randomUUID();
     let data: Question | null = null;
+    const selectedTopic = topic === ALL ? null : JSON.parse(topic) as [string, string | null];
     for (;;) {
     const { data: id } = await supabase.rpc("next_drill_question", {
       p_event: event === ALL ? undefined : event,
-      p_topic: topic === ALL ? undefined : topic,
+      p_topic: selectedTopic?.[0],
       p_difficulty: difficulty === ALL ? undefined : Number(difficulty),
       p_exclude: seen.current,
     } as any);
@@ -62,7 +66,7 @@ function Drill() {
     }
     const { data: candidate, error } = await supabase.from("questions").select("*").eq("id", id as string).single();
     if (error || !candidate) { setLoading(false); toast.error("Couldn't load this question."); return; }
-    if (inPracticeScope(candidate)) { data = candidate as unknown as Question; break; }
+    if (inPracticeScope(candidate) && (!selectedTopic?.[1] || candidate.subtopic === selectedTopic[1])) { data = candidate as unknown as Question; break; }
     seen.current.push(candidate.id);
     }
     setQ(data as unknown as Question);
@@ -73,8 +77,8 @@ function Drill() {
 
   useEffect(() => {
     seen.current = [];
-    next();
-  }, [next]);
+    if (active) next();
+  }, [next, active]);
 
   async function commitAnswer() {
     if (!q || checked || checkingRef.current) return;
@@ -89,11 +93,21 @@ function Drill() {
       qc.invalidateQueries({ queryKey: ["stats"] });
       qc.invalidateQueries({ queryKey: ["trend"] });
       qc.invalidateQueries({ queryKey: ["missed"] });
+      qc.invalidateQueries({ queryKey: ["question-mastery", q.id] });
+      qc.invalidateQueries({ queryKey: ["practice-reviews"] });
     } catch (error) { toast.error(error instanceof Error ? error.message : "Couldn't check your answer."); }
     finally { checkingRef.current = false; setChecking(false); }
   }
 
-  const topics = events.find((e) => e.event === event)?.topics ?? [];
+  const topics = event === ALL ? events.flatMap((e) => e.topicTree).filter((t, i, all) => all.findIndex((x) => x.name === t.name) === i) : events.find((e) => e.event === event)?.topicTree ?? [];
+  const { data: reviews } = useQuery({ queryKey: ["practice-reviews"], queryFn: async () => {
+    const { data, error } = await supabase.from("review_state").select("box,due_at,questions!inner(event,topic,subtopic,division,status,merged_into)").order("due_at");
+    if (error) throw error;
+    const eligible = (data ?? []).filter((r) => r.questions.status === "live" && !r.questions.merged_into && inPracticeScope(r.questions));
+    return { due: eligible.filter((r) => new Date(r.due_at) <= new Date()).length, next: eligible.find((r) => new Date(r.due_at) > new Date())?.due_at };
+  } });
+  const matching = q ? matchingItems(q.stem, q.choices) : [];
+  const complete = q?.question_type === "free_response" ? matching.length ? matching.every((_, i) => /—\s*[A-J]/.test(answer.text.split("\n")[i] ?? "")) : !!answer.text.trim() : answer.indices.length > 0;
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
@@ -103,38 +117,39 @@ function Drill() {
           <span className="text-success">{session.correct}</span>/{session.answered} this session
         </span>
       </div>
-      <div className="grid grid-cols-3 gap-2">
-        <Select disabled={checking} value={event} onValueChange={(v) => { setEvent(v); setTopic(ALL); }}>
-          <SelectTrigger><SelectValue placeholder="Event" /></SelectTrigger>
+      {active && <div className="flex justify-end"><Button variant="ghost" size="sm" disabled={checking} onClick={() => setActive(false)}>Change practice</Button></div>}
+      {!active && <><section className="space-y-5 border-y border-border py-6"><div className="space-y-2"><Label>Event</Label>
+        <Select value={event} onValueChange={(v) => { setEvent(v); setTopic(ALL); }}>
+          <SelectTrigger aria-label="Event"><SelectValue placeholder="Event" /></SelectTrigger>
           <SelectContent>
             <SelectItem value={ALL}>All events</SelectItem>
             {events.map((e) => <SelectItem key={e.event} value={e.event}>{e.event} ({e.count})</SelectItem>)}
           </SelectContent>
-        </Select>
-        <Select value={topic} onValueChange={setTopic} disabled={event === ALL || checking}>
-          <SelectTrigger><SelectValue placeholder="Topic" /></SelectTrigger>
+        </Select></div><div className="space-y-2"><Label>Topic</Label>
+        <Select value={topic} onValueChange={setTopic}>
+          <SelectTrigger aria-label="Topic"><SelectValue placeholder="Topic" /></SelectTrigger>
           <SelectContent>
             <SelectItem value={ALL}>All topics</SelectItem>
-            {topics.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+            {topics.map((t) => <div key={t.name}><SelectItem className="font-semibold" value={JSON.stringify([t.name, null])}>{t.name}</SelectItem>{t.subtopics.map((s) => <SelectItem className="pl-7" key={s} value={JSON.stringify([t.name, s])}>{s}</SelectItem>)}</div>)}
           </SelectContent>
-        </Select>
-        <Select disabled={checking} value={difficulty} onValueChange={setDifficulty}>
-          <SelectTrigger><SelectValue placeholder="Difficulty" /></SelectTrigger>
+        </Select></div><div className="space-y-2"><Label>Difficulty</Label>
+        <Select value={difficulty} onValueChange={setDifficulty}>
+          <SelectTrigger aria-label="Difficulty"><SelectValue placeholder="Difficulty" /></SelectTrigger>
           <SelectContent>
             <SelectItem value={ALL}>Any level</SelectItem>
             {[1, 2, 3].map((d) => <SelectItem key={d} value={String(d)}>{DIFFICULTY[d]}</SelectItem>)}
           </SelectContent>
-        </Select>
-      </div>
+        </Select></div><Button size="lg" className="w-full" onClick={() => { seen.current = []; setActive(true); }}>Practice <ArrowRight /></Button></section><div className="flex flex-wrap items-center justify-between gap-2 text-sm text-muted-foreground"><span>{reviews?.due ?? 0} reviews due</span>{reviews?.next && <span>Next review {new Date(reviews.next).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>}</div></>}
 
-      {loading && <div className="panel flex h-60 items-center justify-center"><Loader2 className="animate-spin text-muted-foreground" /></div>}
-      {!loading && empty && (
+      {active && loading && <div className="panel flex h-60 items-center justify-center"><Loader2 className="animate-spin text-muted-foreground" /></div>}
+      {active && !loading && empty && (
         <div className="panel p-8 text-center">
-          <h2 className="text-xl font-bold">You're caught up.</h2>
+          <h2 className="text-xl font-bold">No more questions this round.</h2>
           <p className="mt-1 text-muted-foreground">No new or due questions for these filters. Try another event, or come back later for reviews.</p>
+          <Button className="mt-4" onClick={() => { seen.current = []; next(); }}>Practice again</Button>
         </div>
       )}
-      {!loading && q && (
+      {active && !loading && q && (
         <>
           <QuestionCard q={q} chosen={answer.indices[0] ?? null} answer={answer} reveal={checked !== null} onAnswer={checking ? undefined : setAnswer} feedback={checked?.bullets} />
           {checked && (
@@ -146,7 +161,7 @@ function Drill() {
               <Button size="lg" onClick={next}>Next <ArrowRight /></Button>
             </div>
           )}
-          {!checked && <div className="flex flex-wrap items-center justify-end gap-2"><SaveButton questionId={q.id} />{!checking && <FlagButton questionId={q.id} onFlagged={next} />}<Button size="lg" onClick={commitAnswer} disabled={checking || (q.question_type === "free_response" ? !answer.text.trim() : !answer.indices.length)}>{checking && <Loader2 className="animate-spin" />}{checking ? "Checking…" : "Check answer"}</Button></div>}
+          {!checked && <div className="flex flex-wrap items-center justify-end gap-2"><Button variant="outline" disabled={checking} onClick={() => { seen.current = skipQuestion(seen.current, q.id); next(); }}>Skip <ArrowRight /></Button><SaveButton questionId={q.id} />{!checking && <FlagButton questionId={q.id} onFlagged={next} />}<Button size="lg" onClick={commitAnswer} disabled={checking || !complete}>{checking && <Loader2 className="animate-spin" />}{checking ? "Checking…" : "Check answer"}</Button></div>}
         </>
       )}
     </div>
