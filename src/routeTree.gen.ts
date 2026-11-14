@@ -19,6 +19,7 @@ import { Route as AuthenticatedDrillRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedEventsRouteImport } from './routes/_authenticated/events'
 import { Route as AuthenticatedLeaderboardRouteImport } from './routes/_authenticated/leaderboard'
 import { Route as AuthenticatedMockRouteImport } from './routes/_authenticated/mock'
+import { Route as AuthenticatedPracticeRouteImport } from './routes/_authenticated/practice'
 import { Route as AuthenticatedReviewRouteImport } from './routes/_authenticated/review'
 import { Route as AuthenticatedSyllabusRouteImport } from './routes/_authenticated/syllabus'
 import { Route as AuthenticatedCoachIndexRouteImport } from './routes/_authenticated/coach/index'
@@ -78,6 +79,11 @@ const AuthenticatedMockRoute = AuthenticatedMockRouteImport.update({
   path: '/mock',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPracticeRoute = AuthenticatedPracticeRouteImport.update({
+  id: '/practice',
+  path: '/practice',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedReviewRoute = AuthenticatedReviewRouteImport.update({
   id: '/review',
   path: '/review',
@@ -133,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/events': typeof AuthenticatedEventsRoute
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/mock': typeof AuthenticatedMockRoute
+  '/practice': typeof AuthenticatedPracticeRoute
   '/review': typeof AuthenticatedReviewRoute
   '/syllabus': typeof AuthenticatedSyllabusRoute
   '/coach/accounts': typeof AuthenticatedCoachAccountsRoute
@@ -151,6 +158,7 @@ export interface FileRoutesByTo {
   '/events': typeof AuthenticatedEventsRoute
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/mock': typeof AuthenticatedMockRoute
+  '/practice': typeof AuthenticatedPracticeRoute
   '/review': typeof AuthenticatedReviewRoute
   '/syllabus': typeof AuthenticatedSyllabusRoute
   '/coach/accounts': typeof AuthenticatedCoachAccountsRoute
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   '/_authenticated/events': typeof AuthenticatedEventsRoute
   '/_authenticated/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/_authenticated/mock': typeof AuthenticatedMockRoute
+  '/_authenticated/practice': typeof AuthenticatedPracticeRoute
   '/_authenticated/review': typeof AuthenticatedReviewRoute
   '/_authenticated/syllabus': typeof AuthenticatedSyllabusRoute
   '/_authenticated/coach/accounts': typeof AuthenticatedCoachAccountsRoute
@@ -193,6 +202,7 @@ export interface FileRouteTypes {
     | '/events'
     | '/leaderboard'
     | '/mock'
+    | '/practice'
     | '/review'
     | '/syllabus'
     | '/coach/accounts'
@@ -211,6 +221,7 @@ export interface FileRouteTypes {
     | '/events'
     | '/leaderboard'
     | '/mock'
+    | '/practice'
     | '/review'
     | '/syllabus'
     | '/coach/accounts'
@@ -231,6 +242,7 @@ export interface FileRouteTypes {
     | '/_authenticated/events'
     | '/_authenticated/leaderboard'
     | '/_authenticated/mock'
+    | '/_authenticated/practice'
     | '/_authenticated/review'
     | '/_authenticated/syllabus'
     | '/_authenticated/coach/accounts'
@@ -318,6 +330,13 @@ declare module '@tanstack/react-router' {
       path: '/mock'
       fullPath: '/mock'
       preLoaderRoute: typeof AuthenticatedMockRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/practice': {
+      id: '/_authenticated/practice'
+      path: '/practice'
+      fullPath: '/practice'
+      preLoaderRoute: typeof AuthenticatedPracticeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/review': {
@@ -410,6 +429,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedEventsRoute: typeof AuthenticatedEventsRoute
   AuthenticatedLeaderboardRoute: typeof AuthenticatedLeaderboardRoute
   AuthenticatedMockRoute: typeof AuthenticatedMockRoute
+  AuthenticatedPracticeRoute: typeof AuthenticatedPracticeRoute
   AuthenticatedReviewRoute: typeof AuthenticatedReviewRoute
   AuthenticatedSyllabusRoute: typeof AuthenticatedSyllabusRoute
 }
@@ -421,6 +441,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedEventsRoute: AuthenticatedEventsRoute,
   AuthenticatedLeaderboardRoute: AuthenticatedLeaderboardRoute,
   AuthenticatedMockRoute: AuthenticatedMockRoute,
+  AuthenticatedPracticeRoute: AuthenticatedPracticeRoute,
   AuthenticatedReviewRoute: AuthenticatedReviewRoute,
   AuthenticatedSyllabusRoute: AuthenticatedSyllabusRoute,
 }

@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { masteryLevel, matchingItems, skipQuestion, sourceLabel, topicTree, matchesPracticeFilters } from "./practice";
+import { masteryLevel, matchingItems, skipQuestion, sourceLabel, topicTree, matchesPracticeFilters, canStartPractice } from "./practice";
 
 describe("practice rules", () => {
+  it("requires at least one event before starting practice", () => {
+    expect(canStartPractice([])).toBe(false);
+    expect(canStartPractice(["Circuit Lab"])).toBe(true);
+    expect(canStartPractice(["Circuit Lab", "Anatomy & Physiology"])).toBe(true);
+    expect(matchesPracticeFilters({ event: "Circuit Lab", topic: "Electric circuits", subtopic: null }, [], [])).toBe(false);
+  });
   it("leaves skipped questions eligible in a fresh session without recording an answer", () => {
     const seen: string[] = [];
     expect(skipQuestion(seen, "q98")).toEqual(["q98"]);

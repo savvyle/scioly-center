@@ -31,6 +31,10 @@ export function matchingItems(stem: string, choices: string[]) {
 }
 
 export type TopicSelection = [event: string, topic: string, subtopic: string | null];
+export function canStartPractice(events: string[]) {
+  return events.length > 0;
+}
+
 export function matchesPracticeFilters(q: { event: string; topic: string | null; subtopic: string | null }, events: string[], topics: TopicSelection[]) {
-  return (!events.length || events.includes(q.event)) && (!topics.length || topics.some(([event, topic, subtopic]) => event === q.event && topic === q.topic && (!subtopic || subtopic === q.subtopic)));
+  return canStartPractice(events) && events.includes(q.event) && (!topics.length || topics.some(([event, topic, subtopic]) => event === q.event && topic === q.topic && (!subtopic || subtopic === q.subtopic)));
 }

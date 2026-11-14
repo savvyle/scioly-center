@@ -36,12 +36,12 @@ use the editor.
 - Test PDFs are parsed by an AI server function (`src/lib/parse.functions.ts`); low-confidence or image-dependent questions go to the review queue.
 - Original answer formats and points are stored per question; authenticated check-answer functions grade and save committed answers, with AI grading and reference answers confined to server modules (why: consistent scoring and uncommitted selections never count).
 - Aggregate team SQL excludes coach roles while personal reports retain their practice (why: coach testing must not distort student progress).
-- The historical /mock URL renders the filtered Test Archive with short-lived private PDF links (why: preserve existing links without retaining timed mock behavior).
+- Practice lives at /practice; legacy /drill and /mock URLs redirect there (why: preserve published links after renaming Practice and removing the archive page).
 - Division defaults share one constant, while Practice scopes Division C candidates against the bundled Division B syllabus before displaying them (why: defaults do not block relevant cross-division practice).
 - New uploads identify metadata from the PDF and source names before syllabus-based parsing; only missing division defaults, while unknown year/tournament/level stay empty (why: one-input uploads must not invent archive filters).
 - Explicit parent question numbers are combined after extraction; merged legacy rows retain a replacement pointer so answer history is not deleted.
 - Saved questions are owner-scoped persistent bookmarks with RLS; competition years remain numeric end-years and share a school-year display formatter.
-- Practice starts with explicit filter configuration; skips only exclude a question for the current pass and never write attempts or review state (why: skipped work must stay due without distorting scores).
+- Practice starts with explicit filter configuration requiring at least one event; skips only exclude a question for the current pass and never write attempts or review state (why: practice must stay event-scoped and skipped work must stay due without distorting scores).
 - Source question numbers/pages are stored independently of display stems; mastery reads the existing review-state boxes with box four mastered (why: preserve source citations and reuse the authoritative spaced-repetition schedule).
 - Practice event/topic filters are multi-select, with event-qualified topic values and topics derived only from selected events (why: unrelated or stale topics must not enter practice).
 - Question-card editing uses authenticated staff-checked server functions and school-scoped RLS; staff-supplied feedback is saved as both reusable bullets and explanation, with empty feedback clearing both (why: students cannot edit keys and feedback corrections must persist consistently).

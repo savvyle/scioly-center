@@ -26,7 +26,7 @@ function Dashboard() {
         <h1 className="text-3xl font-extrabold">Ready for a few questions?</h1>
       </div>
       <Button asChild variant="hero" size="lg" className="w-full sm:w-auto">
-        <Link to="/drill"><Brain /> Practice</Link>
+        <Link to="/practice"><Brain /> Practice</Link>
       </Button>
       <div className="grid items-start gap-4 md:grid-cols-2">
         <MyEventProgress userId={me.id} />
