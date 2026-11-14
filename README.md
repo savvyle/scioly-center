@@ -24,3 +24,5 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+<!-- Test PR: verifying the pull request workflow. Safe to close without merging. -->
