@@ -29,3 +29,8 @@ export function matchingItems(stem: string, choices: string[]) {
   if (!/\bmatch\b/i.test(stem) || choices.length < 2) return [];
   return [...stem.matchAll(/^\s*(\d+)[.)]\s+(.+)$/gm)].map((match) => ({ number: match[1], text: match[2] }));
 }
+
+export type TopicSelection = [event: string, topic: string, subtopic: string | null];
+export function matchesPracticeFilters(q: { event: string; topic: string | null; subtopic: string | null }, events: string[], topics: TopicSelection[]) {
+  return (!events.length || events.includes(q.event)) && (!topics.length || topics.some(([event, topic, subtopic]) => event === q.event && topic === q.topic && (!subtopic || subtopic === q.subtopic)));
+}

@@ -19,6 +19,8 @@
 - [x] Repair existing split question parts and enforce grouped imports
 - [x] Display school years and rename Flag to Report
 - [x] Save questions and add Saved/Missed sections to Review
-- [ ] Practice setup, indented topic/subtopic filters, skip without scoring, mastery and source links
-- [ ] Audit and restore original formats across imported questions, including Q98
-- [ ] Explain spaced repetition and expose current review status
+- [x] Practice setup, indented topic/subtopic filters, skip without scoring, mastery and source links
+- [x] Audit all 16 imported tests and restore Q98 matching format
+- [ ] Apply remaining audited question corrections (bulk row import unavailable through current authorized tools)
+- [x] Explain spaced repetition and expose current review status
+- [x] Multiple event/topic selections; topics stay empty until an event is selected

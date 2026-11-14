@@ -14,8 +14,9 @@ import { emptyAnswer, type Answer } from "@/lib/answers";
 import { toast } from "sonner";
 import { inPracticeScope } from "@/lib/practice-scope";
 import { SaveButton } from "@/components/app/SaveButton";
-import { skipQuestion, matchingItems } from "@/lib/practice";
+import { skipQuestion, matchingItems, matchesPracticeFilters, type TopicSelection } from "@/lib/practice";
 import { Label } from "@/components/ui/label";
+import { PracticeMultiSelect } from "@/components/app/PracticeMultiSelect";
 
 export const Route = createFileRoute("/_authenticated/drill")({
   head: () => ({ meta: [{ title: "Practice · SciOly Center" }, { name: "description", content: "Practice Science Olympiad questions with answer checking and concise feedback." }, { property: "og:title", content: "Practice · SciOly Center" }, { property: "og:description", content: "Practice questions with answer checking and concise feedback." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
@@ -27,8 +28,8 @@ const ALL = "__all";
 function Drill() {
   const qc = useQueryClient();
   const { data: events = [] } = useQuery(liveEventsQuery);
-  const [event, setEvent] = useState(ALL);
-  const [topic, setTopic] = useState(ALL);
+  const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
+  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
   const [difficulty, setDifficulty] = useState(ALL);
   const [active, setActive] = useState(false);
   const [q, setQ] = useState<Question | null>(null);
@@ -50,11 +51,11 @@ function Drill() {
     setChecked(null);
     submissionId.current = crypto.randomUUID();
     let data: Question | null = null;
-    const selectedTopic = topic === ALL ? null : JSON.parse(topic) as [string, string | null];
+    const topicFilters = selectedTopics.map((value) => JSON.parse(value) as TopicSelection);
     for (;;) {
     const { data: id } = await supabase.rpc("next_drill_question", {
-      p_event: event === ALL ? undefined : event,
-      p_topic: selectedTopic?.[0],
+      p_event: selectedEvents.length === 1 ? selectedEvents[0] : undefined,
+      p_topic: topicFilters.length === 1 ? topicFilters[0]?.[1] : undefined,
       p_difficulty: difficulty === ALL ? undefined : Number(difficulty),
       p_exclude: seen.current,
     } as any);
@@ -66,14 +67,14 @@ function Drill() {
     }
     const { data: candidate, error } = await supabase.from("questions").select("*").eq("id", id as string).single();
     if (error || !candidate) { setLoading(false); toast.error("Couldn't load this question."); return; }
-    if (inPracticeScope(candidate) && (!selectedTopic?.[1] || candidate.subtopic === selectedTopic[1])) { data = candidate as unknown as Question; break; }
+    if (inPracticeScope(candidate) && matchesPracticeFilters(candidate, selectedEvents, topicFilters)) { data = candidate as unknown as Question; break; }
     seen.current.push(candidate.id);
     }
     setQ(data as unknown as Question);
     setEmpty(false);
     setLoading(false);
     started.current = Date.now();
-  }, [event, topic, difficulty]);
+  }, [selectedEvents, selectedTopics, difficulty]);
 
   useEffect(() => {
     seen.current = [];
@@ -99,7 +100,7 @@ function Drill() {
     finally { checkingRef.current = false; setChecking(false); }
   }
 
-  const topics = event === ALL ? events.flatMap((e) => e.topicTree).filter((t, i, all) => all.findIndex((x) => x.name === t.name) === i) : events.find((e) => e.event === event)?.topicTree ?? [];
+  const topics = events.filter((e) => selectedEvents.includes(e.event)).flatMap((e) => e.topicTree.flatMap((topic) => [{ value: JSON.stringify([e.event, topic.name, null]), label: topic.name, heading: e.event }, ...topic.subtopics.map((subtopic) => ({ value: JSON.stringify([e.event, topic.name, subtopic]), label: subtopic, indent: true, heading: e.event }))]));
   const { data: reviews } = useQuery({ queryKey: ["practice-reviews"], queryFn: async () => {
     const { data, error } = await supabase.from("review_state").select("box,due_at,questions!inner(event,topic,subtopic,division,status,merged_into)").order("due_at");
     if (error) throw error;
@@ -119,20 +120,8 @@ function Drill() {
       </div>
       {active && <div className="flex justify-end"><Button variant="ghost" size="sm" disabled={checking} onClick={() => setActive(false)}>Change practice</Button></div>}
       {!active && <><section className="space-y-5 border-y border-border py-6"><div className="space-y-2"><Label>Event</Label>
-        <Select value={event} onValueChange={(v) => { setEvent(v); setTopic(ALL); }}>
-          <SelectTrigger aria-label="Event"><SelectValue placeholder="Event" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value={ALL}>All events</SelectItem>
-            {events.map((e) => <SelectItem key={e.event} value={e.event}>{e.event} ({e.count})</SelectItem>)}
-          </SelectContent>
-        </Select></div><div className="space-y-2"><Label>Topic</Label>
-        <Select value={topic} onValueChange={setTopic}>
-          <SelectTrigger aria-label="Topic"><SelectValue placeholder="Topic" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value={ALL}>All topics</SelectItem>
-            {topics.map((t) => <div key={t.name}><SelectItem className="font-semibold" value={JSON.stringify([t.name, null])}>{t.name}</SelectItem>{t.subtopics.map((s) => <SelectItem className="pl-7" key={s} value={JSON.stringify([t.name, s])}>{s}</SelectItem>)}</div>)}
-          </SelectContent>
-        </Select></div><div className="space-y-2"><Label>Difficulty</Label>
+        <PracticeMultiSelect label="Event" placeholder="Select events" options={events.map((e) => ({ value: e.event, label: e.event }))} value={selectedEvents} onChange={(values) => { setSelectedEvents(values); setSelectedTopics((current) => current.filter((value) => values.includes((JSON.parse(value) as TopicSelection)[0]))); }} /></div><div className="space-y-2"><Label>Topic</Label>
+        <PracticeMultiSelect label="Topic" placeholder={selectedEvents.length ? "All topics in selected events" : "Select an event first"} options={topics} value={selectedTopics} onChange={setSelectedTopics} disabled={!selectedEvents.length} /></div><div className="space-y-2"><Label>Difficulty</Label>
         <Select value={difficulty} onValueChange={setDifficulty}>
           <SelectTrigger aria-label="Difficulty"><SelectValue placeholder="Difficulty" /></SelectTrigger>
           <SelectContent>

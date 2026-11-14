@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { masteryLevel, matchingItems, skipQuestion, sourceLabel, topicTree } from "./practice";
+import { masteryLevel, matchingItems, skipQuestion, sourceLabel, topicTree, matchesPracticeFilters } from "./practice";
 
 describe("practice rules", () => {
   it("leaves skipped questions eligible in a fresh session without recording an answer", () => {
@@ -20,5 +20,11 @@ describe("practice rules", () => {
   });
   it("keeps subtopics under their own parent", () => {
     expect(topicTree([{ topic: "Immune disorders", subtopic: "Type 1–4 hypersensitivities" }, { topic: "Immune mechanisms", subtopic: "Innate immunity" }])).toEqual([{ name: "Immune disorders", subtopics: ["Type 1–4 hypersensitivities"] }, { name: "Immune mechanisms", subtopics: ["Innate immunity"] }]);
+  });
+  it("accepts multiple selected events and only their selected topics", () => {
+    const question = { event: "Anatomy & Physiology", topic: "Immune disorders", subtopic: "Type 1–4 hypersensitivities" };
+    expect(matchesPracticeFilters(question, ["Anatomy & Physiology", "Circuit Lab"], [["Anatomy & Physiology", "Immune disorders", null], ["Circuit Lab", "Electric circuits", null]])).toBe(true);
+    expect(matchesPracticeFilters(question, ["Circuit Lab"], [])).toBe(false);
+    expect(matchesPracticeFilters(question, ["Anatomy & Physiology"], [["Anatomy & Physiology", "Digestive anatomy", null]])).toBe(false);
   });
 });
