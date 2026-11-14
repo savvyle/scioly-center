@@ -47,3 +47,4 @@ use the editor.
 - Question-card editing uses authenticated staff-checked server functions and school-scoped RLS; answer edits clear generated feedback (why: students cannot edit keys and stale explanations must not contradict corrections).
 - Archive PDF actions reserve the new tab synchronously before signing private links (why: mobile popup blockers reject tabs opened after asynchronous requests).
 - Render the weekly leaderboard on the dashboard and redirect the legacy /leaderboard URL there (why: consolidate personal and team progress without breaking old links).
+- Dashboard event progress joins owner-scoped student event selections to existing topic totals, preserving zero-activity selections (why: selected events must remain visible before practice starts).

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useMe } from "@/lib/auth";
 import { leaderboardQuery, settingsQuery } from "@/lib/data";
 import { GoalBar } from "@/components/app/GoalBar";
-import { EventAccuracy } from "@/components/app/StatsPanels";
+import { MyEventProgress } from "@/components/app/MyEventProgress";
 import { Leaderboard } from "@/components/app/Leaderboard";
 import { Brain } from "lucide-react";
 
@@ -28,17 +28,9 @@ function Dashboard() {
       <Button asChild variant="hero" size="lg" className="w-full sm:w-auto">
         <Link to="/drill"><Brain /> Practice</Link>
       </Button>
-      <EventAccuracy userId={me.id} title="My event(s)" action={
-        <Button asChild variant="outline" size="sm"><Link to="/events">Pick your event(s)</Link></Button>
-      } />
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid items-start gap-4 md:grid-cols-2">
+        <MyEventProgress userId={me.id} />
         <GoalBar answered={mine?.answered ?? 0} correct={mine?.correct ?? 0} goal={goal} />
-          {mine && (
-            <div className="flex items-center justify-between gap-4 p-4">
-              <span className="text-sm text-muted-foreground">This week's rank</span>
-              <span className="font-display text-3xl font-extrabold">#{mine.rank}<span className="text-base font-normal text-muted-foreground"> / {board.length}</span></span>
-            </div>
-          )}
       </div>
       <Leaderboard />
     </div>

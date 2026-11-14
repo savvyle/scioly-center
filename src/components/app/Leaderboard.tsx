@@ -11,13 +11,18 @@ export function Leaderboard() {
   const { data: me } = useMe();
   const { data = [] } = useQuery(leaderboardQuery(offset));
   const week = data[0];
+  const mine = data.find((row) => row.user_id === me?.id);
   return (
     <section className="space-y-4 border-t border-border pt-6">
       <h2 className="text-2xl font-extrabold">Weekly leaderboard</h2>
-      <div className="flex flex-wrap gap-2">
-        {["This week", "Last week", "2 weeks ago"].map((label, i) => (
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap gap-2">{["This week", "Last week", "2 weeks ago"].map((label, i) => (
           <Button key={label} size="sm" variant={offset === i ? "default" : "outline"} aria-pressed={offset === i} onClick={() => setOffset(i)}>{label}</Button>
-        ))}
+        ))}</div>
+        <div className="flex items-baseline gap-2" aria-label="Your rank">
+          <span className="text-sm text-muted-foreground">Your rank</span>
+          <span className="font-display text-2xl font-extrabold">{mine ? `#${mine.rank}` : "—"}<span className="text-sm font-normal text-muted-foreground"> / {data.length}</span></span>
+        </div>
       </div>
       {week && <p className="font-mono text-xs text-muted-foreground">{fmtWeek(week.week_start, week.week_end)} · ranked by correct answers, ties go to accuracy</p>}
       <div className="divide-y divide-border">

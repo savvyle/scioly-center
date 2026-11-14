@@ -1,4 +1,5 @@
 # Roadmap
+- [x] Place weekly goal beside selected-event progress, include unstarted events and Done/Right/Accuracy, move rank to week controls, and confirm Practice search/social name
 - [x] Reorganize Home: events below Practice, remove marked shortcuts/charts, embed leaderboard, and reorder Review/Test Archive navigation with folder icon
 - [x] v1 practice hub
 - [x] Rename to "SciOly Center"
