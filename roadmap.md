@@ -15,3 +15,4 @@
 
 - [x] Pen/trash account actions kept on one line
 - [x] Div B defaults and syllabus-related Div C Practice questions
+- [x] Combine link/file upload and infer test details automatically
