@@ -13,6 +13,8 @@ import { useMe } from "@/lib/auth";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ExplanationEditor } from "@/components/app/ExplanationEditor";
+import { questionRestoreFields } from "@/lib/question-edit";
+import { RotateCcw } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/coach/queue")({
   head: () => ({ meta: [{ title: "Review queue · SciOly Center" }, { name: "description", content: "Check uncertain and reported questions." }, { property: "og:title", content: "Review queue · SciOly Center" }, { property: "og:description", content: "Check uncertain and reported questions." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
@@ -38,6 +40,18 @@ function Queue() {
     queryKey: ["queue", "flags"],
     queryFn: async () => (await supabase.from("flags").select("*, questions(*)").is("resolved_at", null).order("created_at").limit(200)).data ?? [],
   });
+  const { data: removed = [] } = useQuery({
+    queryKey: ["queue", "removed"],
+    queryFn: async () => {
+      const rows: Question[] = [];
+      for (let offset = 0; ; offset += 500) {
+        const { data, error } = await supabase.from("questions").select("*").eq("status", "rejected").is("merged_into", null).order("id").range(offset, offset + 499);
+        if (error) throw error;
+        rows.push(...(data ?? []) as unknown as Question[]);
+        if ((data?.length ?? 0) < 500) return rows;
+      }
+    },
+  });
   const byQ = new Map<string, { q: Question; reasons: string[]; ids: string[] }>();
   type FlagRow = { id: string; question_id: string; reason: string; questions: unknown };
   for (const f of flags as unknown as FlagRow[]) {
@@ -48,9 +62,10 @@ function Queue() {
     byQ.set(f.question_id, cur);
   }
   const reported = [...byQ.values()];
-  const events = [...new Set([...review.map((q) => q.event), ...reported.map(({ q }) => q.event)])].sort((a, b) => a.localeCompare(b));
+  const events = [...new Set([...review.map((q) => q.event), ...reported.map(({ q }) => q.event), ...removed.map((q) => q.event)])].sort((a, b) => a.localeCompare(b));
   const filteredReview = review.filter((q) => selectedEvent === "__all" || q.event === selectedEvent);
   const filteredReports = reported.filter(({ q }) => selectedEvent === "__all" || q.event === selectedEvent);
+  const filteredRemoved = removed.filter((q) => selectedEvent === "__all" || q.event === selectedEvent);
   return (
     <Tabs value={tab} onValueChange={setTab}>
       <div className="mb-4 max-w-sm space-y-2">
@@ -66,6 +81,7 @@ function Queue() {
       <TabsList className="h-auto flex-wrap">
         <TabsTrigger value="review">Needs review ({filteredReview.length})</TabsTrigger>
         <TabsTrigger value="flags">Reported ({filteredReports.length})</TabsTrigger>
+        <TabsTrigger value="removed">Removed ({filteredRemoved.length})</TabsTrigger>
       </TabsList>
       <TabsContent value="review" className="space-y-4">
         {filteredReview.map((q) => <Editor key={q.id} q={q} />)}
@@ -75,18 +91,43 @@ function Queue() {
         {filteredReports.map((x) => <Editor key={x.q.id} q={x.q} flagIds={x.ids} flagReasons={x.reasons} />)}
         {!filteredReports.length && <p className="panel p-6 text-center text-muted-foreground">{selectedEvent === "__all" ? "No open reports." : "No open reports for this event."}</p>}
       </TabsContent>
+      <TabsContent value="removed" className="space-y-4">
+        {filteredRemoved.map((q) => <RemovedQuestion key={q.id} q={q} />)}
+        {!filteredRemoved.length && <p className="panel p-6 text-center text-muted-foreground">{selectedEvent === "__all" ? "No removed questions." : "No removed questions for this event."}</p>}
+      </TabsContent>
     </Tabs>
   );
+}
+
+function RemovedQuestion({ q }: { q: Question }) {
+  const qc = useQueryClient();
+  const [busy, setBusy] = useState(false);
+  async function restore() {
+    setBusy(true);
+    try {
+      const { data, error } = await supabase.from("questions").update(questionRestoreFields()).eq("id", q.id).eq("status", "rejected").is("merged_into", null).select("id").single();
+      if (error || !data) throw new Error("Couldn't restore this question. Refresh and try again.");
+      toast.success("Question restored to Needs review.");
+      await qc.invalidateQueries({ queryKey: ["queue"] });
+    } catch (error) { toast.error(error instanceof Error ? error.message : "Couldn't restore this question."); }
+    finally { setBusy(false); }
+  }
+  return <div className="panel space-y-3 p-4">
+    <div className="flex flex-wrap items-center justify-between gap-2"><span className="text-sm text-muted-foreground">{q.event}{q.source_number ? ` · Question ${q.source_number}` : ""}</span><Button variant="outline" disabled={busy} onClick={restore}><RotateCcw />{busy ? "Restoring…" : "Restore"}</Button></div>
+    <p className="whitespace-pre-wrap">{q.stem}</p>
+    <QuestionImages paths={q.image_urls ?? []} />
+  </div>;
 }
 
 function Editor({ q, flagIds, flagReasons }: { q: Question; flagIds?: string[]; flagReasons?: string[] }) {
   const qc = useQueryClient();
   const { data: me } = useMe();
-  const [f, setF] = useState({
+  const initialFields = {
     stem: q.stem, choices: q.choices.join("\n"), correct: q.correct_index, topic: q.topic ?? "", subtopic: q.subtopic ?? "",
     difficulty: q.difficulty, explanation: q.explanation ?? "", images: q.image_urls ?? [],
     type: q.question_type ?? "single", points: q.points ?? 1, accepted: (q.accepted_answers ?? []).join("\n"), rubric: q.grading_rubric ?? "", correctIndices: q.correct_indices ?? [q.correct_index],
-  });
+  };
+  const [f, setF] = useState(initialFields);
   const [busy, setBusy] = useState(false);
   const choices = f.choices.split("\n").map((c) => c.trim()).filter(Boolean);
 
@@ -98,15 +139,17 @@ function Editor({ q, flagIds, flagReasons }: { q: Question; flagIds?: string[]; 
   }
 
   async function save(status: "live" | "rejected") {
+    if (status === "rejected" && !confirm("Remove this question? You can restore it from Removed. Unsaved edits will not be saved.")) return;
+    if (status === "live" && !f.stem.trim()) { toast.error("Add a question prompt before approving."); return; }
     if (status === "live" && (f.points <= 0 || (f.type === "free_response" ? !f.accepted.trim() : choices.length < 2 || (f.type === "multiple" ? !f.correctIndices.length || f.correctIndices.some((i) => i >= choices.length) : f.correct >= choices.length)))) { toast.error("Add valid answers and a positive point value."); return; }
     setBusy(true);
-    const { error } = await supabase.from("questions").update({
+    const { error } = await supabase.from("questions").update(status === "rejected" ? { status } : {
       stem: f.stem, choices, correct_index: f.correct, topic: f.topic || null, subtopic: f.subtopic || null,
       difficulty: f.difficulty, explanation: f.explanation || null, image_urls: f.images, status, review_note: null,
       question_type: f.type, points: f.points, correct_indices: f.type === "multiple" ? f.correctIndices : [f.correct], accepted_answers: f.accepted.split("\n").map((a) => a.trim()).filter(Boolean), grading_rubric: f.rubric || null, feedback_bullets: f.explanation.trim() ? [f.explanation.trim()] : [],
     }).eq("id", q.id);
     if (!error && flagIds?.length) {
-      await supabase.from("flags").update({ resolved_at: new Date().toISOString(), resolved_by: me?.id ?? null, resolution: status === "live" ? "fixed" : "removed" }).in("id", flagIds);
+      await supabase.from("flags").update({ resolved_at: new Date().toISOString(), resolved_by: me?.id ?? null, resolution: status === "live" ? "fixed" : "removed" }).in("id", flagIds).is("resolved_at", null);
     }
     setBusy(false);
     if (error) { toast.error(error.message); return; }
@@ -149,6 +192,7 @@ function Editor({ q, flagIds, flagReasons }: { q: Question; flagIds?: string[]; 
         </label>
         {f.images.length > 0 && <Button size="sm" variant="ghost" onClick={() => setF({ ...f, images: [] })}>Clear images</Button>}
         <div className="ml-auto flex gap-2">
+          <Button variant="ghost" size="icon" title="Reset unsaved changes" aria-label="Reset unsaved changes" disabled={busy} onClick={() => setF(initialFields)}><RotateCcw /></Button>
           <Button variant="outline" disabled={busy} onClick={() => save("rejected")}>Remove</Button>
           <Button disabled={busy} onClick={() => save("live")}>Approve & go live</Button>
         </div>

@@ -1,4 +1,7 @@
 # Roadmap
+- [x] Restore accidentally removed Anatomy question #23
+- [x] Add an event-filtered Removed tab with Restore controls
+- [x] Add recovery controls to question editing and removal without changing settled reports or attempts
 - [x] Add formatted explanation editing and display with paragraphs, bullets, bold, and math/chemical formulas
 - [x] Add event filtering to review and reported queues and an All problems view
 - [x] Move Practice to /practice with legacy redirects, remove Test Archive, require event selection, and add Bad feedback reporting

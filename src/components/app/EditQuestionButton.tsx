@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Pencil } from "lucide-react";
+import { Pencil, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -27,6 +27,9 @@ export function EditQuestionButton({ q, onSaved }: { q: Question; onSaved: (q: Q
   const [accepted, setAccepted] = useState((q.accepted_answers ?? []).join("\n"));
   const [rubric, setRubric] = useState(q.grading_rubric ?? "");
   const [feedback, setFeedback] = useState(q.feedback_bullets?.length ? q.feedback_bullets.join("\n") : q.explanation ?? "");
+  function reset() {
+    setStem(q.stem); setChoices(q.choices.join("\n")); setType(q.question_type ?? "single"); setKey(q.question_type === "multiple" ? q.correct_indices ?? [] : [q.correct_index]); setAccepted((q.accepted_answers ?? []).join("\n")); setRubric(q.grading_rubric ?? ""); setFeedback(q.feedback_bullets?.length ? q.feedback_bullets.join("\n") : q.explanation ?? "");
+  }
   if (!me || !canEditQuestion(me.role)) return null;
   const options = choices.split("\n").map((s) => s.trim()).filter(Boolean);
   async function submit() {
@@ -42,7 +45,7 @@ export function EditQuestionButton({ q, onSaved }: { q: Question; onSaved: (q: Q
     finally { setBusy(false); }
   }
   return <Dialog open={open} onOpenChange={(value) => {
-    if (value) { setStem(q.stem); setChoices(q.choices.join("\n")); setType(q.question_type ?? "single"); setKey(q.question_type === "multiple" ? q.correct_indices ?? [] : [q.correct_index]); setAccepted((q.accepted_answers ?? []).join("\n")); setRubric(q.grading_rubric ?? ""); setFeedback(q.feedback_bullets?.length ? q.feedback_bullets.join("\n") : q.explanation ?? ""); }
+    if (value) reset();
     setOpen(value);
   }}><DialogTrigger asChild><Button variant="ghost" size="icon" title="Edit question" aria-label="Edit question"><Pencil /></Button></DialogTrigger>
     <DialogContent className="max-h-[85dvh] overflow-y-auto"><DialogHeader><DialogTitle>Edit question</DialogTitle></DialogHeader>
@@ -51,6 +54,6 @@ export function EditQuestionButton({ q, onSaved }: { q: Question; onSaved: (q: Q
       <Label htmlFor="edit-choices">Answer choices (one per line)</Label><Textarea id="edit-choices" rows={4} value={choices} onChange={(e) => setChoices(e.target.value)} />
       {type === "free_response" ? <><Label htmlFor="edit-accepted">Answer key (one accepted answer per line)</Label><Textarea id="edit-accepted" value={accepted} onChange={(e) => setAccepted(e.target.value)} /><Label htmlFor="edit-rubric">Grading rubric</Label><Textarea id="edit-rubric" value={rubric} onChange={(e) => setRubric(e.target.value)} /></> : <><Label>Answer key</Label><div className="grid gap-2">{options.map((choice, i) => <Button key={i} variant={key.includes(i) ? "default" : "outline"} className="h-auto whitespace-normal justify-start text-left" aria-pressed={key.includes(i)} onClick={() => setKey(type === "single" ? [i] : key.includes(i) ? key.filter((j) => j !== i) : [...key, i])}>{String.fromCharCode(65 + i)}. {choice}</Button>)}</div></>}
       <Label htmlFor="edit-feedback">Feedback</Label><ExplanationEditor id="edit-feedback" label="Feedback" value={feedback} onChange={setFeedback} />
-      <Button disabled={busy} onClick={submit}>{busy ? "Saving…" : "Save changes"}</Button>
+      <div className="flex items-center justify-end gap-2"><Button variant="ghost" size="icon" title="Reset unsaved changes" aria-label="Reset unsaved changes" disabled={busy} onClick={reset}><RotateCcw /></Button><Button variant="outline" disabled={busy} onClick={() => setOpen(false)}>Cancel</Button><Button disabled={busy} onClick={submit}>{busy ? "Saving…" : "Save changes"}</Button></div>
     </DialogContent></Dialog>;
 }

@@ -4,6 +4,10 @@ export function canEditQuestion(role: string) {
   return role === "coach" || role === "captain";
 }
 
+export function questionRestoreFields() {
+  return { status: "review" as const };
+}
+
 export function questionFeedbackFields(bullets: string[]) {
   const feedback_bullets = bullets.map((bullet) => bullet.trim()).filter(Boolean);
   return { feedback_bullets, explanation: feedback_bullets.join("\n") || null };
