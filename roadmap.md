@@ -1,4 +1,5 @@
 # Roadmap
+- [x] Reproduce blocked external PDF navigation and open privately fetched PDFs via app-origin blob URLs instead
 - [x] Match weekly-goal rounded backgrounds on leaderboard, Practice, Saved review, and archive; replace programmatic PDF popups with native private links
 - [x] Place weekly goal beside selected-event progress, include unstarted events and Done/Right/Accuracy, move rank to week controls, and confirm Practice search/social name
 - [x] Reorganize Home: events below Practice, remove marked shortcuts/charts, embed leaderboard, and reorder Review/Test Archive navigation with folder icon

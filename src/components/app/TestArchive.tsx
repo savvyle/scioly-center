@@ -5,11 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, ExternalLink, Search } from "lucide-react";
+import { FileText, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe } from "@/lib/auth";
 import { DEFAULT_DIVISION } from "@/lib/practice-scope";
 import { schoolYear } from "@/lib/school-year";
+import { ArchivePdfButton } from "./ArchivePdfButton";
 
 export function TestArchive() {
   const { data: me } = useMe();
@@ -26,19 +27,6 @@ export function TestArchive() {
       const { data, error } = await supabase.from("tests").select("id,event,division,year,tournament,level,source_path,key_path,question_count,created_by").eq("status", "parsed").order("year", { ascending: false }).order("event");
       if (error) throw error;
       return data ?? [];
-    },
-  });
-  const paths = tests.flatMap((test) => [test.source_path, test.key_path]).filter((path): path is string => !!path);
-  const { data: pdfLinks = {}, error: linkError } = useQuery({
-    queryKey: ["archive-pdf-links", paths],
-    enabled: paths.length > 0,
-    staleTime: 240_000,
-    refetchInterval: 240_000,
-    refetchOnWindowFocus: "always",
-    queryFn: async () => {
-      const { data, error } = await supabase.storage.from("tests").createSignedUrls(paths, 600);
-      if (error) throw error;
-      return Object.fromEntries((data ?? []).filter((item) => item.path && item.signedUrl && !item.error).map((item) => [item.path, item.signedUrl])) as Record<string, string>;
     },
   });
   const events = [...new Set(tests.map((t) => t.event))].sort();
@@ -60,11 +48,10 @@ export function TestArchive() {
     </section>
     {isLoading && <p className="text-muted-foreground">Loading tests…</p>}
     {error && <p className="text-destructive">Couldn't load the archive.</p>}
-    {linkError && <p className="text-destructive">Couldn't load PDF links. Please refresh and try again.</p>}
     <div className="space-y-3">{rows.map((t) => <article key={t.id} className="panel flex flex-wrap items-center gap-4 p-4">
       <FileText className="h-6 w-6 text-primary" />
       <div className="min-w-0 flex-1 basis-60"><h2 className="font-bold">{t.event}</h2><p className="text-sm text-muted-foreground">{t.tournament ?? "Past tournament"} · {schoolYear(t.year) || "Year unknown"}{t.division ? ` · Div ${t.division}` : ""}{t.level ? ` · ${t.level}` : ""}</p>{tab === "tests" && <span className="text-xs text-muted-foreground">{t.question_count} questions</span>}</div>
-      <div className="flex flex-wrap gap-2">{t.source_path && (pdfLinks[t.source_path] ? <Button asChild variant="outline" size="sm"><a href={pdfLinks[t.source_path]} target="_blank" rel="noopener noreferrer"><ExternalLink />Test PDF</a></Button> : <Button variant="outline" size="sm" disabled>Test PDF</Button>)}{t.key_path ? (pdfLinks[t.key_path] ? <Button asChild variant="outline" size="sm"><a href={pdfLinks[t.key_path]} target="_blank" rel="noopener noreferrer"><ExternalLink />Answer key</a></Button> : <Button variant="outline" size="sm" disabled>Answer key</Button>) : <span className="self-center text-xs text-muted-foreground">No answer key</span>}</div>
+      <div className="flex flex-wrap gap-2">{t.source_path && <ArchivePdfButton path={t.source_path} label="Test PDF" />}{t.key_path ? <ArchivePdfButton path={t.key_path} label="Answer key" /> : <span className="self-center text-xs text-muted-foreground">No answer key</span>}</div>
     </article>)}</div>
     {!isLoading && !error && !rows.length && <p className="py-6 text-center text-muted-foreground">No tests match these filters.</p>}
   </div>;
