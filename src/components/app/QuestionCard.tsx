@@ -164,7 +164,7 @@ export function FlagButton({ questionId, onFlagged }: { questionId: string; onFl
           <DialogTitle>What's wrong with this question?</DialogTitle>
         </DialogHeader>
         <div className="flex flex-wrap gap-2">
-          {["Wrong answer", "Missing context (image, passage)", "Typo / unreadable", "Ambiguous or more than one answer"].map((r) => (
+          {["Wrong answer", "Missing context (image, passage)", "Typo / unreadable", "Ambiguous or more than one answer", "Bad question"].map((r) => (
             <Button key={r} variant={reason === r ? "default" : "outline"} size="sm" onClick={() => setReason(r)}>
               {r}
             </Button>
