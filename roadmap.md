@@ -1,4 +1,5 @@
 # Roadmap
+- [x] Reorganize Home: events below Practice, remove marked shortcuts/charts, embed leaderboard, and reorder Review/Test Archive navigation with folder icon
 - [x] v1 practice hub
 - [x] Rename to "SciOly Center"
 - [x] Finish parsing Highlands Div B tests (Drive import)

@@ -2,22 +2,27 @@ import { useQuery } from "@tanstack/react-query";
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { byEvent, statsQuery, trendQuery } from "@/lib/data";
 import { pct } from "@/lib/week";
+import type { ReactNode } from "react";
 
-export function EventAccuracy({ userId, division }: { userId: string | null; division?: string | null }) {
+export function EventAccuracy({ userId, division, title, action }: { userId: string | null; division?: string | null; title?: string; action?: ReactNode }) {
   const { data = [] } = useQuery(statsQuery(userId, division ?? null));
   const events = byEvent(data);
-  if (!events.length) return <div className="panel p-4 text-sm text-muted-foreground">No answers yet.</div>;
+  if (!events.length && !title) return <div className="panel p-4 text-sm text-muted-foreground">No answers yet.</div>;
   return (
     <div className="panel p-4">
-      <h2 className="text-lg font-bold">By event <span className="text-sm font-normal text-muted-foreground">(weakest first)</span></h2>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-lg font-bold">{title ?? <>By event <span className="text-sm font-normal text-muted-foreground">(weakest first)</span></>}</h2>
+        {action}
+      </div>
+      {!events.length && <p className="mt-3 text-sm text-muted-foreground">No answers yet.</p>}
       <div className="mt-3 space-y-2">
         {events.map((e) => {
           const acc = e.correct / e.answered;
           return (
             <details key={e.event} className="group">
-              <summary className="flex cursor-pointer items-center gap-3 text-sm">
-                <span className="w-40 shrink-0 truncate font-medium">{e.event}</span>
-                <span className="relative h-2 flex-1 overflow-hidden rounded-full bg-muted">
+              <summary className="grid cursor-pointer grid-cols-[minmax(0,1fr)_auto] items-center gap-2 text-sm sm:grid-cols-[10rem_minmax(0,1fr)_6rem] sm:gap-3">
+                <span className="min-w-0 break-words font-medium">{e.event}</span>
+                <span className="relative col-span-2 row-start-2 h-2 overflow-hidden rounded-full bg-muted sm:col-span-1 sm:row-start-auto">
                   <span className="absolute inset-y-0 left-0 rounded-full bg-primary" style={{ width: pct(acc) }} />
                 </span>
                 <span className="w-24 text-right font-mono text-xs">{pct(acc)} · {e.answered}</span>

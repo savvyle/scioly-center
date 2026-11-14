@@ -2,7 +2,7 @@ import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } 
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe } from "@/lib/auth";
-import { BarChart3, Brain, Home, ListChecks, LogOut, Timer, Trophy } from "lucide-react";
+import { BarChart3, Brain, Folder, Home, ListChecks, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -17,9 +17,8 @@ export const Route = createFileRoute("/_authenticated")({
 const NAV = [
   { to: "/dashboard", label: "Home", icon: Home },
   { to: "/drill", label: "Practice", icon: Brain },
-  { to: "/mock", label: "Test Archive", icon: Timer },
   { to: "/review", label: "Review", icon: ListChecks },
-  { to: "/leaderboard", label: "Board", icon: Trophy },
+  { to: "/mock", label: "Test Archive", icon: Folder },
 ] as const;
 
 function Shell() {
