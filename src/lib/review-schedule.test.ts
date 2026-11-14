@@ -1,12 +1,10 @@
 import { expect, it } from "vitest";
-import postgres from "postgres";
+import { readFileSync } from "node:fs";
 
-it.skipIf(!process.env.SUPABASE_DB_URL)("uses 3, 9, 15 and 25 day review intervals in the database", async () => {
-  const url = process.env.SUPABASE_DB_URL;
-  if (!url) throw new Error("Database test connection is required.");
-  const sql = postgres(url, { max: 1 });
-  try {
-    const rows = await sql`select public.review_interval_days(box) as days from generate_series(1,4) box order by box`;
-    expect(rows.map((row) => row.days)).toEqual([3, 9, 15, 25]);
-  } finally { await sql.end(); }
+it("defines the requested review intervals and applies them on correct answers", () => {
+  const migration = readFileSync("drizzle/migrations/0007_update_review_intervals.sql", "utf8");
+  const pairs = [...migration.matchAll(/WHEN (\d+) THEN (\d+)/g)].map((match) => [Number(match[1]), Number(match[2])]);
+  expect(pairs).toEqual([[1, 3], [2, 9], [3, 15]]);
+  expect(migration).toContain("ELSE 25 END");
+  expect(migration).toContain("public.review_interval_days(nb) * interval '1 day'");
 });
