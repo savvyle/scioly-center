@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
-import { parseTest } from "@/lib/parse.functions";
+import { parseTest, retagTest } from "@/lib/parse.functions";
 import { EVENTS, LEVELS } from "@/lib/events";
 import { toast } from "sonner";
 import { Loader2, Upload } from "lucide-react";
@@ -33,6 +33,7 @@ async function splitZip(file: File) {
 function UploadPage() {
   const qc = useQueryClient();
   const parse = useServerFn(parseTest);
+  const retag = useServerFn(retagTest);
   const [meta, setMeta] = useState({ event: "", year: String(new Date().getFullYear()), tournament: "", level: "Invitational" });
   const [testFile, setTestFile] = useState<File | null>(null);
   const [keyFile, setKeyFile] = useState<File | null>(null);
@@ -135,6 +136,9 @@ function UploadPage() {
                 {t.error && <div className="text-xs text-destructive">{t.error}</div>}
               </div>
               <span className="tag">{t.status === "parsed" ? `${t.question_count} Q` : t.status}</span>
+              {t.status === "parsed" && (
+                <Button size="sm" variant="ghost" disabled={!!busy} onClick={async () => { setBusy("Retagging…"); try { const r = await retag({ data: { testId: t.id } }); toast.success(`Retagged ${r.updated} questions`); } catch (e) { toast.error(e instanceof Error ? e.message : "Failed"); } finally { setBusy(null); } }}>Retag</Button>
+              )}
               {(t.status === "failed" || t.status === "uploaded") && t.source_path && (
                 <Button size="sm" variant="outline" disabled={!!busy} onClick={() => runParse(t.id)}>Retry</Button>
               )}

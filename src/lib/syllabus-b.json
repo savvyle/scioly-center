@@ -1,0 +1,2427 @@
+{
+ "Anatomy & Physiology": {
+  "type": "study",
+  "topics": [
+   {
+    "name": "Respiratory anatomy",
+    "subtopics": [
+     "Respiratory organs",
+     "Organ functions",
+     "Pulmonary ventilation",
+     "Breathing patterns",
+     "Spirogram interpretation"
+    ]
+   },
+   {
+    "name": "Respiratory physiology",
+    "subtopics": [
+     "Gas exchange",
+     "Oxygen transport",
+     "Oxygen dissociation curves",
+     "Exercise effects",
+     "High-altitude effects",
+     "Blood chemistry",
+     "Respiratory regulation"
+    ]
+   },
+   {
+    "name": "Respiratory disorders",
+    "subtopics": [
+     "COPD and emphysema",
+     "Asthma",
+     "Pneumonia",
+     "Sleep apnea",
+     "Cystic fibrosis",
+     "Tuberculosis and pleurisy",
+     "Pulmonary edema",
+     "Lung cancers",
+     "Fibrosis and pneumoconiosis",
+     "Treatments and prevention"
+    ]
+   },
+   {
+    "name": "Digestive anatomy",
+    "subtopics": [
+     "Alimentary canal",
+     "Accessory organs",
+     "Four wall layers",
+     "Regional lining differences",
+     "Liver and pancreas",
+     "Kupffer cells"
+    ]
+   },
+   {
+    "name": "Digestive physiology",
+    "subtopics": [
+     "Mechanical digestion",
+     "Chemical digestion",
+     "Protein digestion",
+     "Fat digestion",
+     "Carbohydrate digestion",
+     "Exercise effects",
+     "Obesity effects"
+    ]
+   },
+   {
+    "name": "Digestive disorders",
+    "subtopics": [
+     "Ulcers",
+     "Digestive cancers",
+     "Diarrhea",
+     "Lactose intolerance",
+     "Hepatitis and appendicitis",
+     "Diverticular disease",
+     "GERD",
+     "Inflammatory bowel diseases",
+     "Celiac disease",
+     "Treatments and prevention"
+    ]
+   },
+   {
+    "name": "Immune mechanisms",
+    "subtopics": [
+     "Immune organs",
+     "Anatomical barriers",
+     "Complement system",
+     "Toll-like receptors",
+     "Inflammation",
+     "Innate immune cells",
+     "Adaptive immunity",
+     "Immune responses",
+     "Allergic reactions"
+    ]
+   },
+   {
+    "name": "Immune disorders",
+    "subtopics": [
+     "Acquired immunodeficiencies",
+     "Genetic immunodeficiencies",
+     "Autoimmune diseases",
+     "Type 1\u20134 hypersensitivities",
+     "Lupus",
+     "Dermatomyositis and scleroderma",
+     "Psoriasis",
+     "Treatments and prevention"
+    ]
+   },
+   {
+    "name": "Immune therapies",
+    "subtopics": [
+     "Allografts and autografts",
+     "Rejection prevention",
+     "Antibody therapies",
+     "CAR-T cell therapy"
+    ]
+   }
+  ]
+ },
+ "Boomilever": {
+  "type": "build",
+  "topics": [
+   {
+    "name": "Structural construction",
+    "subtopics": [
+     "Cantilever beams",
+     "Truss structures",
+     "Wood selection",
+     "Adhesive joints",
+     "Team-made laminations",
+     "Single-piece assembly"
+    ]
+   },
+   {
+    "name": "Wall attachment",
+    "subtopics": [
+     "Mounting bolt support",
+     "Contact width limits",
+     "Contact depth limits",
+     "Loading block elevation"
+    ]
+   },
+   {
+    "name": "Load geometry",
+    "subtopics": [
+     "Horizontal load distance",
+     "Lateral chain alignment",
+     "Loading block support",
+     "Bucket clearance"
+    ]
+   },
+   {
+    "name": "Load testing",
+    "subtopics": [
+     "Sand loading",
+     "Bucket stabilization",
+     "Structural failure",
+     "Supported mass measurement",
+     "Load estimation"
+    ]
+   },
+   {
+    "name": "Scoring optimization",
+    "subtopics": [
+     "Structural efficiency",
+     "Structure mass",
+     "15-kilogram load cap",
+     "Shallow-contact bonus",
+     "5000-gram bonus",
+     "Violation tiers"
+    ]
+   }
+  ]
+ },
+ "Botany": {
+  "type": "study",
+  "topics": [
+   {
+    "name": "Plant anatomy",
+    "subtopics": [
+     "Plant cells",
+     "Roots",
+     "Stems",
+     "Leaves",
+     "Spore-forming bodies",
+     "Flowers"
+    ]
+   },
+   {
+    "name": "Plant physiology",
+    "subtopics": [
+     "Growth",
+     "Differentiation",
+     "Gas transport",
+     "Water transport",
+     "Nutrient transport",
+     "Storage",
+     "Photosynthesis"
+    ]
+   },
+   {
+    "name": "Plant classification",
+    "subtopics": [
+     "Algae versus plants",
+     "Monocots versus dicots",
+     "Embryophytes versus cryptogams",
+     "Woody versus herbaceous",
+     "Major taxonomic groups"
+    ]
+   },
+   {
+    "name": "Genetics and reproduction",
+    "subtopics": [
+     "Plant genetics",
+     "Plant reproduction",
+     "Genetically modified organisms"
+    ]
+   },
+   {
+    "name": "History and evolution",
+    "subtopics": [
+     "Botanical history",
+     "Paleobotany",
+     "Plant evolution"
+    ]
+   },
+   {
+    "name": "Plant ecology",
+    "subtopics": [
+     "Global energy cycles",
+     "Nutrient cycles",
+     "Community competition",
+     "Animal plant-use"
+    ]
+   },
+   {
+    "name": "Applied botany",
+    "subtopics": [
+     "Human plant-use",
+     "Food production",
+     "Plant products",
+     "Nutrient deficiencies",
+     "Plant infections"
+    ]
+   }
+  ]
+ },
+ "Circuit Lab": {
+  "type": "hybrid",
+  "topics": [
+   {
+    "name": "Electrical history",
+    "subtopics": [
+     "Ampere",
+     "Coulomb",
+     "Kirchhoff",
+     "Volta",
+     "Ohm",
+     "Hertz",
+     "Boole"
+    ]
+   },
+   {
+    "name": "Charges and currents",
+    "subtopics": [
+     "Electric charges",
+     "Electric fields",
+     "Coulomb's law",
+     "Static electricity",
+     "DC sources",
+     "AC sources",
+     "Electrical hazards"
+    ]
+   },
+   {
+    "name": "Electrical quantities",
+    "subtopics": [
+     "Current",
+     "Voltage",
+     "Resistance",
+     "Power",
+     "Energy",
+     "Metric units",
+     "Significant figures"
+    ]
+   },
+   {
+    "name": "DC circuit analysis",
+    "subtopics": [
+     "Ohm's law",
+     "Series circuits",
+     "Parallel circuits",
+     "Open circuits",
+     "Short circuits",
+     "Circuit schematics",
+     "Equivalent resistance",
+     "Kirchhoff's laws"
+    ]
+   },
+   {
+    "name": "Control and protection",
+    "subtopics": [
+     "Switches",
+     "Relays",
+     "Fuses",
+     "Ground-fault interrupters",
+     "Circuit breakers",
+     "SPDT switching"
+    ]
+   },
+   {
+    "name": "Semiconductor devices",
+    "subtopics": [
+     "Silicon PN junctions",
+     "Diodes",
+     "LEDs",
+     "Equal-brightness circuits"
+    ]
+   },
+   {
+    "name": "Digital logic",
+    "subtopics": [
+     "Logic gates",
+     "Truth tables",
+     "Universal gate sets",
+     "Boolean expressions",
+     "De Morgan's law",
+     "Multiplexers",
+     "Adders",
+     "Binary addition"
+    ]
+   },
+   {
+    "name": "Hands-on measurements",
+    "subtopics": [
+     "Breadboards",
+     "Multimeters",
+     "Mystery resistance",
+     "Circuit power",
+     "Charger specifications",
+     "Battery charging time",
+     "Logic circuit construction",
+     "Circuit troubleshooting"
+    ]
+   }
+  ]
+ },
+ "Codebusters": {
+  "type": "study",
+  "topics": [
+   {
+    "name": "Monoalphabetic substitution",
+    "subtopics": [
+     "Aristocrats",
+     "Patristocrats",
+     "K1 alphabets",
+     "Random alphabets",
+     "Letter frequencies",
+     "Timed decoding"
+    ]
+   },
+   {
+    "name": "Simple substitutions",
+    "subtopics": [
+     "Atbash cipher",
+     "Caesar cipher",
+     "Shift recovery"
+    ]
+   },
+   {
+    "name": "Baconian cipher",
+    "subtopics": [
+     "Binary letter mappings",
+     "Symbol encodings",
+     "Rendering variations",
+     "Word Baconian",
+     "Crib analysis"
+    ]
+   },
+   {
+    "name": "Spanish xenocrypts",
+    "subtopics": [
+     "Spanish plaintext",
+     "K1 English keywords",
+     "Spanish letter frequencies"
+    ]
+   },
+   {
+    "name": "Morse and transposition",
+    "subtopics": [
+     "Fractionated Morse",
+     "Morse segmentation",
+     "Complete columnar transposition",
+     "Column reconstruction",
+     "Crib placement"
+    ]
+   },
+   {
+    "name": "Polyalphabetic ciphers",
+    "subtopics": [
+     "Porta decryption",
+     "Porta cryptanalysis",
+     "Nihilist decryption",
+     "Nihilist cryptanalysis",
+     "Key recovery"
+    ]
+   },
+   {
+    "name": "Checkerboard and homophonic",
+    "subtopics": [
+     "Polybius keys",
+     "Row-column keywords",
+     "Checkerboard decryption",
+     "Checkerboard cryptanalysis",
+     "Homophonic decryption",
+     "Homophonic cryptanalysis"
+    ]
+   },
+   {
+    "name": "Cryptarithms",
+    "subtopics": [
+     "Decimal equations",
+     "Letter-digit mappings",
+     "Word decoding",
+     "Phrase decoding"
+    ]
+   }
+  ]
+ },
+ "Crime Busters": {
+  "type": "lab",
+  "topics": [
+   {
+    "name": "Qualitative testing",
+    "subtopics": [
+     "Solubility",
+     "Acidity",
+     "Magnetism",
+     "Color",
+     "Density",
+     "Odor",
+     "Mixture identification"
+    ]
+   },
+   {
+    "name": "Solid identification",
+    "subtopics": [
+     "Sodium acetate",
+     "Yeast and vitamin C",
+     "Calcium carbonate",
+     "Salt and sugar",
+     "Flour and cornstarch",
+     "Gypsum",
+     "Baking soda",
+     "Gelatin",
+     "Alka-Seltzer",
+     "White sand"
+    ]
+   },
+   {
+    "name": "Metals and liquids",
+    "subtopics": [
+     "Aluminum and iron",
+     "Zinc and magnesium",
+     "Copper and tin",
+     "Lemon juice",
+     "Isopropyl alcohol",
+     "Household ammonia",
+     "Water",
+     "Vinegar",
+     "Hydrogen peroxide"
+    ]
+   },
+   {
+    "name": "Biological trace evidence",
+    "subtopics": [
+     "Human hair",
+     "Dog hair",
+     "Cat hair",
+     "Animal fibers",
+     "Vegetable fibers",
+     "Synthetic fibers"
+    ]
+   },
+   {
+    "name": "Plastic identification",
+    "subtopics": [
+     "PETE",
+     "HDPE",
+     "LDPE",
+     "Polystyrene",
+     "Polypropylene",
+     "PVC",
+     "PMMA",
+     "Density comparisons",
+     "Burn-result interpretation"
+    ]
+   },
+   {
+    "name": "Paper chromatography",
+    "subtopics": [
+     "Ink separation",
+     "Beverage pigments",
+     "Chromatogram interpretation",
+     "Rf calculations"
+    ]
+   },
+   {
+    "name": "Physical evidence",
+    "subtopics": [
+     "Fingerprint patterns",
+     "DNA electropherograms",
+     "Shoeprints",
+     "Tire treads",
+     "Soil composition",
+     "Spatter patterns",
+     "Travel direction",
+     "Impact speed"
+    ]
+   },
+   {
+    "name": "Crime analysis",
+    "subtopics": [
+     "Evidence integration",
+     "Suspect implication",
+     "Suspect exclusion",
+     "Written justification"
+    ]
+   }
+  ]
+ },
+ "Disease Detectives": {
+  "type": "study",
+  "topics": [
+   {
+    "name": "Epidemiological foundations",
+    "subtopics": [
+     "Clinical versus public-health",
+     "Epidemiology history",
+     "Public-health roles",
+     "Health problem-solving",
+     "Natural disease history",
+     "Disease spectrum",
+     "Infectious causes",
+     "Noninfectious causes",
+     "Epidemiological terminology"
+    ]
+   },
+   {
+    "name": "Surveillance",
+    "subtopics": [
+     "Health problem identification",
+     "Five-step surveillance process",
+     "Surveillance types",
+     "System attributes"
+    ]
+   },
+   {
+    "name": "Study designs",
+    "subtopics": [
+     "Experimental studies",
+     "Observational studies",
+     "Case-control studies",
+     "Cohort studies",
+     "Ecological studies",
+     "Cross-sectional studies",
+     "Advantages and disadvantages",
+     "Design selection"
+    ]
+   },
+   {
+    "name": "Outbreak investigation",
+    "subtopics": [
+     "Investigation steps",
+     "Hypothesis generation",
+     "Case definitions",
+     "Person-place-time triad",
+     "Agent-host-environment triad",
+     "Transmission chains",
+     "Hypothesis revision"
+    ]
+   },
+   {
+    "name": "Outbreak data",
+    "subtopics": [
+     "Epidemic curves",
+     "Line listings",
+     "Cluster maps",
+     "Subdivided tables",
+     "PFGE gels",
+     "SNP mapping",
+     "PulseNet"
+    ]
+   },
+   {
+    "name": "Epidemiological calculations",
+    "subtopics": [
+     "Rates and proportions",
+     "Attack rate",
+     "Relative risk",
+     "Odds ratio",
+     "Incidence proportion",
+     "Incidence rate",
+     "Prevalence",
+     "Death and mortality"
+    ]
+   },
+   {
+    "name": "Causality and validity",
+    "subtopics": [
+     "Bradford Hill criteria",
+     "Koch's postulates",
+     "Evans' postulates",
+     "Directed acyclic graphs",
+     "Component-cause models",
+     "GRADE methods",
+     "Bias",
+     "Errors",
+     "Confounding"
+    ]
+   },
+   {
+    "name": "Control and prevention",
+    "subtopics": [
+     "Data trends",
+     "Disease-control strategies",
+     "Prevention scope",
+     "Prevention levels",
+     "Herd immunity",
+     "Vaccine effectiveness",
+     "Vaccine efficacy"
+    ]
+   }
+  ]
+ },
+ "Dynamic Planet": {
+  "type": "study",
+  "topics": [
+   {
+    "name": "Hydrologic cycle",
+    "subtopics": [
+     "Critical zone",
+     "Precipitation",
+     "Evapotranspiration",
+     "Infiltration",
+     "Runoff",
+     "Condensation",
+     "Storage reservoirs",
+     "Residence times",
+     "Water budgets"
+    ]
+   },
+   {
+    "name": "Climatic controls",
+    "subtopics": [
+     "Precipitation patterns",
+     "Seasonality and intensity",
+     "Orographic lift",
+     "Rain shadows",
+     "Continentality",
+     "Lake effect",
+     "Elevation",
+     "Aridity spectrum"
+    ]
+   },
+   {
+    "name": "Drainage networks",
+    "subtopics": [
+     "Watersheds",
+     "Drainage divides",
+     "Basin characteristics",
+     "Stream order",
+     "Drainage patterns",
+     "Drainage density",
+     "Drainage texture"
+    ]
+   },
+   {
+    "name": "Fluvial sediments",
+    "subtopics": [
+     "Channel types",
+     "Sinuosity",
+     "Grain properties",
+     "Sediment sorting",
+     "Bed load",
+     "Suspended load",
+     "Dissolved load",
+     "Competence and capacity",
+     "Fluvial bedforms"
+    ]
+   },
+   {
+    "name": "Fluvial geomorphology",
+    "subtopics": [
+     "Longitudinal profiles",
+     "Gradient and base-level",
+     "Graded streams",
+     "Knickpoints and waterfalls",
+     "Valley erosion",
+     "Stream capture",
+     "Meanders",
+     "Floodplain landforms",
+     "Deltas",
+     "Alluvial fans"
+    ]
+   },
+   {
+    "name": "Streamflow and floods",
+    "subtopics": [
+     "Flow regimes",
+     "Discharge",
+     "Velocity",
+     "Water-sediment loads",
+     "Open-channel relationships",
+     "Flood frequency",
+     "Recurrence intervals"
+    ]
+   },
+   {
+    "name": "Groundwater and karst",
+    "subtopics": [
+     "Subsurface zones",
+     "Water table",
+     "Aquifer types",
+     "Porosity and permeability",
+     "Hydraulic gradient",
+     "Recharge and discharge",
+     "Capillarity",
+     "Surface-groundwater interactions",
+     "Saltwater intrusion",
+     "Karst features"
+    ]
+   },
+   {
+    "name": "Lakes and wetlands",
+    "subtopics": [
+     "Lake formation",
+     "Lake types",
+     "Lake water budgets",
+     "Stratification",
+     "Seasonal turnover",
+     "Shoreline processes",
+     "Wetland types",
+     "Wetland hydrology"
+    ]
+   },
+   {
+    "name": "Paleohydrologic records",
+    "subtopics": [
+     "Sedimentary structures",
+     "Flow-condition indicators",
+     "Paleochannels",
+     "Fluvial deposits",
+     "Lacustrine deposits"
+    ]
+   },
+   {
+    "name": "Human impacts",
+    "subtopics": [
+     "Land-use change",
+     "Altered runoff",
+     "Sedimentation",
+     "Dams and levees",
+     "Channelization and diversion",
+     "Groundwater pumping",
+     "Aquifer depletion",
+     "Land subsidence",
+     "Water pollution"
+    ]
+   },
+   {
+    "name": "Freshwater monitoring",
+    "subtopics": [
+     "Topographic maps",
+     "Water-table mapping",
+     "Groundwater flow lines",
+     "Stream gauging",
+     "Stage-discharge relationships",
+     "Hydrographs",
+     "Baseflow and stormflow",
+     "Observation wells",
+     "Tracer studies",
+     "Remote sensing"
+    ]
+   }
+  ]
+ },
+ "Elastic Launched Glider": {
+  "type": "build",
+  "topics": [
+   {
+    "name": "Glider construction",
+    "subtopics": [
+     "Wing-generated lift",
+     "Free-flight configuration",
+     "Blunt nose",
+     "Material selection",
+     "Mass limits",
+     "Measurement-box fit"
+    ]
+   },
+   {
+    "name": "Elastic launching",
+    "subtopics": [
+     "Stored elastic energy",
+     "Launch-handle dimensions",
+     "Nonmetallic elastic",
+     "Elastic retention",
+     "Handheld launch",
+     "Launch-height restrictions"
+    ]
+   },
+   {
+    "name": "Flight optimization",
+    "subtopics": [
+     "Trim flights",
+     "Ballast adjustment",
+     "Launch pitch",
+     "Launch roll",
+     "Elastic stretch",
+     "Peak flight height"
+    ]
+   },
+   {
+    "name": "Flight logging",
+    "subtopics": [
+     "Ten test flights",
+     "Peak height",
+     "Relaxed elastic length",
+     "Flight time",
+     "Additional parameter",
+     "Numeric units"
+    ]
+   },
+   {
+    "name": "Flight scoring",
+    "subtopics": [
+     "Five official flights",
+     "Three-flight total",
+     "Time aloft",
+     "Median timing",
+     "Complete-log bonus",
+     "Partial-log bonus",
+     "Violation ranking"
+    ]
+   }
+  ]
+ },
+ "Experimental Design": {
+  "type": "lab",
+  "topics": [
+   {
+    "name": "Question and hypothesis",
+    "subtopics": [
+     "Assigned topic",
+     "Testable problem",
+     "Predicted relationship",
+     "Directional prediction",
+     "Scientific rationale"
+    ]
+   },
+   {
+    "name": "Experimental variables",
+    "subtopics": [
+     "Independent variable",
+     "Dependent variable",
+     "Operational definitions",
+     "Independent-variable levels",
+     "Controlled variables"
+    ]
+   },
+   {
+    "name": "Experimental procedure",
+    "subtopics": [
+     "Materials inventory",
+     "Material quantities",
+     "Logical sequence",
+     "Repeated trials",
+     "Setup diagrams",
+     "Reproducibility",
+     "Safe experimentation"
+    ]
+   },
+   {
+    "name": "Data collection",
+    "subtopics": [
+     "Setup observations",
+     "Procedure observations",
+     "Result observations",
+     "Raw data",
+     "Units and labels",
+     "Condensed tables",
+     "Derived-variable calculations"
+    ]
+   },
+   {
+    "name": "Graphs and statistics",
+    "subtopics": [
+     "Graph selection",
+     "Titles and labels",
+     "Scales and units",
+     "Central tendency",
+     "Variation statistics",
+     "Example calculations",
+     "Additional statistics"
+    ]
+   },
+   {
+    "name": "Analysis and conclusions",
+    "subtopics": [
+     "Experimental errors",
+     "Error effects",
+     "Trend claims",
+     "Supporting evidence",
+     "Scientific reasoning",
+     "Outliers",
+     "Variation",
+     "Hypothesis evaluation"
+    ]
+   },
+   {
+    "name": "Applications and improvements",
+    "subtopics": [
+     "Design improvements",
+     "Improvement rationale",
+     "Practical applications",
+     "Future experiments"
+    ]
+   }
+  ]
+ },
+ "Food Science": {
+  "type": "hybrid",
+  "topics": [
+   {
+    "name": "Dairy experiments",
+    "subtopics": [
+     "Experimental notebook",
+     "Independent variables",
+     "Repeated investigations",
+     "Ice cream formation",
+     "Curd mass",
+     "Butter preparation",
+     "Milk-fat mass"
+    ]
+   },
+   {
+    "name": "Dairy macromolecules",
+    "subtopics": [
+     "Lipids",
+     "Carbohydrates",
+     "Proteins",
+     "Sugar structures",
+     "Starch structures",
+     "Fat structures",
+     "Protein structures",
+     "Casein",
+     "Whey proteins"
+    ]
+   },
+   {
+    "name": "Fat chemistry",
+    "subtopics": [
+     "Esterification",
+     "Fat bonding",
+     "Saturated fats",
+     "Unsaturated fats",
+     "Essential fats",
+     "Emulsification"
+    ]
+   },
+   {
+    "name": "Processing and preservation",
+    "subtopics": [
+     "Cooking chemistry",
+     "Freezing-point depression",
+     "Dairy preservation",
+     "Pasteurization",
+     "Curd formation",
+     "Fat separation"
+    ]
+   },
+   {
+    "name": "Nutrition and health",
+    "subtopics": [
+     "Essential vitamins",
+     "Essential proteins",
+     "Mineral requirements",
+     "Recommended daily allowances",
+     "Nutrient deficiencies",
+     "Health benefits",
+     "Probiotics"
+    ]
+   },
+   {
+    "name": "Dairy product varieties",
+    "subtopics": [
+     "Nondairy milks",
+     "Lactose-free milk",
+     "Low-fat milk",
+     "Fat-free milk",
+     "Organic dairy products"
+    ]
+   },
+   {
+    "name": "Consumer considerations",
+    "subtopics": [
+     "Labeling regulations",
+     "Dairy allergens",
+     "Lactose intolerance"
+    ]
+   }
+  ]
+ },
+ "Heredity": {
+  "type": "study",
+  "topics": [
+   {
+    "name": "Mendelian inheritance",
+    "subtopics": [
+     "Mendel's laws",
+     "Monohybrid crosses",
+     "Dihybrid crosses",
+     "Punnett squares",
+     "Genotype probabilities",
+     "Phenotype probabilities",
+     "Pedigree construction",
+     "Inheritance modes"
+    ]
+   },
+   {
+    "name": "Non-Mendelian inheritance",
+    "subtopics": [
+     "Linkage",
+     "Incomplete dominance",
+     "Codominance",
+     "Complementation",
+     "Recessive epistasis"
+    ]
+   },
+   {
+    "name": "Cell division",
+    "subtopics": [
+     "Mitosis stages",
+     "Meiosis stages",
+     "Key cellular structures",
+     "Division comparisons",
+     "Human karyotypes"
+    ]
+   },
+   {
+    "name": "DNA structure",
+    "subtopics": [
+     "Nucleotides",
+     "DNA backbone",
+     "Strand directionality",
+     "Base pairing",
+     "Plasmids",
+     "Chromatin",
+     "Euchromatin",
+     "Heterochromatin",
+     "Chromosomes"
+    ]
+   },
+   {
+    "name": "Replication and mutation",
+    "subtopics": [
+     "Replication stages",
+     "Replication fork",
+     "DNA elongation",
+     "Proofreading",
+     "Chromosomal rearrangements",
+     "Insertions and deletions",
+     "Substitutions",
+     "Protein-sequence consequences",
+     "UVA/UVB damage",
+     "Nucleotide excision repair"
+    ]
+   },
+   {
+    "name": "Gene expression",
+    "subtopics": [
+     "Central dogma",
+     "Transcription stages",
+     "RNA polymerase",
+     "Activators and repressors",
+     "RNA maturation",
+     "Translation stages",
+     "Ribosomes",
+     "mRNA and tRNA",
+     "Lac operon",
+     "Trp operon"
+    ]
+   },
+   {
+    "name": "Population genetics",
+    "subtopics": [
+     "Hardy-Weinberg assumptions",
+     "Hardy-Weinberg calculations",
+     "Allele frequencies",
+     "Genetic drift",
+     "Founder effects",
+     "Population bottlenecks",
+     "Migration",
+     "Relative fitness",
+     "Additive alleles",
+     "Continuous variation"
+    ]
+   },
+   {
+    "name": "Genetic techniques",
+    "subtopics": [
+     "PCR components",
+     "Denaturation",
+     "Annealing",
+     "Extension",
+     "Temperature roles",
+     "PCR applications",
+     "Sanger sequencing",
+     "Sequencing applications"
+    ]
+   }
+  ]
+ },
+ "Hovercraft": {
+  "type": "build",
+  "topics": [
+   {
+    "name": "Air-cushion vehicle",
+    "subtopics": [
+     "Air-pressure lift",
+     "Air-pressure thrust",
+     "Levitation testing",
+     "Vehicle dimensions",
+     "Track contact limits"
+    ]
+   },
+   {
+    "name": "Electrical design",
+    "subtopics": [
+     "Two-motor limit",
+     "Permitted components",
+     "Mechanical switches",
+     "Battery selection",
+     "12-volt ceiling",
+     "Propeller shielding"
+    ]
+   },
+   {
+    "name": "Payload design",
+    "subtopics": [
+     "Nickel rolls",
+     "Loose nickels",
+     "Load retention",
+     "Mass selection",
+     "Payload adjustment"
+    ]
+   },
+   {
+    "name": "Track and timing",
+    "subtopics": [
+     "185-centimeter course",
+     "Timing dowel",
+     "Photogate clearance",
+     "Target-time calibration",
+     "Launch positioning",
+     "Optional ramp"
+    ]
+   },
+   {
+    "name": "Run performance",
+    "subtopics": [
+     "Two-run limit",
+     "Complete runs",
+     "Incomplete runs",
+     "Stall detection",
+     "Runtime limits",
+     "Distance measurement"
+    ]
+   },
+   {
+    "name": "Scoring optimization",
+    "subtopics": [
+     "Distance score",
+     "Time score",
+     "Mass score",
+     "Ramp penalties",
+     "Construction penalties",
+     "Competition penalties",
+     "Best-run selection"
+    ]
+   }
+  ]
+ },
+ "Meteorology": {
+  "type": "study",
+  "topics": [
+   {
+    "name": "Observation technologies",
+    "subtopics": [
+     "ASOS and mesonets",
+     "Radiosondes",
+     "Buoys",
+     "Doppler radar",
+     "Aircraft observations",
+     "Water-vapor imagery",
+     "Visible imagery",
+     "Infrared imagery"
+    ]
+   },
+   {
+    "name": "Forecast interpretation",
+    "subtopics": [
+     "Surface maps",
+     "Station models",
+     "METAR decoding",
+     "Hodographs",
+     "Computer models",
+     "St\u00fcve diagrams",
+     "Skew-T diagrams",
+     "Lifting condensation level",
+     "CAPE"
+    ]
+   },
+   {
+    "name": "Storm environments",
+    "subtopics": [
+     "Large-scale circulation",
+     "Jet streams",
+     "Atmospheric stability",
+     "Air masses",
+     "Fronts and drylines",
+     "Wind shear",
+     "Atmospheric rivers",
+     "Ocean influences",
+     "Topographic influences",
+     "Severe-weather clouds"
+    ]
+   },
+   {
+    "name": "Extreme precipitation",
+    "subtopics": [
+     "Collision-coalescence",
+     "Bergeron process",
+     "Riming and aggregation",
+     "Temperature layers",
+     "Snow and sleet",
+     "Hail size",
+     "Freezing precipitation",
+     "Flooding and debris-flows",
+     "Structural impacts",
+     "IDF curves"
+    ]
+   },
+   {
+    "name": "Thunderstorms and lightning",
+    "subtopics": [
+     "Single-cell storms",
+     "Multicell storms",
+     "Supercells",
+     "Mesoscale convective complexes",
+     "Storm life cycles",
+     "Cloud electrification",
+     "Charge differentiation",
+     "Lightning types",
+     "Lightning detection"
+    ]
+   },
+   {
+    "name": "Severe winds",
+    "subtopics": [
+     "Straight-line winds",
+     "Downdrafts",
+     "Downbursts",
+     "Microbursts and macrobursts",
+     "Gust fronts",
+     "Squall lines",
+     "Derechos",
+     "Downslope winds",
+     "Radar detection"
+    ]
+   },
+   {
+    "name": "Tornadoes and waterspouts",
+    "subtopics": [
+     "Formation conditions",
+     "Structure",
+     "Life cycles",
+     "Tracks and seasonality",
+     "Geographic preferences",
+     "Fujita scales",
+     "Enhanced Fujita scale",
+     "Hook and bow-echoes",
+     "Tornadic vortex signatures",
+     "Debris signatures"
+    ]
+   },
+   {
+    "name": "Tropical cyclones",
+    "subtopics": [
+     "Development stages",
+     "Formation regions",
+     "Tracks",
+     "Eye and eyewall",
+     "Spiral bands",
+     "Saffir-Simpson scale",
+     "Storm surge",
+     "Topographic effects",
+     "Wind-shear effects",
+     "ENSO and pressure"
+    ]
+   },
+   {
+    "name": "Other severe weather",
+    "subtopics": [
+     "Droughts",
+     "Heat waves",
+     "Blizzards",
+     "Nor'easters",
+     "Lake-effect snowstorms",
+     "Ice storms"
+    ]
+   },
+   {
+    "name": "Hazards and safety",
+    "subtopics": [
+     "Weather hazards",
+     "NOAA/NWS watches",
+     "NOAA/NWS warnings",
+     "Reliable forecasts",
+     "Preparedness",
+     "Protective actions"
+    ]
+   },
+   {
+    "name": "Severe-weather cases",
+    "subtopics": [
+     "Listed historic hurricanes",
+     "1888 blizzard",
+     "1930s Dust Bowl",
+     "1974 Xenia tornado",
+     "2011 tornado outbreaks",
+     "1993 Great Flood",
+     "1993 superstorm",
+     "2022\u20132027 storm data"
+    ]
+   }
+  ]
+ },
+ "Ping Pong Parachute": {
+  "type": "build",
+  "topics": [
+   {
+    "name": "Bottle rocket construction",
+    "subtopics": [
+     "Carbonated-beverage bottles",
+     "Pressure-vessel integrity",
+     "Nozzle dimensions",
+     "Blunt nose",
+     "Tape-only attachments",
+     "Fin clearance",
+     "Material restrictions"
+    ]
+   },
+   {
+    "name": "Parachute payload",
+    "subtopics": [
+     "Unaltered ping-pong balls",
+     "Tape attachment",
+     "Parachute dimensions",
+     "Payload separation",
+     "Payload loading"
+    ]
+   },
+   {
+    "name": "Pneumatic launching",
+    "subtopics": [
+     "Air-only propulsion",
+     "Launcher compatibility",
+     "Pressure selection",
+     "Pressure justification",
+     "Ceiling clearance"
+    ]
+   },
+   {
+    "name": "Practice data",
+    "subtopics": [
+     "Ten test flights",
+     "Launch pressure",
+     "Peak height",
+     "Time aloft",
+     "Additional parameters",
+     "Complete flight logs"
+    ]
+   },
+   {
+    "name": "Flight scoring",
+    "subtopics": [
+     "Two launches",
+     "Median timing",
+     "Longest flight",
+     "Nonseparation penalty",
+     "Ceiling-contact penalty",
+     "Missing-log penalty",
+     "Incomplete-log penalty"
+    ]
+   }
+  ]
+ },
+ "Remote Sensing": {
+  "type": "study",
+  "topics": [
+   {
+    "name": "Light and radiation",
+    "subtopics": [
+     "Electromagnetic spectrum",
+     "Reflection and refraction",
+     "Absorption and scattering",
+     "Polarization",
+     "Irradiance and radiance",
+     "Wien's law",
+     "Wave equation",
+     "Snell's law",
+     "Inverse-square law",
+     "Stefan-Boltzmann law"
+    ]
+   },
+   {
+    "name": "Sensors and instruments",
+    "subtopics": [
+     "Passive optical sensing",
+     "Thermal sensing",
+     "Radar backscatter",
+     "Synthetic aperture radar",
+     "InSAR interpretation",
+     "Radar altimetry",
+     "Scanning systems",
+     "Multispectral imagers",
+     "Radiometers",
+     "Digital elevation models"
+    ]
+   },
+   {
+    "name": "Satellite orbits",
+    "subtopics": [
+     "Low Earth orbit",
+     "Medium Earth orbit",
+     "High Earth orbit",
+     "Polar orbits",
+     "Nonpolar orbits",
+     "Geostationary orbits",
+     "Geosynchronous orbits",
+     "Kepler's third law"
+    ]
+   },
+   {
+    "name": "Image characteristics",
+    "subtopics": [
+     "Spatial resolution",
+     "Temporal resolution",
+     "Spectral resolution",
+     "Radiometric resolution",
+     "Signal-to-noise ratio",
+     "Sensor sensitivity"
+    ]
+   },
+   {
+    "name": "Satellite datasets",
+    "subtopics": [
+     "Landsat 5\u20139",
+     "Sentinel-1A/1B",
+     "Sentinel-2A/2B",
+     "Terra MODIS",
+     "Terra ASTER",
+     "SRTM",
+     "ECOSTRESS",
+     "GOES"
+    ]
+   },
+   {
+    "name": "Maps and displays",
+    "subtopics": [
+     "Marginal information",
+     "Natural color",
+     "False color",
+     "Grayscale",
+     "Thermal displays",
+     "Radar displays",
+     "Elevation and contours",
+     "Classified maps"
+    ]
+   },
+   {
+    "name": "Spatial measurements",
+    "subtopics": [
+     "Map scale",
+     "Feature distance",
+     "Perimeter",
+     "Area",
+     "Altitude",
+     "Elevation",
+     "Slope and gradient"
+    ]
+   },
+   {
+    "name": "Earth monitoring",
+    "subtopics": [
+     "Aerosol effects",
+     "Albedo",
+     "Surface temperature",
+     "Material reflectance",
+     "Elevation and subsidence",
+     "Vegetation changes",
+     "Geohazards",
+     "Glacial movement",
+     "Fluvial processes",
+     "Stream patterns"
+    ]
+   },
+   {
+    "name": "Land-cover applications",
+    "subtopics": [
+     "Supervised classification",
+     "Unsupervised classification",
+     "NLCD change index",
+     "Habitat loss",
+     "Urbanization",
+     "Deforestation",
+     "Damage assessment",
+     "Environmental monitoring"
+    ]
+   }
+  ]
+ },
+ "Rocks and Minerals": {
+  "type": "study",
+  "topics": [
+   {
+    "name": "Specimen identification",
+    "subtopics": [
+     "Official specimen list",
+     "Mineral definition",
+     "Rock definition",
+     "Observable properties",
+     "Diagnostic characteristics",
+     "Rock classification"
+    ]
+   },
+   {
+    "name": "Mineral physical properties",
+    "subtopics": [
+     "Color",
+     "Hardness",
+     "Luster",
+     "Streak",
+     "Cleavage",
+     "Fracture",
+     "Density and specific-gravity",
+     "Diaphaneity",
+     "Tenacity",
+     "Mineral habits"
+    ]
+   },
+   {
+    "name": "Other mineral properties",
+    "subtopics": [
+     "Acid reaction",
+     "Fluorescence",
+     "Magnetism",
+     "Smell",
+     "Taste descriptions",
+     "Double refraction",
+     "Piezoelectricity",
+     "Radioactivity"
+    ]
+   },
+   {
+    "name": "Mineral chemistry",
+    "subtopics": [
+     "Chemical formulas",
+     "Composition-property relationships",
+     "Trace elements",
+     "Polymorphs",
+     "Mineral families",
+     "Mineral groups"
+    ]
+   },
+   {
+    "name": "Mineral formation",
+    "subtopics": [
+     "Hydrothermal processes",
+     "Chemical weathering",
+     "Magma crystallization",
+     "Evaporites",
+     "Chemical precipitation",
+     "Heat-pressure alteration",
+     "Rock-forming environments",
+     "Bowen's reaction series"
+    ]
+   },
+   {
+    "name": "Mineral uses",
+    "subtopics": [
+     "Ores",
+     "Industrial minerals",
+     "Gemstones",
+     "Geochronology",
+     "Medicine",
+     "Manufacturing",
+     "Construction",
+     "Electronics",
+     "Pearl and amber"
+    ]
+   },
+   {
+    "name": "Igneous rocks",
+    "subtopics": [
+     "Igneous textures",
+     "Felsic compositions",
+     "Intermediate compositions",
+     "Mafic compositions",
+     "Ultramafic compositions",
+     "Essential minerals",
+     "Intrusive environments",
+     "Extrusive environments",
+     "Cooling rates",
+     "Plate-boundary associations"
+    ]
+   },
+   {
+    "name": "Sedimentary rocks",
+    "subtopics": [
+     "Clastic textures",
+     "Chemical textures",
+     "Biochemical textures",
+     "Essential minerals",
+     "Grain sizes",
+     "Sorting and rounding",
+     "Flow-energy relationships",
+     "Depositional environments",
+     "Sedimentary structures"
+    ]
+   },
+   {
+    "name": "Metamorphic rocks",
+    "subtopics": [
+     "Foliated textures",
+     "Nonfoliated textures",
+     "Mineral composition",
+     "Metamorphic minerals",
+     "Protoliths",
+     "Regional metamorphism",
+     "Contact metamorphism",
+     "Metamorphic grade",
+     "Index minerals"
+    ]
+   },
+   {
+    "name": "Rock cycle",
+    "subtopics": [
+     "Melting and solidification",
+     "Uplift and erosion",
+     "Deposition",
+     "Burial",
+     "Compaction and cementation",
+     "Heat and pressure",
+     "Recrystallization",
+     "Deformation"
+    ]
+   },
+   {
+    "name": "Rock resources",
+    "subtopics": [
+     "Building stone",
+     "Ore rocks",
+     "Ornamental rocks",
+     "Agricultural uses",
+     "Fossil fuels"
+    ]
+   }
+  ]
+ },
+ "Roller Coaster": {
+  "type": "build",
+  "topics": [
+   {
+    "name": "Track design",
+    "subtopics": [
+     "Gravitational potential energy",
+     "Device dimensions",
+     "Visible ball",
+     "Fixed start-finish lines",
+     "Pencil release",
+     "Ball stopping mechanism"
+    ]
+   },
+   {
+    "name": "Elevator mechanisms",
+    "subtopics": [
+     "First-class lever",
+     "Wheel and axle",
+     "Second-class lever",
+     "Pulley",
+     "IMA below one",
+     "Vertical lift",
+     "Counterweights",
+     "Track reentry"
+    ]
+   },
+   {
+    "name": "Loop design",
+    "subtopics": [
+     "Continuous concavity",
+     "Point of intersection",
+     "Loop height",
+     "Open track",
+     "Continuous ball contact",
+     "Unsupported upper passage"
+    ]
+   },
+   {
+    "name": "Timing calibration",
+    "subtopics": [
+     "30\u201360-second targets",
+     "Track adjustment",
+     "Ball selection",
+     "Device leveling",
+     "Practice runs",
+     "Stall prevention"
+    ]
+   },
+   {
+    "name": "Scoring optimization",
+    "subtopics": [
+     "Size score",
+     "Time bonus",
+     "Overtime penalty",
+     "Elevator score",
+     "Loop score",
+     "Incomplete-run scoring",
+     "Violation tiers"
+    ]
+   }
+  ]
+ },
+ "Scrambler": {
+  "type": "build",
+  "topics": [
+   {
+    "name": "Propulsion design",
+    "subtopics": [
+     "Falling-mass energy",
+     "Two-kilogram mass limit",
+     "Energy conversion",
+     "Lowest-energy launch state",
+     "Floor protection",
+     "Device dimensions"
+    ]
+   },
+   {
+    "name": "Vehicle mechanisms",
+    "subtopics": [
+     "Automatic braking",
+     "Onboard stopping mechanism",
+     "Pencil-actuated release",
+     "Wheel contact",
+     "Unified moving assembly",
+     "Nonelectronic construction"
+    ]
+   },
+   {
+    "name": "Egg transport",
+    "subtopics": [
+     "Rigid wooden backstop",
+     "Dowel supports",
+     "Egg height",
+     "Foremost egg position",
+     "Tape placement",
+     "Impact avoidance"
+    ]
+   },
+   {
+    "name": "Course calibration",
+    "subtopics": [
+     "7\u201310-meter targets",
+     "Vehicle alignment",
+     "Stopping distance",
+     "Run time",
+     "Terminal barrier",
+     "Can navigation",
+     "Inside-can distance"
+    ]
+   },
+   {
+    "name": "Testing and modifications",
+    "subtopics": [
+     "Two-run limit",
+     "Run adjustments",
+     "Kit modifications",
+     "Modification documentation",
+     "Successful runs",
+     "Failed runs"
+    ]
+   },
+   {
+    "name": "Scoring optimization",
+    "subtopics": [
+     "Distance score",
+     "Time score",
+     "Can bonus",
+     "Egg-break penalty",
+     "Construction violations",
+     "Competition violations",
+     "Impound penalty",
+     "Best-run selection"
+    ]
+   }
+  ]
+ },
+ "Solar System": {
+  "type": "study",
+  "topics": [
+   {
+    "name": "Solar System targets",
+    "subtopics": [
+     "Venus",
+     "Mars",
+     "Ganymede",
+     "Europa",
+     "Enceladus",
+     "Titan",
+     "Makemake",
+     "101955 Bennu",
+     "67P/Churyumov\u2013Gerasimenko"
+    ]
+   },
+   {
+    "name": "Extrasolar systems",
+    "subtopics": [
+     "TRAPPIST-1",
+     "Kepler-452",
+     "LHS 1140"
+    ]
+   },
+   {
+    "name": "Habitability conditions",
+    "subtopics": [
+     "Temperature",
+     "Atmospheric composition",
+     "Atmospheric retention",
+     "Surface liquids",
+     "Subsurface liquids",
+     "Tidal heating",
+     "Chemical disequilibrium",
+     "Cryovolcanism"
+    ]
+   },
+   {
+    "name": "Habitability evidence",
+    "subtopics": [
+     "Water-shaped morphology",
+     "Historical liquid water",
+     "Spectral features",
+     "Surface composition",
+     "Atmospheric composition",
+     "Water delivery",
+     "Organic-material delivery"
+    ]
+   },
+   {
+    "name": "Biology and chemistry",
+    "subtopics": [
+     "Proteins",
+     "Nucleic acids",
+     "Lipids",
+     "Carbohydrates",
+     "Liquid water",
+     "Amorphous/crystalline ice",
+     "Brines",
+     "Clathrates",
+     "Chemolithoautotrophs",
+     "Tardigrades"
+    ]
+   },
+   {
+    "name": "Exoplanet detection",
+    "subtopics": [
+     "Transits",
+     "Radial velocity",
+     "Microlensing",
+     "Direct imaging"
+    ]
+   },
+   {
+    "name": "Mission design",
+    "subtopics": [
+     "Engineering principles",
+     "Science objectives",
+     "Instrumentation",
+     "Design tradeoffs",
+     "Spacecraft design",
+     "Telescope design"
+    ]
+   },
+   {
+    "name": "Planetary missions",
+    "subtopics": [
+     "Venus Express",
+     "DAVINCI",
+     "VERITAS",
+     "Perseverance",
+     "Mars Reconnaissance Orbiter",
+     "MAVEN",
+     "Galileo",
+     "Europa Clipper",
+     "JUICE",
+     "Cassini-Huygens"
+    ]
+   },
+   {
+    "name": "Additional observatories",
+    "subtopics": [
+     "Dragonfly",
+     "OSIRIS-REx",
+     "Rosetta",
+     "Kepler",
+     "JWST",
+     "Roman Space Telescope"
+    ]
+   },
+   {
+    "name": "Radiation and temperature",
+    "subtopics": [
+     "Doppler shift",
+     "Flux",
+     "Inverse-square law",
+     "Albedo",
+     "Stefan-Boltzmann law",
+     "Wien's displacement law",
+     "Equilibrium temperature"
+    ]
+   },
+   {
+    "name": "Gravity and chemistry",
+    "subtopics": [
+     "Kinetic energy",
+     "Potential energy",
+     "Newtonian gravitation",
+     "Kepler's laws",
+     "Escape velocity",
+     "Tidal forces",
+     "Ideal gas law",
+     "Arrhenius kinetics",
+     "Chemical equilibrium"
+    ]
+   },
+   {
+    "name": "Mathematical reasoning",
+    "subtopics": [
+     "Algebraic manipulation",
+     "Equation derivation",
+     "Order-of-magnitude estimation",
+     "Dimensional analysis",
+     "Graph sketching",
+     "Proportions"
+    ]
+   }
+  ]
+ },
+ "Thermodynamics": {
+  "type": "hybrid",
+  "topics": [
+   {
+    "name": "Thermodynamic foundations",
+    "subtopics": [
+     "Thermodynamic systems",
+     "Intensive properties",
+     "Extensive properties",
+     "Temperature definition",
+     "Zeroth law",
+     "Temperature scales",
+     "Scale conversions",
+     "Heat-related units"
+    ]
+   },
+   {
+    "name": "Matter and transitions",
+    "subtopics": [
+     "Phases of matter",
+     "Phase transitions",
+     "Phase diagrams",
+     "Latent heat",
+     "Sensible heat",
+     "Ideal gas law"
+    ]
+   },
+   {
+    "name": "Heat transfer",
+    "subtopics": [
+     "Conduction",
+     "Convection",
+     "Radiation",
+     "Thermal conductivity",
+     "Heat capacity",
+     "Specific heat"
+    ]
+   },
+   {
+    "name": "Processes and laws",
+    "subtopics": [
+     "Adiabatic processes",
+     "Isothermal processes",
+     "Isochoric processes",
+     "Isobaric processes",
+     "Thermodynamic cycles",
+     "Heat engines",
+     "Efficiency",
+     "First law",
+     "Second law",
+     "Third law"
+    ]
+   },
+   {
+    "name": "Thermal radiation",
+    "subtopics": [
+     "Radiant exitance",
+     "Blackbody radiation",
+     "Stefan-Boltzmann law"
+    ]
+   },
+   {
+    "name": "Historical contributions",
+    "subtopics": [
+     "Kelvin",
+     "Joseph Black",
+     "Joule",
+     "Carnot",
+     "Planck",
+     "Clausius",
+     "Boltzmann",
+     "Maxwell"
+    ]
+   },
+   {
+    "name": "Heat-collector design",
+    "subtopics": [
+     "Lamp heat collection",
+     "Material selection",
+     "Cup accommodation",
+     "Device dimensions",
+     "Water isolation",
+     "Passive heating"
+    ]
+   },
+   {
+    "name": "Testing and prediction",
+    "subtopics": [
+     "Lamp height",
+     "Bulb specifications",
+     "Heating duration",
+     "Starting temperature",
+     "Final-temperature prediction",
+     "Temperature gain",
+     "Prediction error",
+     "Score normalization"
+    ]
+   }
+  ]
+ },
+ "Water Quality": {
+  "type": "hybrid",
+  "topics": [
+   {
+    "name": "Aquatic ecology",
+    "subtopics": [
+     "Marine environments",
+     "Estuary environments",
+     "Water cycle",
+     "Nutrient cycling",
+     "Aquatic chemistry",
+     "Food chains",
+     "Food webs",
+     "Community interactions",
+     "Population dynamics",
+     "Watershed importance"
+    ]
+   },
+   {
+    "name": "Management and pollution",
+    "subtopics": [
+     "Potable water treatment",
+     "Wastewater treatment",
+     "Watershed management",
+     "Sedimentation pollution",
+     "Harmful species",
+     "Recently killed coral",
+     "Harmful algal blooms",
+     "Emerging contaminants",
+     "PFAS",
+     "Ocean garbage patches"
+    ]
+   },
+   {
+    "name": "Reef organism ecology",
+    "subtopics": [
+     "Common-name identification",
+     "Reef-health indicators",
+     "General ecology",
+     "Life cycles",
+     "Feeding habits",
+     "Reef ecosystem threats"
+    ]
+   },
+   {
+    "name": "Global reef invertebrates",
+    "subtopics": [
+     "Banded coral shrimp",
+     "Crown-of-thorns starfish",
+     "Hard/stony corals",
+     "Lobsters",
+     "Long-spined black urchins",
+     "Pencil urchins",
+     "Sea cucumbers",
+     "Demosponges",
+     "Tritons",
+     "Fleshy algae"
+    ]
+   },
+   {
+    "name": "Global reef fishes",
+    "subtopics": [
+     "Butterfly fish",
+     "Large groupers",
+     "Moray eels",
+     "Large parrotfish",
+     "Snappers",
+     "Sweetlips"
+    ]
+   },
+   {
+    "name": "Regional reef organisms",
+    "subtopics": [
+     "Barramundi cod",
+     "Bumphead parrotfish",
+     "Giant clams",
+     "Humphead wrasse",
+     "Flamingo tongue snail",
+     "Gorgonia",
+     "Nassau grouper"
+    ]
+   },
+   {
+    "name": "Water monitoring",
+    "subtopics": [
+     "Salinity and pH",
+     "Phosphates",
+     "Turbidity",
+     "Dissolved oxygen",
+     "Temperature",
+     "Nitrates",
+     "Fecal coliform",
+     "Total solids",
+     "Biochemical oxygen demand",
+     "Aragonite saturation"
+    ]
+   },
+   {
+    "name": "Salinometer testing",
+    "subtopics": [
+     "Student-built hydrometers",
+     "Electronic salinometers",
+     "Device calibration",
+     "Mass-volume concentration",
+     "1\u201310% salinity",
+     "Beaker compatibility",
+     "Tenth-percent estimates",
+     "Measurement accuracy"
+    ]
+   }
+  ]
+ },
+ "Write It Do It": {
+  "type": "lab",
+  "topics": [
+   {
+    "name": "Object observation",
+    "subtopics": [
+     "Component identification",
+     "Size recognition",
+     "Color recognition",
+     "Location",
+     "Orientation",
+     "Connections"
+    ]
+   },
+   {
+    "name": "Written description",
+    "subtopics": [
+     "Verbal model description",
+     "Assembly instructions",
+     "Numerals and letters",
+     "Abbreviations",
+     "Contextual symbols",
+     "No diagrams"
+    ]
+   },
+   {
+    "name": "Model reconstruction",
+    "subtopics": [
+     "Instruction interpretation",
+     "Material selection",
+     "Piece placement",
+     "Connection accuracy",
+     "Orientation matching"
+    ]
+   },
+   {
+    "name": "Accuracy and timing",
+    "subtopics": [
+     "Original-model matching",
+     "Component-level correctness",
+     "Downstream correct connections",
+     "Writing time",
+     "Construction time"
+    ]
+   }
+  ]
+ },
+ "Code Craze": {
+  "type": "hybrid",
+  "topics": [
+   {
+    "name": "Computer science scope",
+    "subtopics": [
+     "Annual practice module",
+     "Programming concepts",
+     "Artificial intelligence",
+     "Cryptography",
+     "Python",
+     "Java"
+    ]
+   },
+   {
+    "name": "Quiz reasoning",
+    "subtopics": [
+     "Gamified quizzes",
+     "Multiple-choice questions",
+     "Response accuracy",
+     "Response speed"
+    ]
+   },
+   {
+    "name": "Code interpretation",
+    "subtopics": [
+     "Coding snippets",
+     "Snippet questions",
+     "Debugging challenges"
+    ]
+   },
+   {
+    "name": "Code development",
+    "subtopics": [
+     "Code authoring",
+     "CodeHS activities",
+     "Result correctness",
+     "Autograder assessment"
+    ]
+   }
+  ]
+ },
+ "Hydraulics": {
+  "type": "hybrid",
+  "topics": [
+   {
+    "name": "Density",
+    "subtopics": [
+     "Solid density",
+     "Liquid density",
+     "Gas density",
+     "Relative density",
+     "Number density",
+     "Area density"
+    ]
+   },
+   {
+    "name": "Fluid pressure",
+    "subtopics": [
+     "Fluid and gas-pressure",
+     "Hydrostatic pressure",
+     "Pressure-depth relationship",
+     "Pascal's principle"
+    ]
+   },
+   {
+    "name": "Gas laws",
+    "subtopics": [
+     "Ideal gas law",
+     "Boyle's law",
+     "Charles' law",
+     "Gay-Lussac's law",
+     "Avogadro's law"
+    ]
+   },
+   {
+    "name": "Buoyancy and flow",
+    "subtopics": [
+     "Archimedes' principle",
+     "Buoyancy",
+     "Stability",
+     "Viscosity",
+     "Bernoulli's principle"
+    ]
+   },
+   {
+    "name": "Hydraulic engineering",
+    "subtopics": [
+     "Design principles",
+     "Hydraulic materials",
+     "Mechanical advantage",
+     "System components",
+     "Energy losses",
+     "Control-actuator pairs",
+     "Flexible tubing",
+     "Hand-powered syringes"
+    ]
+   },
+   {
+    "name": "Device operation",
+    "subtopics": [
+     "Self-supporting base",
+     "Device footprint",
+     "Water-air filling",
+     "Leak prevention",
+     "Battery pushing",
+     "Obstacle avoidance",
+     "Upright placement",
+     "Goal-box placement"
+    ]
+   },
+   {
+    "name": "Performance scoring",
+    "subtopics": [
+     "Finish-zone delivery",
+     "Goal bonus",
+     "Upright bonus",
+     "Unmovable-battery penalty",
+     "Adjustment penalty",
+     "Run-time score",
+     "Leak consequences"
+    ]
+   }
+  ]
+ },
+ "Protein Builders": {
+  "type": "hybrid",
+  "topics": [
+   {
+    "name": "Primary sequence modeling",
+    "subtopics": [
+     "Three-letter amino-acid codes",
+     "Sidechain order",
+     "Backbone placement",
+     "Five-centimeter spacing",
+     "N-terminus",
+     "C-terminus"
+    ]
+   },
+   {
+    "name": "Protein structural levels",
+    "subtopics": [
+     "Primary structure",
+     "Secondary structure",
+     "Alpha helices",
+     "Beta sheets",
+     "Loops",
+     "Tertiary structure",
+     "Structural relationships",
+     "Diagram interpretation"
+    ]
+   },
+   {
+    "name": "Sidechain properties",
+    "subtopics": [
+     "Hydrophobic residues",
+     "Polar residues",
+     "Acidic residues",
+     "Basic residues",
+     "Glycine",
+     "Proline",
+     "Cysteine"
+    ]
+   },
+   {
+    "name": "Stabilizing interactions",
+    "subtopics": [
+     "Hydrogen bonds",
+     "Ionic interactions",
+     "Salt bridges",
+     "Hydrophobic effect",
+     "Disulfide bonds"
+    ]
+   },
+   {
+    "name": "Three-dimensional folding",
+    "subtopics": [
+     "Hydrophobic core",
+     "Polar surface",
+     "Soluble globular proteins",
+     "Surface-exposed segments",
+     "Buried residues",
+     "Structural context",
+     "Fold compactness",
+     "Interaction labeling"
+    ]
+   },
+   {
+    "name": "Structure-function reasoning",
+    "subtopics": [
+     "Amino-acid substitutions",
+     "Environmental changes",
+     "pH effects",
+     "Environmental polarity",
+     "Folding changes",
+     "Stability changes"
+    ]
+   }
+  ]
+ }
+}

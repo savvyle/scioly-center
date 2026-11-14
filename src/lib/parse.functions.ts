@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { syllabusPrompt } from "./syllabus";
 
 const CONFIDENCE_THRESHOLD = 0.75;
 
@@ -120,12 +121,13 @@ export const parseTest = createServerFn({ method: "POST" })
       const instructions = `You convert Science Olympiad tests into a multiple-choice question bank.
 Event: ${test.event}${test.division ? ` (Division ${test.division})` : ""}. Year: ${test.year ?? "unknown"}. Tournament: ${test.tournament ?? "unknown"} (${test.level ?? ""}).
 The first PDF is the test. ${files.length > 1 ? "The second PDF is the answer key." : "The answer key may be included at the end of the test PDF."}
+${syllabusPrompt(test.event, test.division)}
 Rules:
 - Extract EVERY question in order. Keep stems faithful; include any needed data, tables (as plain text) or station context.
 - Multiple-choice: copy choices verbatim without letter prefixes; set correct_index from the answer key.
 - Free response (short answer, fill-in, numeric, matching items): set original_format "free_response", put the answer key's correct answer as one choice and write 3 plausible but clearly wrong choices (common misconceptions, near-miss values, sibling terms). Shuffle; correct_index points at the right one. Never write a distractor that could also be correct.
 - Multi-part questions: split into separate questions, each self-contained.
-- topic and subtopic: short labels within the event's syllabus. difficulty: 1 easy, 2 medium, 3 hard.
+- topic and subtopic: from the syllabus above when given, otherwise short labels. difficulty: 1 easy, 2 medium, 3 hard.
 - page: 1-based page number in the test PDF.
 - needs_image true if the question can't be answered without a figure, photo or specimen image; describe it in image_description (else empty string).
 - confidence 0..1: your confidence that stem, choices and correct answer are all right. Use below 0.75 when the key is missing/ambiguous, text was unreadable, or you guessed.
@@ -194,4 +196,43 @@ Rules:
       await supabase.from("tests").update({ status: "failed", error: msg }).eq("id", test.id);
       throw new Error(msg);
     }
+  });
+
+const tagSchema = {
+  type: "object", additionalProperties: false, required: ["tags"],
+  properties: { tags: { type: "array", items: { type: "object", additionalProperties: false, required: ["id", "topic", "subtopic"],
+    properties: { id: { type: "string" }, topic: { type: "string" }, subtopic: { type: "string" } } } } },
+} as const;
+
+/** Re-tag a test's questions against the official syllabus (text only, no PDF). */
+export const retagTest = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ testId: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const { data: staff } = await supabase.rpc("is_staff", { _user_id: userId });
+    if (!staff) throw new Error("Only captains and coaches can retag.");
+    const { data: test } = await supabase.from("tests").select("event, division").eq("id", data.testId).single();
+    if (!test) throw new Error("Test not found");
+    const sp = syllabusPrompt(test.event, test.division);
+    if (!sp) throw new Error("No syllabus for this event yet.");
+    const { data: qs } = await supabase.from("questions").select("id, stem").eq("test_id", data.testId);
+    const apiKey = process.env["LOVABLE_API_KEY"]!;
+    let updated = 0;
+    for (let i = 0; i < (qs ?? []).length; i += 60) {
+      const batch = qs!.slice(i, i + 60);
+      const raw = await streamResponses(apiKey, {
+        model: "openai/gpt-6-astra", stream: true, store: false, reasoning: { effort: "low" },
+        instructions: `Tag each ${test.event} question with a topic and subtopic.${sp}`,
+        input: [{ role: "user", content: [{ type: "input_text", text: JSON.stringify(batch.map((q) => ({ id: q.id, stem: q.stem.slice(0, 600) }))) }] }],
+        text: { format: { type: "json_schema", name: "tags", strict: true, schema: tagSchema } },
+      });
+      const tags = (JSON.parse(raw).tags ?? []) as { id: string; topic: string; subtopic: string }[];
+      for (const t of tags) {
+        if (!batch.some((q) => q.id === t.id)) continue;
+        await supabase.from("questions").update({ topic: t.topic || null, subtopic: t.subtopic || null }).eq("id", t.id);
+        updated++;
+      }
+    }
+    return { updated };
   });

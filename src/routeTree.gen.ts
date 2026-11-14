@@ -16,9 +16,11 @@ import { Route as SetupRouteImport } from './routes/setup'
 import { Route as AuthenticatedCoachRouteRouteImport } from './routes/_authenticated/coach/route'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDrillRouteImport } from './routes/_authenticated/drill'
+import { Route as AuthenticatedEventsRouteImport } from './routes/_authenticated/events'
 import { Route as AuthenticatedLeaderboardRouteImport } from './routes/_authenticated/leaderboard'
 import { Route as AuthenticatedMockRouteImport } from './routes/_authenticated/mock'
 import { Route as AuthenticatedReviewRouteImport } from './routes/_authenticated/review'
+import { Route as AuthenticatedSyllabusRouteImport } from './routes/_authenticated/syllabus'
 import { Route as AuthenticatedCoachIndexRouteImport } from './routes/_authenticated/coach/index'
 import { Route as AuthenticatedCoachAccountsRouteImport } from './routes/_authenticated/coach/accounts'
 import { Route as AuthenticatedCoachQueueRouteImport } from './routes/_authenticated/coach/queue'
@@ -60,6 +62,11 @@ const AuthenticatedDrillRoute = AuthenticatedDrillRouteImport.update({
   path: '/drill',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedEventsRoute = AuthenticatedEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedLeaderboardRoute =
   AuthenticatedLeaderboardRouteImport.update({
     id: '/leaderboard',
@@ -74,6 +81,11 @@ const AuthenticatedMockRoute = AuthenticatedMockRouteImport.update({
 const AuthenticatedReviewRoute = AuthenticatedReviewRouteImport.update({
   id: '/review',
   path: '/review',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSyllabusRoute = AuthenticatedSyllabusRouteImport.update({
+  id: '/syllabus',
+  path: '/syllabus',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedCoachIndexRoute = AuthenticatedCoachIndexRouteImport.update({
@@ -118,9 +130,11 @@ export interface FileRoutesByFullPath {
   '/coach': typeof AuthenticatedCoachRouteRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/drill': typeof AuthenticatedDrillRoute
+  '/events': typeof AuthenticatedEventsRoute
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/mock': typeof AuthenticatedMockRoute
   '/review': typeof AuthenticatedReviewRoute
+  '/syllabus': typeof AuthenticatedSyllabusRoute
   '/coach/accounts': typeof AuthenticatedCoachAccountsRoute
   '/coach/queue': typeof AuthenticatedCoachQueueRoute
   '/coach/settings': typeof AuthenticatedCoachSettingsRoute
@@ -134,9 +148,11 @@ export interface FileRoutesByTo {
   '/setup': typeof SetupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/drill': typeof AuthenticatedDrillRoute
+  '/events': typeof AuthenticatedEventsRoute
   '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/mock': typeof AuthenticatedMockRoute
   '/review': typeof AuthenticatedReviewRoute
+  '/syllabus': typeof AuthenticatedSyllabusRoute
   '/coach/accounts': typeof AuthenticatedCoachAccountsRoute
   '/coach/queue': typeof AuthenticatedCoachQueueRoute
   '/coach/settings': typeof AuthenticatedCoachSettingsRoute
@@ -153,9 +169,11 @@ export interface FileRoutesById {
   '/_authenticated/coach': typeof AuthenticatedCoachRouteRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/drill': typeof AuthenticatedDrillRoute
+  '/_authenticated/events': typeof AuthenticatedEventsRoute
   '/_authenticated/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/_authenticated/mock': typeof AuthenticatedMockRoute
   '/_authenticated/review': typeof AuthenticatedReviewRoute
+  '/_authenticated/syllabus': typeof AuthenticatedSyllabusRoute
   '/_authenticated/coach/accounts': typeof AuthenticatedCoachAccountsRoute
   '/_authenticated/coach/queue': typeof AuthenticatedCoachQueueRoute
   '/_authenticated/coach/settings': typeof AuthenticatedCoachSettingsRoute
@@ -172,9 +190,11 @@ export interface FileRouteTypes {
     | '/coach'
     | '/dashboard'
     | '/drill'
+    | '/events'
     | '/leaderboard'
     | '/mock'
     | '/review'
+    | '/syllabus'
     | '/coach/accounts'
     | '/coach/queue'
     | '/coach/settings'
@@ -188,9 +208,11 @@ export interface FileRouteTypes {
     | '/setup'
     | '/dashboard'
     | '/drill'
+    | '/events'
     | '/leaderboard'
     | '/mock'
     | '/review'
+    | '/syllabus'
     | '/coach/accounts'
     | '/coach/queue'
     | '/coach/settings'
@@ -206,9 +228,11 @@ export interface FileRouteTypes {
     | '/_authenticated/coach'
     | '/_authenticated/dashboard'
     | '/_authenticated/drill'
+    | '/_authenticated/events'
     | '/_authenticated/leaderboard'
     | '/_authenticated/mock'
     | '/_authenticated/review'
+    | '/_authenticated/syllabus'
     | '/_authenticated/coach/accounts'
     | '/_authenticated/coach/queue'
     | '/_authenticated/coach/settings'
@@ -275,6 +299,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDrillRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/events': {
+      id: '/_authenticated/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof AuthenticatedEventsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/leaderboard': {
       id: '/_authenticated/leaderboard'
       path: '/leaderboard'
@@ -294,6 +325,13 @@ declare module '@tanstack/react-router' {
       path: '/review'
       fullPath: '/review'
       preLoaderRoute: typeof AuthenticatedReviewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/syllabus': {
+      id: '/_authenticated/syllabus'
+      path: '/syllabus'
+      fullPath: '/syllabus'
+      preLoaderRoute: typeof AuthenticatedSyllabusRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/coach/': {
@@ -369,18 +407,22 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCoachRouteRoute: typeof AuthenticatedCoachRouteRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDrillRoute: typeof AuthenticatedDrillRoute
+  AuthenticatedEventsRoute: typeof AuthenticatedEventsRoute
   AuthenticatedLeaderboardRoute: typeof AuthenticatedLeaderboardRoute
   AuthenticatedMockRoute: typeof AuthenticatedMockRoute
   AuthenticatedReviewRoute: typeof AuthenticatedReviewRoute
+  AuthenticatedSyllabusRoute: typeof AuthenticatedSyllabusRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCoachRouteRoute: AuthenticatedCoachRouteRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDrillRoute: AuthenticatedDrillRoute,
+  AuthenticatedEventsRoute: AuthenticatedEventsRoute,
   AuthenticatedLeaderboardRoute: AuthenticatedLeaderboardRoute,
   AuthenticatedMockRoute: AuthenticatedMockRoute,
   AuthenticatedReviewRoute: AuthenticatedReviewRoute,
+  AuthenticatedSyllabusRoute: AuthenticatedSyllabusRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

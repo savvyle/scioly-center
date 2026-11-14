@@ -347,6 +347,30 @@ export type Database = {
           },
         ]
       }
+      student_events: {
+        Row: {
+          conflict_group: number
+          created_at: string
+          division: string
+          event: string
+          user_id: string
+        }
+        Insert: {
+          conflict_group: number
+          created_at?: string
+          division: string
+          event: string
+          user_id: string
+        }
+        Update: {
+          conflict_group?: number
+          created_at?: string
+          division?: string
+          event?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       teams: {
         Row: {
           division: string

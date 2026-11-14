@@ -38,6 +38,8 @@ function Dashboard() {
             <ListChecks className="h-6 w-6 text-primary" />
             <div><div className="font-bold">Review missed</div><div className="text-xs text-muted-foreground">Every question you got wrong</div></div>
           </Link>
+          <Link to="/events" className="panel p-4 hover:border-primary"><div className="font-bold">My events</div><div className="text-xs text-muted-foreground">One per conflict block</div></Link>
+          <Link to="/syllabus" className="panel p-4 hover:border-primary"><div className="font-bold">Syllabus</div><div className="text-xs text-muted-foreground">Concepts to master</div></Link>
           {mine && (
             <div className="panel col-span-2 flex items-center justify-between p-4">
               <span className="text-sm text-muted-foreground">This week's rank</span>
