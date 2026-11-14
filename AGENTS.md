@@ -30,6 +30,7 @@ use the editor.
 <!-- LOVABLE:END -->
 
 ## Architecture
+- The coach queue shares an event filter across review, reports, and paginated all-problem editors; merged replacement rows are excluded (why: staff can inspect every current problem without rendering the entire bank at once).
 - Sign-in uses username mapped to `<username>@kls.local`; public signup is disabled and accounts are created by coach-only server functions (why: no student PII).
 - Leaderboard and weekly windows are computed from attempts in SQL (`weekly_leaderboard`, `week_bounds`), not snapshotted by a cron job (why: no recurring job needed, history is always exact).
 - Spaced repetition state is updated by a database trigger on attempts (why: drill and mock answers both feed it consistently).

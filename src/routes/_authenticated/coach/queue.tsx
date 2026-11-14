@@ -11,6 +11,7 @@ import type { Question } from "@/lib/data";
 import { QuestionImages, QuestionTags } from "@/components/app/QuestionCard";
 import { useMe } from "@/lib/auth";
 import { toast } from "sonner";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/_authenticated/coach/queue")({
   head: () => ({ meta: [{ title: "Review queue · SciOly Center" }, { name: "description", content: "Check uncertain and reported questions." }, { property: "og:title", content: "Review queue · SciOly Center" }, { property: "og:description", content: "Check uncertain and reported questions." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
@@ -18,6 +19,21 @@ export const Route = createFileRoute("/_authenticated/coach/queue")({
 });
 
 function Queue() {
+  const [selectedEvent, setSelectedEvent] = useState("__all");
+  const [tab, setTab] = useState("review");
+  const [allPage, setAllPage] = useState(0);
+  const { data: allQuestions = [] } = useQuery({
+    queryKey: ["queue", "all"],
+    queryFn: async () => {
+      const rows: Question[] = [];
+      for (let offset = 0; ; offset += 500) {
+        const { data, error } = await supabase.from("questions").select("*").is("merged_into", null).order("event").order("id").range(offset, offset + 499);
+        if (error) throw error;
+        rows.push(...(data ?? []) as unknown as Question[]);
+        if ((data?.length ?? 0) < 500) return rows;
+      }
+    },
+  });
   const { data: review = [] } = useQuery({
     queryKey: ["queue", "review"],
     queryFn: async () => {
@@ -43,19 +59,46 @@ function Queue() {
     cur.ids.push(f.id);
     byQ.set(f.question_id, cur);
   }
+  const reported = [...byQ.values()];
+  const events = [...new Set([...allQuestions.map((q) => q.event), ...review.map((q) => q.event), ...reported.map(({ q }) => q.event)])].sort((a, b) => a.localeCompare(b));
+  const filteredReview = review.filter((q) => selectedEvent === "__all" || q.event === selectedEvent);
+  const filteredReports = reported.filter(({ q }) => selectedEvent === "__all" || q.event === selectedEvent);
+  const filteredAll = allQuestions.filter((q) => selectedEvent === "__all" || q.event === selectedEvent);
+  const pageCount = Math.max(1, Math.ceil(filteredAll.length / 20));
+  const currentPage = Math.min(allPage, pageCount - 1);
   return (
-    <Tabs defaultValue="review">
-      <TabsList>
-        <TabsTrigger value="review">Needs review ({review.length})</TabsTrigger>
-        <TabsTrigger value="flags">Reported ({byQ.size})</TabsTrigger>
+    <Tabs value={tab} onValueChange={setTab}>
+      <div className="mb-4 max-w-sm space-y-2">
+        <Label htmlFor="queue-event">Event</Label>
+        <Select value={selectedEvent} onValueChange={(event) => { setSelectedEvent(event); setAllPage(0); }}>
+          <SelectTrigger id="queue-event" aria-label="Filter by event"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="__all">All events</SelectItem>
+            {events.map((event) => <SelectItem key={event} value={event}>{event}</SelectItem>)}
+          </SelectContent>
+        </Select>
+      </div>
+      <TabsList className="h-auto flex-wrap">
+        <TabsTrigger value="review">Needs review ({filteredReview.length})</TabsTrigger>
+        <TabsTrigger value="flags">Reported ({filteredReports.length})</TabsTrigger>
+        <TabsTrigger value="all">All problems ({filteredAll.length})</TabsTrigger>
       </TabsList>
       <TabsContent value="review" className="space-y-4">
-        {review.map((q) => <Editor key={q.id} q={q} />)}
-        {!review.length && <p className="panel p-6 text-center text-muted-foreground">Queue is empty.</p>}
+        {filteredReview.map((q) => <Editor key={q.id} q={q} />)}
+        {!filteredReview.length && <p className="panel p-6 text-center text-muted-foreground">{selectedEvent === "__all" ? "Queue is empty." : "No questions need review for this event."}</p>}
+      </TabsContent>
+      <TabsContent value="all" className="space-y-4">
+        {filteredAll.slice(currentPage * 20, (currentPage + 1) * 20).map((q) => <Editor key={q.id} q={q} />)}
+        {!filteredAll.length && <p className="panel p-6 text-center text-muted-foreground">No problems for this event.</p>}
+        {pageCount > 1 && <div className="flex items-center justify-between gap-2">
+          <Button variant="outline" disabled={currentPage === 0} onClick={() => setAllPage(currentPage - 1)}>Previous</Button>
+          <span className="text-sm text-muted-foreground">Page {currentPage + 1} of {pageCount}</span>
+          <Button variant="outline" disabled={currentPage + 1 >= pageCount} onClick={() => setAllPage(currentPage + 1)}>Next</Button>
+        </div>}
       </TabsContent>
       <TabsContent value="flags" className="space-y-4">
-        {[...byQ.values()].map((x) => <Editor key={x.q.id} q={x.q} flagIds={x.ids} flagReasons={x.reasons} />)}
-        {!byQ.size && <p className="panel p-6 text-center text-muted-foreground">No open reports.</p>}
+        {filteredReports.map((x) => <Editor key={x.q.id} q={x.q} flagIds={x.ids} flagReasons={x.reasons} />)}
+        {!filteredReports.length && <p className="panel p-6 text-center text-muted-foreground">{selectedEvent === "__all" ? "No open reports." : "No open reports for this event."}</p>}
       </TabsContent>
     </Tabs>
   );

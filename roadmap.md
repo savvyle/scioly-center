@@ -1,4 +1,5 @@
 # Roadmap
+- [x] Add event filtering to review and reported queues and an All problems view
 - [x] Move Practice to /practice with legacy redirects, remove Test Archive, require event selection, and add Bad feedback reporting
 - [x] Add and verify editable problem feedback; explain the website’s AI provider and billing
 - [x] Add Change practice background, AI-first report repairs, 3/9/15/25-day reviews, and reusable saved grading feedback
