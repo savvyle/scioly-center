@@ -1,4 +1,5 @@
 # Roadmap
+- [x] Add and verify editable problem feedback; explain the website’s AI provider and billing
 - [x] Add Change practice background, AI-first report repairs, 3/9/15/25-day reviews, and reusable saved grading feedback
 - [x] Reproduce blocked external PDF navigation and open privately fetched PDFs via app-origin blob URLs instead
 - [x] Match weekly-goal rounded backgrounds on leaderboard, Practice, Saved review, and archive; replace programmatic PDF popups with native private links

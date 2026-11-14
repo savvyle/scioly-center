@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useMe } from "@/lib/auth";
 import type { Question } from "@/lib/data";
-import { canEditQuestion, questionEditSchema } from "@/lib/question-edit";
+import { canEditQuestion, questionEditSchema, questionFeedbackFields } from "@/lib/question-edit";
 import { editQuestion } from "@/lib/question-edit.functions";
 
 export function EditQuestionButton({ q, onSaved }: { q: Question; onSaved: (q: Question) => void }) {
@@ -25,22 +25,23 @@ export function EditQuestionButton({ q, onSaved }: { q: Question; onSaved: (q: Q
   const [key, setKey] = useState(q.question_type === "multiple" ? q.correct_indices ?? [] : [q.correct_index]);
   const [accepted, setAccepted] = useState((q.accepted_answers ?? []).join("\n"));
   const [rubric, setRubric] = useState(q.grading_rubric ?? "");
+  const [feedback, setFeedback] = useState(q.feedback_bullets?.length ? q.feedback_bullets.join("\n") : q.explanation ?? "");
   if (!me || !canEditQuestion(me.role)) return null;
   const options = choices.split("\n").map((s) => s.trim()).filter(Boolean);
   async function submit() {
-    const result = questionEditSchema.safeParse({ questionId: q.id, stem, choices: options, question_type: type, correct_indices: type === "free_response" ? [] : key, accepted_answers: accepted.split("\n").map((s) => s.trim()).filter(Boolean), grading_rubric: rubric });
+    const result = questionEditSchema.safeParse({ questionId: q.id, stem, choices: options, question_type: type, correct_indices: type === "free_response" ? [] : key, accepted_answers: accepted.split("\n").map((s) => s.trim()).filter(Boolean), grading_rubric: rubric, feedback_bullets: feedback.split("\n").map((s) => s.trim()).filter(Boolean) });
     if (!result.success) { toast.error(result.error.issues[0]?.message ?? "Check the answer key."); return; }
     setBusy(true);
     try {
       await save({ data: result.data });
-      onSaved({ ...q, ...result.data, correct_index: result.data.correct_indices[0] ?? 0, explanation: null, feedback_bullets: [] });
+      onSaved({ ...q, ...result.data, correct_index: result.data.correct_indices[0] ?? 0, ...questionFeedbackFields(result.data.feedback_bullets) });
       await qc.invalidateQueries();
       setOpen(false); toast.success("Question saved.");
     } catch (e) { toast.error(e instanceof Error ? e.message : "Couldn't save this question."); }
     finally { setBusy(false); }
   }
   return <Dialog open={open} onOpenChange={(value) => {
-    if (value) { setStem(q.stem); setChoices(q.choices.join("\n")); setType(q.question_type ?? "single"); setKey(q.question_type === "multiple" ? q.correct_indices ?? [] : [q.correct_index]); setAccepted((q.accepted_answers ?? []).join("\n")); setRubric(q.grading_rubric ?? ""); }
+    if (value) { setStem(q.stem); setChoices(q.choices.join("\n")); setType(q.question_type ?? "single"); setKey(q.question_type === "multiple" ? q.correct_indices ?? [] : [q.correct_index]); setAccepted((q.accepted_answers ?? []).join("\n")); setRubric(q.grading_rubric ?? ""); setFeedback(q.feedback_bullets?.length ? q.feedback_bullets.join("\n") : q.explanation ?? ""); }
     setOpen(value);
   }}><DialogTrigger asChild><Button variant="ghost" size="icon" title="Edit question" aria-label="Edit question"><Pencil /></Button></DialogTrigger>
     <DialogContent className="max-h-[85dvh] overflow-y-auto"><DialogHeader><DialogTitle>Edit question</DialogTitle></DialogHeader>
@@ -48,6 +49,7 @@ export function EditQuestionButton({ q, onSaved }: { q: Question; onSaved: (q: Q
       <Label>Answer format</Label><Select value={type} onValueChange={(v) => { setType(v as typeof type); setKey([]); }}><SelectTrigger aria-label="Answer format"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="single">Single choice</SelectItem><SelectItem value="multiple">Multiple select</SelectItem><SelectItem value="free_response">Free response / matching</SelectItem></SelectContent></Select>
       <Label htmlFor="edit-choices">Answer choices (one per line)</Label><Textarea id="edit-choices" rows={4} value={choices} onChange={(e) => setChoices(e.target.value)} />
       {type === "free_response" ? <><Label htmlFor="edit-accepted">Answer key (one accepted answer per line)</Label><Textarea id="edit-accepted" value={accepted} onChange={(e) => setAccepted(e.target.value)} /><Label htmlFor="edit-rubric">Grading rubric</Label><Textarea id="edit-rubric" value={rubric} onChange={(e) => setRubric(e.target.value)} /></> : <><Label>Answer key</Label><div className="grid gap-2">{options.map((choice, i) => <Button key={i} variant={key.includes(i) ? "default" : "outline"} className="h-auto whitespace-normal justify-start text-left" aria-pressed={key.includes(i)} onClick={() => setKey(type === "single" ? [i] : key.includes(i) ? key.filter((j) => j !== i) : [...key, i])}>{String.fromCharCode(65 + i)}. {choice}</Button>)}</div></>}
+      <Label htmlFor="edit-feedback">Feedback</Label><Textarea id="edit-feedback" rows={5} value={feedback} onChange={(e) => setFeedback(e.target.value)} />
       <Button disabled={busy} onClick={submit}>{busy ? "Saving…" : "Save changes"}</Button>
     </DialogContent></Dialog>;
 }

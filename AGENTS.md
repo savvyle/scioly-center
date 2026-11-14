@@ -44,7 +44,7 @@ use the editor.
 - Practice starts with explicit filter configuration; skips only exclude a question for the current pass and never write attempts or review state (why: skipped work must stay due without distorting scores).
 - Source question numbers/pages are stored independently of display stems; mastery reads the existing review-state boxes with box four mastered (why: preserve source citations and reuse the authoritative spaced-repetition schedule).
 - Practice event/topic filters are multi-select, with event-qualified topic values and topics derived only from selected events (why: unrelated or stale topics must not enter practice).
-- Question-card editing uses authenticated staff-checked server functions and school-scoped RLS; answer edits clear generated feedback (why: students cannot edit keys and stale explanations must not contradict corrections).
+- Question-card editing uses authenticated staff-checked server functions and school-scoped RLS; staff-supplied feedback is saved as both reusable bullets and explanation, with empty feedback clearing both (why: students cannot edit keys and feedback corrections must persist consistently).
 - Archive PDF buttons reserve a tab synchronously, fetch the private file with the authenticated storage client, and open an app-origin blob URL (why: avoid blocked external storage navigation without making files public).
 - Render the weekly leaderboard on the dashboard and redirect the legacy /leaderboard URL there (why: consolidate personal and team progress without breaking old links).
 - Dashboard event progress joins owner-scoped student event selections to existing topic totals, preserving zero-activity selections (why: selected events must remain visible before practice starts).

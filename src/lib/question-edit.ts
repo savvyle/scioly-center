@@ -4,6 +4,11 @@ export function canEditQuestion(role: string) {
   return role === "coach" || role === "captain";
 }
 
+export function questionFeedbackFields(bullets: string[]) {
+  const feedback_bullets = bullets.map((bullet) => bullet.trim()).filter(Boolean);
+  return { feedback_bullets, explanation: feedback_bullets.join("\n") || null };
+}
+
 export const questionEditSchema = z.object({
   questionId: z.string().uuid(),
   stem: z.string().trim().min(1).max(30000),
@@ -12,6 +17,7 @@ export const questionEditSchema = z.object({
   correct_indices: z.array(z.number().int().nonnegative()),
   accepted_answers: z.array(z.string().trim().min(1)),
   grading_rubric: z.string().max(30000),
+  feedback_bullets: z.array(z.string().trim().min(1).max(30000)).max(100).default([]),
 }).superRefine((q, ctx) => {
   if (q.question_type === "free_response") {
     if (!q.accepted_answers.length) ctx.addIssue({ code: "custom", message: "Add an accepted answer." });

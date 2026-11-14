@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { questionEditSchema } from "./question-edit";
+import { questionEditSchema, questionFeedbackFields } from "./question-edit";
 
 export const editQuestion = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -13,7 +13,7 @@ export const editQuestion = createServerFn({ method: "POST" })
       ...fields,
       correct_index: data.correct_indices[0] ?? 0,
       grading_rubric: data.grading_rubric || null,
-      feedback_bullets: [], explanation: null,
+      ...questionFeedbackFields(data.feedback_bullets),
     }).eq("id", questionId).is("merged_into", null).select("id").single();
     if (error || !saved) throw new Error("Couldn't save this question.");
     return saved;
