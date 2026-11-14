@@ -12,7 +12,7 @@ function CoachLayout() {
   if (isLoading) return null;
   if (!me?.isStaff) return <div className="panel p-6">This area is for captains and coaches.</div>;
   const tabs = [
-    { to: "/coach", label: "Team" },
+    { to: "/coach", label: "Progress" },
     { to: "/coach/upload", label: "Upload" },
     { to: "/coach/queue", label: "Review queue" },
     { to: "/coach/accounts", label: "Accounts" },
