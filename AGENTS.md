@@ -28,3 +28,9 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Architecture
+- Sign-in uses username mapped to `<username>@kls.local`; public signup is disabled and accounts are created by coach-only server functions (why: no student PII).
+- Leaderboard and weekly windows are computed from attempts in SQL (`weekly_leaderboard`, `week_bounds`), not snapshotted by a cron job (why: no recurring job needed, history is always exact).
+- Spaced repetition state is updated by a database trigger on attempts (why: drill and mock answers both feed it consistently).
+- Test PDFs are parsed by an AI server function (`src/lib/parse.functions.ts`); low-confidence or image-dependent questions go to the review queue.
