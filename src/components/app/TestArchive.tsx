@@ -30,9 +30,17 @@ export function TestArchive() {
     },
   });
   async function openPdf(path: string) {
-    const { data, error } = await supabase.storage.from("tests").createSignedUrl(path, 300);
-    if (error || !data) { toast.error("Couldn't open that PDF."); return; }
-    window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+    // Reserve the tab during the click; opening after an await is blocked on phones.
+    const tab = window.open("about:blank", "_blank");
+    if (tab) tab.opener = null;
+    try {
+      const { data, error } = await supabase.storage.from("tests").createSignedUrl(path, 300);
+      if (error || !data) throw new Error("Couldn't open that PDF.");
+      if (tab) tab.location.replace(data.signedUrl);
+      else window.location.assign(data.signedUrl);
+    } catch {
+      tab?.close(); toast.error("Couldn't open that PDF.");
+    }
   }
   const events = [...new Set(tests.map((t) => t.event))].sort();
   const years = [...new Set(tests.map((t) => String(t.year)).filter((y) => y !== "null"))].sort().reverse();

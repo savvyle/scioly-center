@@ -11,6 +11,7 @@ import { cleanStem, type Answer } from "@/lib/answers";
 import { useQuery } from "@tanstack/react-query";
 import { masteryLevel, matchingItems, sourceLabel } from "@/lib/practice";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { EditQuestionButton } from "./EditQuestionButton";
 
 const LETTERS = "ABCDEFGHIJ";
 
@@ -87,13 +88,15 @@ export function QuestionCard({
   onAnswer?: ((answer: Answer) => void) | undefined;
   feedback?: string[] | undefined;
 }) {
+  const [edited, setEdited] = useState<Question | null>(null);
+  q = edited?.id === q.id ? edited : q;
   const indices = answer?.indices ?? (chosen === null ? [] : [chosen]);
   const free = q.question_type === "free_response";
   const matching = free ? matchingItems(q.stem, q.choices) : [];
   const correctIndices = q.question_type === "multiple" ? q.correct_indices ?? [] : [q.correct_index];
   return (
     <div className="panel p-4 sm:p-6">
-      {(showTagsBefore || reveal) && <QuestionTags q={q} />}
+      <div className="flex items-center justify-between gap-2">{(showTagsBefore || reveal) && <QuestionTags q={q} />}<EditQuestionButton q={q} onSaved={(updated) => { setEdited(updated); onAnswer?.({ indices: [], text: "" }); }} /></div>
       <p className="mt-3 whitespace-pre-wrap text-[17px] leading-relaxed">{cleanStem(q.stem)}</p>
       <QuestionImages paths={q.image_urls ?? []} />
       {matching.length > 0 && <><div className="mt-6 space-y-3">{q.choices.map((choice, i) => <p key={i}>{LETTERS[i]}) {choice}</p>)}</div><div className="mt-5 grid gap-3 sm:grid-cols-2">{matching.map((item, i) => {

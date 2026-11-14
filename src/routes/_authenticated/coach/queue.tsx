@@ -20,7 +20,15 @@ export const Route = createFileRoute("/_authenticated/coach/queue")({
 function Queue() {
   const { data: review = [] } = useQuery({
     queryKey: ["queue", "review"],
-    queryFn: async () => ((await supabase.from("questions").select("*").eq("status", "review").order("created_at").limit(200)).data ?? []) as unknown as Question[],
+    queryFn: async () => {
+      const rows: Question[] = [];
+      for (let offset = 0; ; offset += 500) {
+        const { data, error } = await supabase.from("questions").select("*").eq("status", "review").is("merged_into", null).order("id").range(offset, offset + 499);
+        if (error) throw error;
+        rows.push(...(data ?? []) as unknown as Question[]);
+        if ((data?.length ?? 0) < 500) return rows;
+      }
+    },
   });
   const { data: flags = [] } = useQuery({
     queryKey: ["queue", "flags"],

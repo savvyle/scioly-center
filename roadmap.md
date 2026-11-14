@@ -21,8 +21,9 @@
 - [x] Save questions and add Saved/Missed sections to Review
 - [x] Practice setup, indented topic/subtopic filters, skip without scoring, mastery and source links
 - [x] Audit all 16 imported tests and restore Q98 matching format
-- [ ] Apply all audited question corrections while preserving answer history
-- [ ] Allow coaches and captains to edit question prompts, choices, and answer keys
-- [ ] Repair and verify Test Archive test PDF and answer-key links
+- [x] Apply all audited question corrections while preserving answer history (1,122 source questions across 16 tests; 101 source-page images recovered)
+- [ ] Coach verification of 391 uncertain/image-dependent audited questions before publishing them (requires source-answer/context judgment)
+- [x] Allow coaches and captains to edit question prompts, choices, and answer keys
+- [x] Repair and verify Test Archive test PDF and answer-key links
 - [x] Explain spaced repetition and expose current review status
 - [x] Multiple event/topic selections; topics stay empty until an event is selected
