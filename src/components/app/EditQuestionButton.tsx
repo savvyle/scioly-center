@@ -12,6 +12,7 @@ import { useMe } from "@/lib/auth";
 import type { Question } from "@/lib/data";
 import { canEditQuestion, questionEditSchema, questionFeedbackFields } from "@/lib/question-edit";
 import { editQuestion } from "@/lib/question-edit.functions";
+import { ExplanationEditor } from "./ExplanationEditor";
 
 export function EditQuestionButton({ q, onSaved }: { q: Question; onSaved: (q: Question) => void }) {
   const { data: me } = useMe();
@@ -29,7 +30,7 @@ export function EditQuestionButton({ q, onSaved }: { q: Question; onSaved: (q: Q
   if (!me || !canEditQuestion(me.role)) return null;
   const options = choices.split("\n").map((s) => s.trim()).filter(Boolean);
   async function submit() {
-    const result = questionEditSchema.safeParse({ questionId: q.id, stem, choices: options, question_type: type, correct_indices: type === "free_response" ? [] : key, accepted_answers: accepted.split("\n").map((s) => s.trim()).filter(Boolean), grading_rubric: rubric, feedback_bullets: feedback.split("\n").map((s) => s.trim()).filter(Boolean) });
+    const result = questionEditSchema.safeParse({ questionId: q.id, stem, choices: options, question_type: type, correct_indices: type === "free_response" ? [] : key, accepted_answers: accepted.split("\n").map((s) => s.trim()).filter(Boolean), grading_rubric: rubric, feedback_bullets: feedback.trim() ? [feedback.trim()] : [] });
     if (!result.success) { toast.error(result.error.issues[0]?.message ?? "Check the answer key."); return; }
     setBusy(true);
     try {
@@ -49,7 +50,7 @@ export function EditQuestionButton({ q, onSaved }: { q: Question; onSaved: (q: Q
       <Label>Answer format</Label><Select value={type} onValueChange={(v) => { setType(v as typeof type); setKey([]); }}><SelectTrigger aria-label="Answer format"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="single">Single choice</SelectItem><SelectItem value="multiple">Multiple select</SelectItem><SelectItem value="free_response">Free response / matching</SelectItem></SelectContent></Select>
       <Label htmlFor="edit-choices">Answer choices (one per line)</Label><Textarea id="edit-choices" rows={4} value={choices} onChange={(e) => setChoices(e.target.value)} />
       {type === "free_response" ? <><Label htmlFor="edit-accepted">Answer key (one accepted answer per line)</Label><Textarea id="edit-accepted" value={accepted} onChange={(e) => setAccepted(e.target.value)} /><Label htmlFor="edit-rubric">Grading rubric</Label><Textarea id="edit-rubric" value={rubric} onChange={(e) => setRubric(e.target.value)} /></> : <><Label>Answer key</Label><div className="grid gap-2">{options.map((choice, i) => <Button key={i} variant={key.includes(i) ? "default" : "outline"} className="h-auto whitespace-normal justify-start text-left" aria-pressed={key.includes(i)} onClick={() => setKey(type === "single" ? [i] : key.includes(i) ? key.filter((j) => j !== i) : [...key, i])}>{String.fromCharCode(65 + i)}. {choice}</Button>)}</div></>}
-      <Label htmlFor="edit-feedback">Feedback</Label><Textarea id="edit-feedback" rows={5} value={feedback} onChange={(e) => setFeedback(e.target.value)} />
+      <Label htmlFor="edit-feedback">Feedback</Label><ExplanationEditor id="edit-feedback" label="Feedback" value={feedback} onChange={setFeedback} />
       <Button disabled={busy} onClick={submit}>{busy ? "Saving…" : "Save changes"}</Button>
     </DialogContent></Dialog>;
 }

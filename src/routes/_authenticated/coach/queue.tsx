@@ -12,6 +12,7 @@ import { QuestionImages, QuestionTags } from "@/components/app/QuestionCard";
 import { useMe } from "@/lib/auth";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ExplanationEditor } from "@/components/app/ExplanationEditor";
 
 export const Route = createFileRoute("/_authenticated/coach/queue")({
   head: () => ({ meta: [{ title: "Review queue · SciOly Center" }, { name: "description", content: "Check uncertain and reported questions." }, { property: "og:title", content: "Review queue · SciOly Center" }, { property: "og:description", content: "Check uncertain and reported questions." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
@@ -102,7 +103,7 @@ function Editor({ q, flagIds, flagReasons }: { q: Question; flagIds?: string[]; 
     const { error } = await supabase.from("questions").update({
       stem: f.stem, choices, correct_index: f.correct, topic: f.topic || null, subtopic: f.subtopic || null,
       difficulty: f.difficulty, explanation: f.explanation || null, image_urls: f.images, status, review_note: null,
-      question_type: f.type, points: f.points, correct_indices: f.type === "multiple" ? f.correctIndices : [f.correct], accepted_answers: f.accepted.split("\n").map((a) => a.trim()).filter(Boolean), grading_rubric: f.rubric || null, feedback_bullets: f.explanation.split("\n").filter(Boolean),
+      question_type: f.type, points: f.points, correct_indices: f.type === "multiple" ? f.correctIndices : [f.correct], accepted_answers: f.accepted.split("\n").map((a) => a.trim()).filter(Boolean), grading_rubric: f.rubric || null, feedback_bullets: f.explanation.trim() ? [f.explanation.trim()] : [],
     }).eq("id", q.id);
     if (!error && flagIds?.length) {
       await supabase.from("flags").update({ resolved_at: new Date().toISOString(), resolved_by: me?.id ?? null, resolution: status === "live" ? "fixed" : "removed" }).in("id", flagIds);
@@ -139,7 +140,7 @@ function Editor({ q, flagIds, flagReasons }: { q: Question; flagIds?: string[]; 
           <option value={1}>Easy</option><option value={2}>Medium</option><option value={3}>Hard</option>
         </select>
       </div>
-      <Input placeholder="Explanation (optional)" value={f.explanation} onChange={(e) => setF({ ...f, explanation: e.target.value })} />
+      <div className="space-y-1.5"><Label htmlFor={`explanation-${q.id}`}>Explanation (optional)</Label><ExplanationEditor id={`explanation-${q.id}`} value={f.explanation} onChange={(explanation) => setF({ ...f, explanation })} /></div>
       <QuestionImages paths={f.images} />
       <div className="flex flex-wrap items-center gap-2">
         <label className="cursor-pointer rounded-md border border-dashed border-border px-3 py-1.5 text-sm text-muted-foreground hover:border-primary">

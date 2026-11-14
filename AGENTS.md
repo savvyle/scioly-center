@@ -30,6 +30,7 @@ use the editor.
 <!-- LOVABLE:END -->
 
 ## Architecture
+- Explanations store Markdown as a complete feedback entry and render with React Markdown and deduplicated KaTeX/mhchem without raw HTML (why: preserve paragraphs and scientific formulas safely, with chemistry macros registered on the same renderer).
 - The coach queue shares an event filter across Needs review and Reported tabs (why: staff can focus on an event without loading the full question bank).
 - Sign-in uses username mapped to `<username>@kls.local`; public signup is disabled and accounts are created by coach-only server functions (why: no student PII).
 - Leaderboard and weekly windows are computed from attempts in SQL (`weekly_leaderboard`, `week_bounds`), not snapshotted by a cron job (why: no recurring job needed, history is always exact).

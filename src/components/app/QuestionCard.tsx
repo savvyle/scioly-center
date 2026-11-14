@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { EditQuestionButton } from "./EditQuestionButton";
 import { useServerFn } from "@tanstack/react-start";
 import { reportQuestion } from "@/lib/report.functions";
+import { FormattedExplanation } from "./FormattedExplanation";
 
 const LETTERS = "ABCDEFGHIJ";
 
@@ -96,6 +97,7 @@ export function QuestionCard({
   const free = q.question_type === "free_response";
   const matching = free ? matchingItems(q.stem, q.choices) : [];
   const correctIndices = q.question_type === "multiple" ? q.correct_indices ?? [] : [q.correct_index];
+  const explanations = feedback?.length ? feedback : q.feedback_bullets?.length ? q.feedback_bullets : q.explanation ? [q.explanation] : [];
   return (
     <div className="panel p-4 sm:p-6">
       <div className="flex items-center justify-between gap-2">{(showTagsBefore || reveal) && <QuestionTags q={q} />}<EditQuestionButton q={q} onSaved={(updated) => { setEdited(updated); onAnswer?.({ indices: [], text: "" }); }} /></div>
@@ -137,7 +139,7 @@ export function QuestionCard({
         })}
       </div>}
       {reveal && free && <div className="mt-3 text-sm"><strong>Accepted answers</strong><ul className="mt-1 list-disc space-y-1 pl-5">{(q.accepted_answers ?? []).map((text, i) => <li key={i}>{text}</li>)}</ul></div>}
-      {reveal && <ul className="mt-4 list-disc space-y-2 rounded-lg bg-muted p-4 pl-8 text-sm text-muted-foreground">{(feedback?.length ? feedback : q.feedback_bullets?.length ? q.feedback_bullets : q.explanation ? [q.explanation] : []).map((text, i) => <li key={i}>{text.replace(/^[-•]\s*/, "")}</li>)}</ul>}
+      {reveal && explanations.length > 0 && <div className="mt-4 rounded-lg bg-muted p-4 text-sm text-muted-foreground">{explanations.length === 1 ? <FormattedExplanation text={explanations[0] ?? ""} /> : <ul className="list-disc space-y-2 pl-4">{explanations.map((text, i) => <li key={i}><FormattedExplanation text={text.replace(/^[-•]\s*/, "")} /></li>)}</ul>}</div>}
       <QuestionSource q={q} />
     </div>
   );

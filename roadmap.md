@@ -1,4 +1,5 @@
 # Roadmap
+- [x] Add formatted explanation editing and display with paragraphs, bullets, bold, and math/chemical formulas
 - [x] Add event filtering to review and reported queues and an All problems view
 - [x] Move Practice to /practice with legacy redirects, remove Test Archive, require event selection, and add Bad feedback reporting
 - [x] Add and verify editable problem feedback; explain the website’s AI provider and billing
