@@ -10,33 +10,218 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as SetupRouteImport } from './routes/setup'
+import { Route as AuthenticatedCoachRouteRouteImport } from './routes/_authenticated/coach/route'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedDrillRouteImport } from './routes/_authenticated/drill'
+import { Route as AuthenticatedLeaderboardRouteImport } from './routes/_authenticated/leaderboard'
+import { Route as AuthenticatedMockRouteImport } from './routes/_authenticated/mock'
+import { Route as AuthenticatedReviewRouteImport } from './routes/_authenticated/review'
+import { Route as AuthenticatedCoachIndexRouteImport } from './routes/_authenticated/coach/index'
+import { Route as AuthenticatedCoachAccountsRouteImport } from './routes/_authenticated/coach/accounts'
+import { Route as AuthenticatedCoachQueueRouteImport } from './routes/_authenticated/coach/queue'
+import { Route as AuthenticatedCoachSettingsRouteImport } from './routes/_authenticated/coach/settings'
+import { Route as AuthenticatedCoachUploadRouteImport } from './routes/_authenticated/coach/upload'
+import { Route as AuthenticatedCoachStudentsIdRouteImport } from './routes/_authenticated/coach/students.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SetupRoute = SetupRouteImport.update({
+  id: '/setup',
+  path: '/setup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedCoachRouteRoute = AuthenticatedCoachRouteRouteImport.update({
+  id: '/coach',
+  path: '/coach',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDrillRoute = AuthenticatedDrillRouteImport.update({
+  id: '/drill',
+  path: '/drill',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedLeaderboardRoute =
+  AuthenticatedLeaderboardRouteImport.update({
+    id: '/leaderboard',
+    path: '/leaderboard',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMockRoute = AuthenticatedMockRouteImport.update({
+  id: '/mock',
+  path: '/mock',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedReviewRoute = AuthenticatedReviewRouteImport.update({
+  id: '/review',
+  path: '/review',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCoachIndexRoute = AuthenticatedCoachIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedCoachRouteRoute,
+} as any)
+const AuthenticatedCoachAccountsRoute =
+  AuthenticatedCoachAccountsRouteImport.update({
+    id: '/accounts',
+    path: '/accounts',
+    getParentRoute: () => AuthenticatedCoachRouteRoute,
+  } as any)
+const AuthenticatedCoachQueueRoute = AuthenticatedCoachQueueRouteImport.update({
+  id: '/queue',
+  path: '/queue',
+  getParentRoute: () => AuthenticatedCoachRouteRoute,
+} as any)
+const AuthenticatedCoachSettingsRoute =
+  AuthenticatedCoachSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedCoachRouteRoute,
+  } as any)
+const AuthenticatedCoachUploadRoute =
+  AuthenticatedCoachUploadRouteImport.update({
+    id: '/upload',
+    path: '/upload',
+    getParentRoute: () => AuthenticatedCoachRouteRoute,
+  } as any)
+const AuthenticatedCoachStudentsIdRoute =
+  AuthenticatedCoachStudentsIdRouteImport.update({
+    id: '/students/$id',
+    path: '/students/$id',
+    getParentRoute: () => AuthenticatedCoachRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/setup': typeof SetupRoute
+  '/coach': typeof AuthenticatedCoachRouteRouteWithChildren
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/drill': typeof AuthenticatedDrillRoute
+  '/leaderboard': typeof AuthenticatedLeaderboardRoute
+  '/mock': typeof AuthenticatedMockRoute
+  '/review': typeof AuthenticatedReviewRoute
+  '/coach/accounts': typeof AuthenticatedCoachAccountsRoute
+  '/coach/queue': typeof AuthenticatedCoachQueueRoute
+  '/coach/settings': typeof AuthenticatedCoachSettingsRoute
+  '/coach/upload': typeof AuthenticatedCoachUploadRoute
+  '/coach/': typeof AuthenticatedCoachIndexRoute
+  '/coach/students/$id': typeof AuthenticatedCoachStudentsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/setup': typeof SetupRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/drill': typeof AuthenticatedDrillRoute
+  '/leaderboard': typeof AuthenticatedLeaderboardRoute
+  '/mock': typeof AuthenticatedMockRoute
+  '/review': typeof AuthenticatedReviewRoute
+  '/coach/accounts': typeof AuthenticatedCoachAccountsRoute
+  '/coach/queue': typeof AuthenticatedCoachQueueRoute
+  '/coach/settings': typeof AuthenticatedCoachSettingsRoute
+  '/coach/upload': typeof AuthenticatedCoachUploadRoute
+  '/coach': typeof AuthenticatedCoachIndexRoute
+  '/coach/students/$id': typeof AuthenticatedCoachStudentsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/setup': typeof SetupRoute
+  '/_authenticated/coach': typeof AuthenticatedCoachRouteRouteWithChildren
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/drill': typeof AuthenticatedDrillRoute
+  '/_authenticated/leaderboard': typeof AuthenticatedLeaderboardRoute
+  '/_authenticated/mock': typeof AuthenticatedMockRoute
+  '/_authenticated/review': typeof AuthenticatedReviewRoute
+  '/_authenticated/coach/accounts': typeof AuthenticatedCoachAccountsRoute
+  '/_authenticated/coach/queue': typeof AuthenticatedCoachQueueRoute
+  '/_authenticated/coach/settings': typeof AuthenticatedCoachSettingsRoute
+  '/_authenticated/coach/upload': typeof AuthenticatedCoachUploadRoute
+  '/_authenticated/coach/': typeof AuthenticatedCoachIndexRoute
+  '/_authenticated/coach/students/$id': typeof AuthenticatedCoachStudentsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/setup'
+    | '/coach'
+    | '/dashboard'
+    | '/drill'
+    | '/leaderboard'
+    | '/mock'
+    | '/review'
+    | '/coach/accounts'
+    | '/coach/queue'
+    | '/coach/settings'
+    | '/coach/upload'
+    | '/coach/'
+    | '/coach/students/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/setup'
+    | '/dashboard'
+    | '/drill'
+    | '/leaderboard'
+    | '/mock'
+    | '/review'
+    | '/coach/accounts'
+    | '/coach/queue'
+    | '/coach/settings'
+    | '/coach/upload'
+    | '/coach'
+    | '/coach/students/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/setup'
+    | '/_authenticated/coach'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/drill'
+    | '/_authenticated/leaderboard'
+    | '/_authenticated/mock'
+    | '/_authenticated/review'
+    | '/_authenticated/coach/accounts'
+    | '/_authenticated/coach/queue'
+    | '/_authenticated/coach/settings'
+    | '/_authenticated/coach/upload'
+    | '/_authenticated/coach/'
+    | '/_authenticated/coach/students/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  SetupRoute: typeof SetupRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +233,164 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/setup': {
+      id: '/setup'
+      path: '/setup'
+      fullPath: '/setup'
+      preLoaderRoute: typeof SetupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/coach': {
+      id: '/_authenticated/coach'
+      path: '/coach'
+      fullPath: '/coach'
+      preLoaderRoute: typeof AuthenticatedCoachRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/drill': {
+      id: '/_authenticated/drill'
+      path: '/drill'
+      fullPath: '/drill'
+      preLoaderRoute: typeof AuthenticatedDrillRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/leaderboard': {
+      id: '/_authenticated/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof AuthenticatedLeaderboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/mock': {
+      id: '/_authenticated/mock'
+      path: '/mock'
+      fullPath: '/mock'
+      preLoaderRoute: typeof AuthenticatedMockRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/review': {
+      id: '/_authenticated/review'
+      path: '/review'
+      fullPath: '/review'
+      preLoaderRoute: typeof AuthenticatedReviewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/coach/': {
+      id: '/_authenticated/coach/'
+      path: '/'
+      fullPath: '/coach/'
+      preLoaderRoute: typeof AuthenticatedCoachIndexRouteImport
+      parentRoute: typeof AuthenticatedCoachRouteRoute
+    }
+    '/_authenticated/coach/accounts': {
+      id: '/_authenticated/coach/accounts'
+      path: '/accounts'
+      fullPath: '/coach/accounts'
+      preLoaderRoute: typeof AuthenticatedCoachAccountsRouteImport
+      parentRoute: typeof AuthenticatedCoachRouteRoute
+    }
+    '/_authenticated/coach/queue': {
+      id: '/_authenticated/coach/queue'
+      path: '/queue'
+      fullPath: '/coach/queue'
+      preLoaderRoute: typeof AuthenticatedCoachQueueRouteImport
+      parentRoute: typeof AuthenticatedCoachRouteRoute
+    }
+    '/_authenticated/coach/settings': {
+      id: '/_authenticated/coach/settings'
+      path: '/settings'
+      fullPath: '/coach/settings'
+      preLoaderRoute: typeof AuthenticatedCoachSettingsRouteImport
+      parentRoute: typeof AuthenticatedCoachRouteRoute
+    }
+    '/_authenticated/coach/upload': {
+      id: '/_authenticated/coach/upload'
+      path: '/upload'
+      fullPath: '/coach/upload'
+      preLoaderRoute: typeof AuthenticatedCoachUploadRouteImport
+      parentRoute: typeof AuthenticatedCoachRouteRoute
+    }
+    '/_authenticated/coach/students/$id': {
+      id: '/_authenticated/coach/students/$id'
+      path: '/students/$id'
+      fullPath: '/coach/students/$id'
+      preLoaderRoute: typeof AuthenticatedCoachStudentsIdRouteImport
+      parentRoute: typeof AuthenticatedCoachRouteRoute
+    }
   }
 }
 
+interface AuthenticatedCoachRouteRouteChildren {
+  AuthenticatedCoachAccountsRoute: typeof AuthenticatedCoachAccountsRoute
+  AuthenticatedCoachQueueRoute: typeof AuthenticatedCoachQueueRoute
+  AuthenticatedCoachSettingsRoute: typeof AuthenticatedCoachSettingsRoute
+  AuthenticatedCoachUploadRoute: typeof AuthenticatedCoachUploadRoute
+  AuthenticatedCoachIndexRoute: typeof AuthenticatedCoachIndexRoute
+  AuthenticatedCoachStudentsIdRoute: typeof AuthenticatedCoachStudentsIdRoute
+}
+
+const AuthenticatedCoachRouteRouteChildren: AuthenticatedCoachRouteRouteChildren =
+  {
+    AuthenticatedCoachAccountsRoute: AuthenticatedCoachAccountsRoute,
+    AuthenticatedCoachQueueRoute: AuthenticatedCoachQueueRoute,
+    AuthenticatedCoachSettingsRoute: AuthenticatedCoachSettingsRoute,
+    AuthenticatedCoachUploadRoute: AuthenticatedCoachUploadRoute,
+    AuthenticatedCoachIndexRoute: AuthenticatedCoachIndexRoute,
+    AuthenticatedCoachStudentsIdRoute: AuthenticatedCoachStudentsIdRoute,
+  }
+
+const AuthenticatedCoachRouteRouteWithChildren =
+  AuthenticatedCoachRouteRoute._addFileChildren(
+    AuthenticatedCoachRouteRouteChildren,
+  )
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCoachRouteRoute: typeof AuthenticatedCoachRouteRouteWithChildren
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDrillRoute: typeof AuthenticatedDrillRoute
+  AuthenticatedLeaderboardRoute: typeof AuthenticatedLeaderboardRoute
+  AuthenticatedMockRoute: typeof AuthenticatedMockRoute
+  AuthenticatedReviewRoute: typeof AuthenticatedReviewRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCoachRouteRoute: AuthenticatedCoachRouteRouteWithChildren,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDrillRoute: AuthenticatedDrillRoute,
+  AuthenticatedLeaderboardRoute: AuthenticatedLeaderboardRoute,
+  AuthenticatedMockRoute: AuthenticatedMockRoute,
+  AuthenticatedReviewRoute: AuthenticatedReviewRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  SetupRoute: SetupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
